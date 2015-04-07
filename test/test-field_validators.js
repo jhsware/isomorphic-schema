@@ -156,7 +156,7 @@ describe('Field validators', function() {
         it('allows you to select a value from the list', function() {        
             var theField = validators.selectField({
                 required: true,
-                valueType: validators.textField,
+                valueType: validators.textField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -169,7 +169,7 @@ describe('Field validators', function() {
         it('throws an error if selected value is outside list', function() {        
             var theField = validators.selectField({
                 required: true,
-                valueType: validators.textField,
+                valueType: validators.textField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -182,7 +182,7 @@ describe('Field validators', function() {
         it('throws an error if wrong type', function() {        
             var theField = validators.selectField({
                 required: true,
-                valueType: validators.emailField,
+                valueType: validators.emailField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
