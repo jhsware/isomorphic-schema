@@ -99,7 +99,7 @@ describe('Schema definition', function() {
         });
                 
         expect(formErrors).not.to.be(undefined);
-        expect(formErrors.field_errors.email).to.not.be(undefined);
+        expect(formErrors.fieldErrors.email).to.not.be(undefined);
     });
     
     it('handles successful post with invariant', function() {
@@ -128,8 +128,8 @@ describe('Schema definition', function() {
         });
         
         expect(formErrors).not.to.be(undefined);
-        expect(formErrors.field_errors).to.be(undefined);
-        expect(formErrors.invariant_errors.length).to.equal(1);
+        expect(formErrors.fieldErrors).to.be(undefined);
+        expect(formErrors.invariantErrors.length).to.equal(1);
     });
 
     
@@ -145,8 +145,8 @@ describe('Schema definition', function() {
         });
         
         expect(formErrors).not.to.be(undefined);
-        expect(formErrors.field_errors.email).to.not.be(undefined);
-        expect(formErrors.invariant_errors.length).to.equal(1);
+        expect(formErrors.fieldErrors.email).to.not.be(undefined);
+        expect(formErrors.invariantErrors.length).to.equal(1);
     });
     
     it('does not validate username according to validationConstraint', function() {        
@@ -193,8 +193,8 @@ describe('Schema definition', function() {
         });
         
         expect(formErrors).not.to.be(undefined);
-        expect(formErrors.field_errors).to.not.be(undefined);
-        expect(formErrors.invariant_errors).to.be(undefined);
+        expect(formErrors.fieldErrors).to.not.be(undefined);
+        expect(formErrors.invariantErrors).to.be(undefined);
     });
     
     it("is valid with field error in attribute on object that shouldn't be validated according to constraint", function() {
