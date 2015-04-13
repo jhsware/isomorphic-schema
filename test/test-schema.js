@@ -67,75 +67,69 @@ describe('Schema definition', function() {
     it('can validate correct data', function() {
         var testUserSchema = _genTestUserSchema();
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware@email.com',
             password: 'mypassword',
             confirm_password: 'mypassword'
         });
         
-        expect(testUserSchema.isValid()).to.equal(true);
-        expect(testUserSchema.field_errors).to.be(undefined);
-        expect(testUserSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
     
     it('can validate correct data without required fields', function() {
         var testUserSchema = _genTestUserSchema();
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware@email.com'
         });
         
-        expect(testUserSchema.isValid()).to.equal(true);
-        expect(testUserSchema.field_errors).to.be(undefined);
-        expect(testUserSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
     
     it('returns an error with faulty data', function() {
         var testUserSchema = _genTestUserSchema();
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware++email.com',
             password: 'mypassword',
             confirm_password: 'mypassword'
         });
                 
-        expect(testUserSchema.isValid()).to.equal(false);
-        expect(testUserSchema.field_errors.email).to.not.be(undefined);
+        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.field_errors.email).to.not.be(undefined);
     });
     
     it('handles successful post with invariant', function() {
         var testUserSchema = _genTestUserSchema();
         testUserSchema.addInvariant(_invariantCheck);
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware@email.com',
             password: 'mypassword',
             confirm_password: 'mypassword'
         });
         
-        expect(testUserSchema.isValid()).to.equal(true);
-        expect(testUserSchema.field_errors).to.be(undefined);
-        expect(testUserSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
 
     it('returns an error with unmet invariant check', function() {        
         var testUserSchema = _genTestUserSchema();
         testUserSchema.addInvariant(_invariantCheck);
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware@email.com',
             password: 'mypassword',
             confirm_password: '----'
         });
         
-        expect(testUserSchema.isValid()).to.equal(false);
-        expect(testUserSchema.field_errors).to.be(undefined);
-        expect(testUserSchema.invariant_errors.length).to.equal(1);
+        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.field_errors).to.be(undefined);
+        expect(formErrors.invariant_errors.length).to.equal(1);
     });
 
     
@@ -143,38 +137,36 @@ describe('Schema definition', function() {
         var testUserSchema = _genTestUserSchema();
         testUserSchema.addInvariant(_invariantCheck);
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: 'jhsware',
             email: 'jhsware++email.com',
             password: 'mypassword',
             confirm_password: '----'
         });
         
-        expect(testUserSchema.isValid()).to.equal(false);
-        expect(testUserSchema.field_errors.email).to.not.be(undefined);
-        expect(testUserSchema.invariant_errors.length).to.equal(1);
+        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.field_errors.email).to.not.be(undefined);
+        expect(formErrors.invariant_errors.length).to.equal(1);
     });
     
     it('does not validate username according to validationConstraint', function() {        
         var testUserSchema = _genTestUserSchema();
         testUserSchema.addValidationConstraint(_doNotValidateUsername);
         
-        testUserSchema.validate({
+        var formErrors = testUserSchema.validate({
             username: undefined,
             email: 'jhsware@email.com',
             password: 'mypassword',
             confirm_password: 'mypassword'
         });
         
-        expect(testUserSchema.isValid()).to.be.true;
-        expect(testUserSchema.field_errors).to.be(undefined);
-        expect(testUserSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
     
     it('is valid with correct, required, object field', function() {
         var testComplexSchema = _genTestObjectSchema({userIsRequired: true});
         
-        testComplexSchema.validate({
+        var formErrors = testComplexSchema.validate({
             user: {
                 username: 'jhsware',
                 email: 'jhsware@email.com',
@@ -184,15 +176,13 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(testComplexSchema.isValid()).to.equal(true);
-        expect(testComplexSchema.field_errors).to.be(undefined);
-        expect(testComplexSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
     
     it('throws error on invalid required object field', function() {
         var testComplexSchema = _genTestObjectSchema({userIsRequired: true});
         
-        testComplexSchema.validate({
+        var formErrors = testComplexSchema.validate({
             user: {
                 username: undefined,
                 email: 'jhsware@email.com',
@@ -202,15 +192,15 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(testComplexSchema.isValid()).to.equal(false);
-        expect(testComplexSchema.field_errors).to.not.be(undefined);
-        expect(testComplexSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.field_errors).to.not.be(undefined);
+        expect(formErrors.invariant_errors).to.be(undefined);
     });
     
     it("is valid with field error in attribute on object that shouldn't be validated according to constraint", function() {
         var testComplexSchema = _genTestObjectSchema({doNotValidateUserName: true});
         
-        testComplexSchema.validate({
+        var formErrors = testComplexSchema.validate({
             user: {
                 username: undefined,
                 email: 'jhsware@email.com',
@@ -220,9 +210,7 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(testComplexSchema.isValid()).to.equal(true);
-        expect(testComplexSchema.field_errors).to.be(undefined);
-        expect(testComplexSchema.invariant_errors).to.be(undefined);
+        expect(formErrors).to.be(undefined);
     });
 
 });
