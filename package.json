@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Isomorphic JS Schema",
   "engines": {
-    "node": "0.13.x"
+    "node": "0.12.x"
   },
   "main": "./lib/index.js",
   "dependencies": {
