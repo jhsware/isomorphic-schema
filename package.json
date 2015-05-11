@@ -2,8 +2,9 @@
   "name": "isomorphic-schema",
   "version": "0.1.0",
   "description": "Isomorphic JS Schema",
-  "engines": {
-    "node": "0.12.x"
+  "repository" : { 
+      "type" : "git",
+      "url" : "https://github.com/jhsware/SimpleJSSchema.git"
   },
   "main": "./lib/index.js",
   "dependencies": {
