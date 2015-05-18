@@ -9,10 +9,8 @@
   "main": "./lib/index.js",
   "dependencies": {
     "lodash": "^2.4.1",
-    "moment": "^2.8.4"
-  },
-  "peerDependencies": {
-    "component-registry": ">=0.1"  
+    "moment": "^2.8.4",
+    "component-registry": "git://github.com/jhsware/SimpleJSRegistry.git#master",
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
