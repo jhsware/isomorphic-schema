@@ -12,7 +12,7 @@
     "moment": "^2.8.4"
   },
   "peerDependencies": {
-    "component-registry": "git://github.com/jhsware/SimpleJSRegistry.git#master"  
+    "component-registry": ">0.1"  
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
