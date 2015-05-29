@@ -61,6 +61,13 @@ describe('Field validators', function() {
             var tmp = integerField.validate(13.0);
             expect(tmp).to.be.undefined;
         });
+        
+        it('converts string input properly with leading charaters and decimal', function() {        
+            var integerField = validators.integerField({required: true});
+        
+            var tmp = integerField.fromString("ab12.0");
+            expect(tmp).to.be(12);
+        });
     
         it('throws error on undefined if required', function() {        
             var integerField = validators.integerField({required: true});
