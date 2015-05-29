@@ -68,6 +68,13 @@ describe('Field validators', function() {
             var tmp = integerField.fromString("ab12.0");
             expect(tmp).to.be(12);
         });
+        
+        it('does not convert integer input', function() {        
+            var integerField = validators.integerField({required: true});
+        
+            var tmp = integerField.fromString(12);
+            expect(tmp).to.be(12);
+        });
     
         it('throws error on undefined if required', function() {        
             var integerField = validators.integerField({required: true});
