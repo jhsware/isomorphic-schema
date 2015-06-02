@@ -14,6 +14,16 @@ describe('Field validators', function() {
             var tmp = baseField.validate('something');
             expect(tmp).to.be(undefined);
         });
+        
+        it('shows error on required test if null', function() {        
+            var baseField = validators.baseField({required: true});
+        
+            var tmp = baseField.validate(null);
+            expect(tmp).to.not.be(undefined);
+            
+            var tmp = baseField.validate('something');
+            expect(tmp).to.be(undefined);
+        });
     
         it('supports being optional', function() {        
             var baseField = validators.baseField({required: false});
