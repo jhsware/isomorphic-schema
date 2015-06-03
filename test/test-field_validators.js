@@ -72,6 +72,13 @@ describe('Field validators', function() {
             expect(tmp).to.be.undefined;
         });
         
+        it('accepts null as empty if field not required', function() {        
+            var integerField = validators.integerField({required: false});
+        
+            var tmp = integerField.validate(null);
+            expect(tmp).to.be.undefined;
+        });
+        
         it('converts string input properly with leading charaters and decimal', function() {        
             var integerField = validators.integerField({required: true});
         
@@ -89,6 +96,12 @@ describe('Field validators', function() {
         it('throws error on undefined if required', function() {        
             var integerField = validators.integerField({required: true});
             var tmp = integerField.validate();
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('throws error on null if required', function() {        
+            var integerField = validators.integerField({required: true});
+            var tmp = integerField.validate(null);
             expect(tmp).to.not.be(undefined);
         });
 
