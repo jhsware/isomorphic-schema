@@ -57,6 +57,27 @@ describe('Field validators', function() {
         });
     });
     
+    describe('Password field', function() {
+        it('accepts strings', function() {        
+            var passwordField = validators.passwordField({required: true});
+        
+            var tmp = passwordField.validate("thePassword");
+            expect(tmp).to.be(undefined);
+        });
+    
+        it('throws error on undefined if required', function() {        
+            var passwordField = validators.passwordField({required: true});
+            var tmp = passwordField.validate();
+            expect(tmp).to.not.be(undefined);
+        });
+
+        it('throws error on less than 8 chars', function() {        
+            var passwordField = validators.passwordField({required: false});
+            var tmp = passwordField.validate('pass');
+            expect(tmp).to.not.be(undefined);
+        });
+    });
+    
     describe('Integer field', function() {
         it('accepts non decimal numbers', function() {        
             var integerField = validators.integerField({required: true});
