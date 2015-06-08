@@ -312,6 +312,22 @@ describe('Field validators', function() {
             var tmp = theField.validate("select-me");
             expect(tmp).to.be(undefined);
         });
+        
+        it('allows undefined or null if not required', function() {        
+            var theField = validators.selectField({
+                required: false,
+                valueType: validators.textField({required: true}),
+                options: [
+                    {name: "select-me", title: "Select Me"},
+                    {name: "do-not-select", title: "Don't Select Me"}
+                ]});
+        
+            var tmp = theField.validate(undefined);
+            expect(tmp).to.be(undefined);
+            var tmp = theField.validate(null);
+            expect(tmp).to.be(undefined);
+            
+        });
     
         it('throws an error if selected value is outside list', function() {        
             var theField = validators.selectField({
@@ -325,6 +341,8 @@ describe('Field validators', function() {
             var tmp = theField.validate("outside-list");
             expect(tmp).to.not.be(undefined);
         });
+        
+        
 
         it('throws an error if wrong type', function() {        
             var theField = validators.selectField({
