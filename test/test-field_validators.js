@@ -76,6 +76,14 @@ describe('Field validators', function() {
             var tmp = passwordField.validate('pass');
             expect(tmp).to.not.be(undefined);
         });
+        
+        it('allows null or undefined if not required', function() {        
+            var passwordField = validators.passwordField({required: false});
+            var tmp = passwordField.validate(null);
+            expect(tmp).to.be(undefined);
+            var tmp = passwordField.validate(undefined);
+            expect(tmp).to.be(undefined);
+        });
     });
     
     describe('Integer field', function() {
