@@ -115,6 +115,15 @@ describe('Field validators', function() {
             expect(tmp).to.be(12);
         });
         
+        it('renders null and undefined as empty string', function() {        
+            var integerField = validators.integerField({requried: false});
+        
+            var tmp = integerField.toFormattedString(undefined);
+            expect(tmp).to.be('');
+            var tmp = integerField.toFormattedString(null);
+            expect(tmp).to.be('');
+        });
+        
         it('does not convert integer input', function() {        
             var integerField = validators.integerField({required: true});
         
