@@ -482,5 +482,14 @@ describe('Field validators', function() {
             
         });
         
+        it('creates a proper Date object from string', function() {        
+            var dateTimeField = validators.dateTimeField({required: true, timezoneAware: true});
+            
+            var inpStr = "2015-01-02T10:18:00.000Z";
+            var tmpDt = dateTimeField.fromString(inpStr);
+            
+            expect(tmpDt).to.be.a(Date);            
+        });
+        
     });
 });
