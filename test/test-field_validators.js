@@ -55,6 +55,34 @@ describe('Field validators', function() {
             var tmp = textField.validate(4);
             expect(tmp).to.not.be(undefined);
         });
+        
+        it('throws error if text is longer than maxLength', function() {        
+            var textField = validators.textField({maxLength: 5});
+            var tmp = textField.validate("123456");
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('throws error if text is shorter than minLength', function() {        
+            var textField = validators.textField({minLength: 5});
+            var tmp = textField.validate("1234");
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('accepts if length is at bottom end inbetween max- and minLength', function() {        
+            var textField = validators.textField({minLength: 3, maxLength: 10});
+        
+            var tmp = textField.validate("123");
+            expect(tmp).to.be(undefined);
+        });
+        
+        it('accepts if length is at top end inbetween max- and minLength', function() {        
+            var textField = validators.textField({minLength: 3, maxLength: 10});
+        
+            var tmp = textField.validate("1234567890");
+            expect(tmp).to.be(undefined);
+        });
+        
+        
     });
     
     describe('Password field', function() {
