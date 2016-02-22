@@ -14,6 +14,23 @@ var _genTestUserSchema = function () {
     });
 };
 
+var _genCustomerNoSchema = function () {    
+    return new Schema("Customer Schema", {
+        customer: validators.textField({required: true}),
+    });
+};
+
+var _genSpecialUserThatExtends = function (extendWithSchemas) {
+    return new Schema({schemaName: "Special User Schema", extends: extendWithSchemas}, {
+        role: validators.textField({required: true})
+    });
+};
+
+var _genSpecialUserThatExtendsAndOverrides = function (extendWithSchemas) {
+    return new Schema({schemaName: "Override Schema", extends: extendWithSchemas}, {
+        email: validators.textField({required: true})
+    });
+};
 
 var _genTestObjectSchema = function (options) {
     var userSchema = new Schema("User Schema", {
@@ -213,4 +230,106 @@ describe('Schema definition', function() {
         expect(formErrors).to.be(undefined);
     });
 
+});
+
+describe('Schema inheritance', function() {
+    it('we can inherit a single schema', function() {        
+        var userSchema = _genTestUserSchema();
+        var specUserSchema = _genSpecialUserThatExtends([userSchema]);
+        
+        expect(specUserSchema._fields.username).to.not.be(undefined);
+    });
+    
+    it('we can inherit multiple schemas', function() {        
+        var userSchema = _genTestUserSchema();
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        expect(specCustUserSchema._fields.username).to.not.be(undefined);
+        expect(specCustUserSchema._fields.customer).to.not.be(undefined);
+    });
+    
+    it('throws an error when inherited fields do not validate', function() {
+        var userSchema = _genTestUserSchema();
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var formErrors = specCustUserSchema.validate({
+            username: 'jhsware',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'mypassword'
+            // Missing role and customer property
+        });
+        
+        expect(formErrors).not.to.be(undefined);
+    });
+    
+    it('validates when inherited fields are ok', function() {
+        var userSchema = _genTestUserSchema();
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var formErrors = specCustUserSchema.validate({
+            username: 'jhsware',
+            customer: '1234',
+            role: 'normal',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'mypassword'
+        });
+        
+        expect(formErrors).to.be(undefined);
+    });
+    
+    it('throws error when inherited invariant check fails', function() {
+        var userSchema = _genTestUserSchema();
+        userSchema.addInvariant(_invariantCheck);
+        
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var formErrors = specCustUserSchema.validate({
+            username: 'jhsware',
+            customer: '1234',
+            role: 'normal',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'wrongpassword'
+        });
+        
+        expect(formErrors).not.to.be(undefined);
+    });
+    
+    it('respects validation constraints for inherited schemas', function() {        
+        var userSchema = _genTestUserSchema();
+        userSchema.addValidationConstraint(_doNotValidateUsername);
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var formErrors = specCustUserSchema.validate({
+            // Missing username but it shouldn't be validated
+            customer: '1234',
+            role: 'normal',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'mypassword'
+        });
+        
+        expect(formErrors).to.be(undefined);
+    });
+    
+    it('overrides inherited schema field validation', function() {
+        var userSchema = _genTestUserSchema();
+        var overrideSchema = _genSpecialUserThatExtendsAndOverrides([userSchema]);
+        
+        var formErrors = overrideSchema.validate({
+            username: 'jhsware',
+            email: 'jhsware_weird_email.com',
+            password: 'mypassword',
+            confirm_password: 'wrongpassword'
+        });
+        
+        expect(formErrors).to.be(undefined);
+    });
 });
