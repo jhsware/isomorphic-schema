@@ -520,4 +520,27 @@ describe('Field validators', function() {
         });
         
     });
+    
+    describe('TextArea field', function() {
+        it('accepts strings', function() {        
+            var textField = validators.textAreaField({required: true});
+        
+            var tmp = textField.validate("<p>this is a sting<p>");
+            expect(tmp).to.be(undefined);
+        });
+    
+        it('throws error on undefined if required', function() {        
+            var textField = validators.textAreaField({required: true});
+            var tmp = textField.validate();
+            expect(tmp).to.not.be(undefined);
+        });
+
+        it('throws error on integer', function() {        
+            var textField = validators.textAreaField({required: false});
+            var tmp = textField.validate(4);
+            expect(tmp).to.not.be(undefined);
+        });        
+        
+    });
+
 });
