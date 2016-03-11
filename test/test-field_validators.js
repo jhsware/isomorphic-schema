@@ -543,4 +543,26 @@ describe('Field validators', function() {
         
     });
 
+    describe('HTMLArea field', function() {
+        it('accepts strings', function() {        
+            var htmlField = validators.HTMLAreaField({required: true});
+        
+            var tmp = htmlField.validate("<p>this is a sting<p>");
+            expect(tmp).to.be(undefined);
+        });
+    
+        it('throws error on undefined if required', function() {        
+            var htmlField = validators.HTMLAreaField({required: true});
+            var tmp = htmlField.validate();
+            expect(tmp).to.not.be(undefined);
+        });
+
+        it('throws error on integer', function() {        
+            var htmlField = validators.HTMLAreaField({required: false});
+            var tmp = htmlField.validate(4);
+            expect(tmp).to.not.be(undefined);
+        });        
+        
+    });
+    
 });
