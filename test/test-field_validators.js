@@ -86,33 +86,90 @@ describe('Field validators', function() {
         
     });
     
-    describe('Password field', function() {
+    
+    describe('String field', function() {
         it('accepts strings', function() {        
-            var passwordField = validators.passwordField({required: true});
+            var textField = validators.textField({required: true});
         
-            var tmp = passwordField.validate("thePassword");
+            var tmp = textField.validate("this is a sting");
             expect(tmp).to.be(undefined);
         });
     
         it('throws error on undefined if required', function() {        
-            var passwordField = validators.passwordField({required: true});
-            var tmp = passwordField.validate();
+            var textField = validators.textField({required: true});
+            var tmp = textField.validate();
             expect(tmp).to.not.be(undefined);
         });
 
-        it('throws error on less than 8 chars', function() {        
-            var passwordField = validators.passwordField({required: false});
-            var tmp = passwordField.validate('pass');
+        it('throws error on integer', function() {        
+            var textField = validators.textField({required: false});
+            var tmp = textField.validate(4);
             expect(tmp).to.not.be(undefined);
         });
         
-        it('allows null or undefined if not required', function() {        
-            var passwordField = validators.passwordField({required: false});
-            var tmp = passwordField.validate(null);
-            expect(tmp).to.be(undefined);
-            var tmp = passwordField.validate(undefined);
+        it('throws error if text is longer than maxLength', function() {        
+            var textField = validators.textField({maxLength: 5});
+            var tmp = textField.validate("123456");
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('throws error if text is shorter than minLength', function() {        
+            var textField = validators.textField({minLength: 5});
+            var tmp = textField.validate("1234");
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('accepts if length is at bottom end inbetween max- and minLength', function() {        
+            var textField = validators.textField({minLength: 3, maxLength: 10});
+        
+            var tmp = textField.validate("123");
             expect(tmp).to.be(undefined);
         });
+        
+        it('accepts if length is at top end inbetween max- and minLength', function() {        
+            var textField = validators.textField({minLength: 3, maxLength: 10});
+        
+            var tmp = textField.validate("1234567890");
+            expect(tmp).to.be(undefined);
+        });
+        
+        
+    });
+    
+    describe('Bool field', function() {
+        it('accepts boolean true', function() {        
+            var boolField = validators.boolField({required: true});
+            var tmp = boolField.validate(true);
+            expect(tmp).to.be(undefined);
+        });
+    
+        it('accepts boolean false', function() {        
+            var boolField = validators.boolField({required: true});
+            var tmp = boolField.validate(false);
+            expect(tmp).to.be(undefined);
+        });
+        
+        it('allows null or undefined if not required', function() {        
+            var boolField = validators.boolField({required: false});
+            var tmp = boolField.validate(null);
+            expect(tmp).to.be(undefined);
+            var tmp = boolField.validate(undefined);
+            expect(tmp).to.be(undefined);
+        });
+        
+        it('converts string represenations to proper values', function() {        
+            var boolField = validators.boolField();
+            var tmp = boolField.fromString('false');
+            expect(tmp).to.be(false);
+            var tmp = boolField.fromString('true');
+            expect(tmp).to.be(true);
+            var tmp = boolField.fromString('undefined');
+            expect(tmp).to.be(undefined);
+            var tmp = boolField.fromString('null');
+            expect(tmp).to.be(null);            
+        });
+        
+        
     });
     
     describe('Integer field', function() {
