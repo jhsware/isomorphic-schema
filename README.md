@@ -4,8 +4,34 @@ Schema definition library with nested field validation. Field validators use obj
 
 For more examples, please check out the tests.
 
-Sample usage:
+### i18n ###
+isomorphic-schema supports i18n by providing i18nLabel propoerties that you can translate with your library of choice. There are two useful helper methods.
 
+Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library:
+
+```
+    description: validators.textAreaField({
+        label: i18n('form_description_label', 'Description'),
+        placeholder: i18n('form_description_placeholder', 'Type here...'),
+        required: true
+    })
+```
+
+Use `renderString` to substitute placeholders for values from the field validator options:
+
+```
+    var fieldDef = validators.integerField({
+        min: 10,
+        max: 20
+    })
+
+    var outp = renderString('Value too low. Min ${minValue}', fieldDef)
+    // outp === 'Value too low. Min 10'
+```
+
+### Sample usage ###
+
+```
     var Schema = require('isomorphic-schema').Schema;
     var validators = require('isomorphic-schema').field_validators;
     
@@ -59,3 +85,4 @@ Sample usage:
     if (typeof errors === 'undfined') {
         console.log("We didn't get any validation errors!");
     }
+```
