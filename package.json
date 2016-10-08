@@ -21,8 +21,7 @@
   },
   "peerDependencies": {
     "component-registry": "~0.1.1",
-    "moment": "^2.8.4",
-    "lodash": "^2.4.1"
+    "moment": "^2.8.4"
   },
   "devDependencies": {
     "expect.js": "~0.3.1",
