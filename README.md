@@ -30,7 +30,7 @@ Use `renderString` to substitute placeholders for values from the field validato
 ```
 
 #### Extracting i18n strings ####
-You can use grep to find all the i18n strings you have in your project.
+You can use grep to extract all the i18n strings you have in your project.
 
 ```
 grep -ohr "i18n([^)]*)" ./path/to/your/code/*
