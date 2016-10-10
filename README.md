@@ -32,13 +32,13 @@ Use `renderString` to substitute placeholders for values from the field validato
 #### Extracting i18n strings ####
 You can use grep to find all the i18n strings you have in your project.
 
-'''
+```
 grep -ohr "i18n([^)]*)" ./path/to/your/code/*
-'''
+```
 
 When running this command on isomorphic-schema we get the following output (note, we added a prefix to avoid some comments etc):
 
-'''
+```
 $ grep -ohr "i18n('isomorphic-schema[^)]*)" ./lib/*
 i18n('isomorphic-schema--field_required', 'Required')
 i18n('isomorphic-schema--text_field_no_string', 'The field doesn\'t contain text')
@@ -66,7 +66,7 @@ i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short')
 i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)
 i18n('isomorphic-schema--password_field_too_short', 'The password must contain at least 8 chars')
 i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed')
-'''
+```
 
 You will want to translate these strings in your project to i18n isomorphic-schema.
 
