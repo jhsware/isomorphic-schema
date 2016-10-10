@@ -7,9 +7,12 @@ For more examples, please check out the tests.
 ### i18n ###
 isomorphic-schema supports i18n by providing i18nLabel propoerties that you can translate with your library of choice. There are two useful helper methods.
 
-Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library:
+Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library when outputing the strings.
 
 ```
+    var validators = require('isomorphic-schema').validators
+    var i18n = require('isomorphic-schema').i18n
+
     description: validators.textAreaField({
         label: i18n('form_description_label', 'Description'),
         placeholder: i18n('form_description_placeholder', 'Type here...'),
@@ -20,6 +23,9 @@ Use `i18n` to create nice i18n labels when defining your schema. All it does is 
 Use `renderString` to substitute placeholders for values from the field validator options:
 
 ```
+    var validators = require('isomorphic-schema').validators
+    var renderString = require('isomorphic-schema').renderString
+
     var fieldDef = validators.integerField({
         min: 10,
         max: 20
@@ -71,6 +77,8 @@ i18n('isomorphic-schema--select_field_value_error', 'The selected value is not a
 You will want to translate these strings in your project to i18n isomorphic-schema.
 
 ### Sample usage ###
+
+**Note:** These examples don't use i18n enabled strings for readability. Substitute the strings with i18n(...) as shown above to support translations.
 
 ```
     var Schema = require('isomorphic-schema').Schema;
