@@ -69,7 +69,7 @@ i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the se
 i18n('isomorphic-schema--object_field_value_error', 'There is an error in the content of this object')
 i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted')
 i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short')
-i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)
+i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)  // TODO: <<<<<<<< Fix this in regex, should be "error)')"
 i18n('isomorphic-schema--password_field_too_short', 'The password must contain at least 8 chars')
 i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed')
 ```
