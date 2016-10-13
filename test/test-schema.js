@@ -333,3 +333,42 @@ describe('Schema inheritance', function() {
         expect(formErrors).to.be(undefined);
     });
 });
+
+var _genSchemaWithInteger = function () {    
+    return new Schema("Integer Schema", {
+        number: validators.integerField({required: true}),
+    });
+};
+
+var _genSchemaWithObject = function () {
+    var integerSchema = _genSchemaWithInteger();
+
+    return new Schema("Object Schema", {
+        numberObj: validators.objectField({schema: integerSchema, required: true}),
+    });
+};
+
+describe('Schema data transformation', function() {
+    it('converts a simple integer field', function() {
+        var integerSchema = _genSchemaWithInteger();
+        
+        var data = integerSchema.transform({
+            number: "5"
+        });
+        
+        expect(typeof data.number).to.equal('number');
+    });
+
+    it('converts a simple integer field', function() {
+        var objSchema = _genSchemaWithObject();
+        
+        var data = objSchema.transform({
+            numberObj: {
+                number: "5"
+            }
+        });
+        
+        expect(typeof data.numberObj).to.equal('object');
+        expect(typeof data.numberObj.number).to.equal('number');
+    });
+});
