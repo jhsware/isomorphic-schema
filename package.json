@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-schema",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Isomorphic Javascript schema library and validation for component-registry. Supports nested form validation and invariants. Has i18n support.",
   "author": {
     "name": "Sebastian Ware",
@@ -21,6 +21,7 @@
   },
   "peerDependencies": {
     "component-registry": "^0.1.1 || ^0.2.0",
+    "striptags": "^2.1.1",
     "moment": "^2.8.4"
   },
   "devDependencies": {

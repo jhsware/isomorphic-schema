@@ -578,28 +578,6 @@ describe('Field validators', function() {
         });
         
     });
-    
-    describe('TextArea field', function() {
-        it('accepts strings', function() {        
-            var textField = validators.textAreaField({required: true});
-        
-            var tmp = textField.validate("<p>this is a sting<p>");
-            expect(tmp).to.be(undefined);
-        });
-    
-        it('throws error on undefined if required', function() {        
-            var textField = validators.textAreaField({required: true});
-            var tmp = textField.validate();
-            expect(tmp).to.not.be(undefined);
-        });
-
-        it('throws error on integer', function() {        
-            var textField = validators.textAreaField({required: false});
-            var tmp = textField.validate(4);
-            expect(tmp).to.not.be(undefined);
-        });        
-        
-    });
 
     describe('HTMLArea field', function() {
         it('accepts strings', function() {        
@@ -619,7 +597,37 @@ describe('Field validators', function() {
             var htmlField = validators.HTMLAreaField({required: false});
             var tmp = htmlField.validate(4);
             expect(tmp).to.not.be(undefined);
-        });        
+        });
+        
+        it('throws error if text (exlcuding tags) is longer than maxLength', function() {        
+            var htmlField = validators.textAreaField({maxLength: 5});
+            var tmp = htmlField.validate("<p>123456</p>");
+            expect(tmp).to.not.be(undefined);
+        });
+        
+        it('throws error if text (exlcuding tags) is shorter than minLength', function() {        
+            var htmlField = validators.HTMLAreaField({minLength: 5});
+            var tmp = htmlField.validate("<p>1234</p>");
+            expect(tmp).to.not.be(undefined);
+        });
+
+        it('accepts if text (exlcuding tags) is equal to maxLength', function() {        
+            var htmlField = validators.HTMLAreaField({maxLength: 6});
+            var tmp = htmlField.validate("<p>123456</p>");
+            expect(tmp).to.be(undefined);
+        });
+
+        it('accepts if text (exlcuding tags) is equal to minLength', function() {        
+            var htmlField = validators.HTMLAreaField({minLength: 5});
+            var tmp = htmlField.validate("<p>12345</p>");
+            expect(tmp).to.be(undefined);
+        });
+
+        it('accepts if text (exlcuding tags) is in between minLength and maxLength', function() {        
+            var htmlField = validators.HTMLAreaField({minLength: 5, maxLength: 10});
+            var tmp = htmlField.validate("<p>1234567</p>");
+            expect(tmp).to.be(undefined);
+        });
         
     });
     
