@@ -50,6 +50,23 @@ var _genTestObjectSchema = function (options) {
     });
 };
 
+var _genTestOtherRO = function () {
+    return new Schema("RO Schema", {
+        titleOtherRO: validators.textField({required: true, readOnly: true}),
+        ageOtherRO: validators.textField({required: true, readOnly: true}),
+    });
+};
+
+var _genTestRO = function () {
+    var otherRO = _genTestOtherRO()
+
+    return new Schema("RO Schema", {
+        titleRO: validators.textField({required: true, readOnly: true}),
+        ageRO: validators.textField({required: true, readOnly: true}),
+        otherObj: validators.objectField({required: true, schema: otherRO})
+    });
+};
+
 var _invariantCheck = function (data, selectedFields) {
     var tmpFields = ['password', 'confirm_password'];
 
@@ -232,6 +249,39 @@ describe('Schema definition', function() {
 
 });
 
+describe('Schema validation with read only fields', function() {
+    it('correct content is valid', function() {        
+        var roSchema = _genTestRO();
+        
+        var errors = roSchema.validate({
+            titleRO: 'readOnly',
+            ageRO: 5,
+            otherObj: {
+                titleOtherRO: "readOnly",
+                ageOtherRO: 5
+            }
+        })
+        
+        expect(errors).to.be(undefined);
+    });
+
+    it('read only values pass validation if wrong', function() {        
+        var roSchema = _genTestRO();
+        
+        var errors = roSchema.validate({
+            titleRO: undefined,
+            ageRO: "hallo",
+            otherObj: {
+                titleOtherRO: undefined,
+                ageOtherRO: "no"
+            }
+        })
+        
+        expect(errors).to.be(undefined);
+    });
+});
+
+
 describe('Schema inheritance', function() {
     it('we can inherit a single schema', function() {        
         var userSchema = _genTestUserSchema();
@@ -348,6 +398,26 @@ var _genSchemaWithObject = function () {
     });
 };
 
+
+var _genOtherSchemaWithReadOnly = function () {
+    return new Schema("Object Schema", {
+        otherTitleRO: validators.textField({readOnly: true, required: true}),
+        otherAge: validators.integerField({required: true})
+    });
+};
+
+var _genSchemaWithReadOnly = function () {
+    var otherSchema = _genOtherSchemaWithReadOnly();
+
+    return new Schema("ReadOnly Schema", {
+        other: validators.objectField({schema: otherSchema, required: true}),
+        otherRO: validators.objectField({schema: otherSchema, readOnly: true, required: true}),
+        titleRO: validators.textField({readOnly: true}),
+        age: validators.integerField({required: true})
+    });
+};
+
+
 describe('Schema data transformation', function() {
     it('converts a simple integer field', function() {
         var integerSchema = _genSchemaWithInteger();
@@ -370,5 +440,53 @@ describe('Schema data transformation', function() {
         
         expect(typeof data.numberObj).to.equal('object');
         expect(typeof data.numberObj.number).to.equal('number');
+    });
+
+    it('converts a nested object with readOnly fields removed', function() {
+        var objSchema = _genSchemaWithReadOnly();
+        
+        var data = objSchema.transform({
+            titleRO: "readOnly",
+            age: 5,
+            other: {
+                otherTitleRO: "readOnly",
+                otherAge: 10
+            },
+            otherRO: {
+                otherTitleRO: "otherReadOnly",
+                otherAge: 20
+            }
+        });
+        
+        expect(data.titleRO).to.be(undefined);
+        expect(data.otherRO).to.be(undefined);
+        expect(data.other.titleRO).to.be(undefined);
+        expect(data.other.otherAge).to.equal(10);
+        expect(data.age).to.equal(5);
+    });
+
+    it('converts a nested object without removing readOnly fields', function() {
+        var objSchema = _genSchemaWithReadOnly();
+        
+        var data = objSchema.transform({
+            titleRO: "readOnly",
+            age: 5,
+            other: {
+                otherTitleRO: "readOnly",
+                otherAge: 10
+            },
+            otherRO: {
+                otherTitleRO: "otherReadOnly",
+                otherAge: 20
+            }
+        }, undefined, true);
+        
+        expect(data.titleRO).to.equal('readOnly');
+        expect(data.otherRO).not.to.be(undefined);
+        expect(data.otherRO.otherTitleRO).to.equal('otherReadOnly');
+        expect(data.otherRO).not.to.be(undefined);
+        expect(data.other.otherTitleRO).to.equal('readOnly');
+        expect(data.other.otherAge).to.equal(10);
+        expect(data.age).to.equal(5);
     });
 });
