@@ -33,7 +33,12 @@ To create a schema you make a new instance of the Schema object. There are two r
             label: 'Title',
             placeholder: 'Type here...',
             required: true
-        })
+        }),
+        author: validators.textField({
+            label: 'Author',
+            placeholder: 'Type here...',
+            required: true
+        }) 
     })
 ```
 
@@ -41,11 +46,11 @@ Each field has a field validator that determines what data that field accepts. T
 
 Besides field validators you can also add form level validation with invariants and validation constraints.
 
-#### Invariants #####
+### Invariants ####
 An invariant is a test that returns an an invariant error if doesn't pass. A typical invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
 
 ```
-    simpleSchema.addInvariant(function (data, selectedFields) {
+simpleSchema.addInvariant(function (data, selectedFields) {
     var tmpFields = ['password', 'confirm_password'];
 
     // Check that all the fields in this invariant are passed
@@ -68,35 +73,48 @@ An invariant is a test that returns an an invariant error if doesn't pass. A typ
 
 Note that invariants should only be checked if all the fields are passed in selectedFields. Both data and selectedFields are passed by the simpleSchema.validate method to the invariant validator function.
 
-#### Validation Constraints #####
+### Validation Constraints ####
 
-Validation constraints are used to skip validation of one or more fields depending on what the passed data looks like. This is useful if you have large forms where some fields depend on the value of other fields. An example could be that a publish_date field only is validated if the staus field of the object is set to published.  
+Validation constraints are used to skip validation of one or more fields depending on what the passed data looks like. This is useful if you have large forms where some fields depend on the value of other fields. An example could be that a publish_date field only is validated if the staus field of the object is set to published.
+
+```
+simpleSchema.addValidationConstraint(function (data, fieldKey) {
+    // Don't render or validate author when no title is set
+    if (fieldKey === 'author') {
+        return data.title ? true : false; 
+    } else {
+        return true;
+    }
+})
+```
+
+Validation constraints are very nice in browser rendered forms because they allow you to hide fields that only should be shown if the user has entered specific values, such as choosing "other" in a list of options in a questionaire reveals a text field where other is specified.
 
 ### Validating Form Data ####
 
 Once you have created an instance of a schema such as `simpleSchema` above you can use it to validate and transform data that you have received from the browser. The validation part checks that the provided input is valid, otherwise returning field level errors that are inteded to be displayed to the user. The transform part makes sure that data is converted to correct data types since the HTML-input fields normally return simple strings.
 
 ```
-    var errors = simpleSchema.validate(inputData)
+var errors = simpleSchema.validate(inputData)
 ```
 
 When we call validate, the schema calls validate on each field and returns an error object if any data is determined to be invalid.
 
 ```
-    var errors = {
-        fieldErrors: {
-            [field-name]: { [field-error-object] }
-        },
-        invariantErrors: [
-            // list of invariant error objects (validation checks on more than one field at a time, such as 'password' === 'confirmPassword')
-        ]
-    }
+var errors = {
+    fieldErrors: {
+        [field-name]: { [field-error-object] }
+    },
+    invariantErrors: [
+        // list of invariant error objects (validation checks on more than one field at a time, such as 'password' === 'confirmPassword')
+    ]
+}
 ```
 
 If the form data passes validation we need transform the form data to proper datatypes, such as integers and real objects, before we can pass it on to our storage mechanism.
 
 ```
-    var outp = simpleSchema.transform(inputData)
+var outp = simpleSchema.transform(inputData)
 ```
 
 The passed data is converted to proper datatypes by calling the method `fromString` which is available on each field validator. The resulting object can then be sent to an API or a database.
