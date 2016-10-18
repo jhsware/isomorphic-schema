@@ -1,8 +1,8 @@
 # Isomorphic Schema
 
+Isomorphic Javascript form validation library. Supports nested forms, rules for skipping validation of fields and multi-field validation. Has i18n support.
 
-
-Schema definition library with nested field validation. Field validators use object prototype mechanism from [component-registry](https://github.com/jhsware/SimpleJSRegistry "SimpleJSRegistry").
+Field validators use object prototype mechanism from [component-registry](https://github.com/jhsware/component-registry "component-registry") to support inheritance.
 
 For more examples, please check out the tests.
 
@@ -12,7 +12,9 @@ The purpose of the isomorphic-schema form validation package is to help create g
 
 You can choose to only use isomorphic-schema to define your forms, you can use it to define your entity objects or you can use it for both.
 
-Chances are you will start by only using it for forms, where one schema matches a single form.
+Chances are you will start by only using it for forms, where one schema matches a single form. However it can also be used to validate data that is stored in a document database such as MongoDB.
+
+By using the component-registry concept of interfaces and object prototypes, it is possible to register widgets to render the form fields. This is very powerful when creating a form rendering library where the form generator is entirely decoupled from the field widget implementations. This is explained a bit more further down.
 
 ## Schema ###
 
@@ -324,7 +326,7 @@ These two methods allow us great flexibility in what data a field can handle.
 
 ### Creating a Form Renderer ####
 
-Rendering a form from a schema is not very difficult but there are several features you need to make sure you support. If you want to create your own form renderer you should take a look at an existing implementation and make the changes that suit your purpose. For server side template based rendering engines check the NPM-package `kth-node-formlib` and for React style isomorphic form rendering look at `protoncms-formlib` https://github.com/jhsware/protoncms-formlib
+Rendering a form from a schema is not very difficult but there are several features you need to make sure you support. If you want to create your own form renderer you should take a look at an existing implementation and make the changes that suit your purpose. For server side template based rendering engines check the NPM-package XXX (to be published) and for React style isomorphic form rendering look at `protoncms-formlib` https://github.com/jhsware/protoncms-formlib
 
 ### Creating a Field Widget ####
 
@@ -335,7 +337,7 @@ var theField = module.exports.mySpecialField; // The field we exported in the cr
 registry.getAdapter(theField, IInputFieldWidget);
 ```
 
-The component-registry https://github.com/jhsware/component-registry will find the widget we are creating now.
+The component-registry https://github.com/jhsware/component-registry will find the widget we are creating here:
 
 ```
 var MySpecialInputAdapter = createAdapter({
