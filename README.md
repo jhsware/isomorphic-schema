@@ -149,22 +149,22 @@ Overview of field options:
 ### Validator Hierarchy
 ```
 baseField
-baseField > decimalField
-baseField > integerField
-baseField > textField
-baseField > textField > dateField
-baseField > textField > dateTimeField
-baseField > textField > emailField
-baseField > textField > orgNrField
-baseField > textField > passwordField
-baseField > textField > textAreaField
-baseField > textField > HTMLAreaField
-baseField > listField
-baseField > objectField
-baseField > objectRelationField
-baseField > multiSelectField
-baseField > selectField
-baseField > creditCardField
+    |- decimalField
+    |- integerField
+    |- textField
+    |   |- dateField
+    |   |- dateTimeField
+    |   |- emailField
+    |   |- orgNrField
+    |   |- passwordField
+    |   |- textAreaField
+    |   |- HTMLAreaField
+    |- listField
+    |- objectField
+    |- objectRelationField
+    |- multiSelectField
+    |- selectField
+    |- creditCardField
 boolField    
 ```
 
@@ -418,33 +418,42 @@ grep -ohr "i18n([^)]*)" ./path/to/your/code/*
 When running this command on isomorphic-schema we get the following output (note, we added a prefix to avoid some comments etc):
 
 ```
-$ grep -ohr "i18n('isomorphic-schema[^)]*)" ./lib/*
-i18n('isomorphic-schema--field_required', 'Required')
-i18n('isomorphic-schema--text_field_no_string', 'The field doesn\'t contain text')
-i18n('isomorphic-schema--text_field_too_short', 'The text is too short. Min ${minLength} chars.')
-i18n('isomorphic-schema--text_field_too_long', 'The text is too long. Max ${maxLength} chars.')
-i18n('isomorphic-schema--text_area_field_no_string', 'The field doesn\'t contain text')
-i18n('isomorphic-schema--integer_field_not_number', 'The field doesn\'t contain numbers')
-i18n('isomorphic-schema--integer_field_no_decimals', 'The field may not contain decimals')
-i18n('isomorphic-schema--integer_field_too_small', 'The value is too small. Min ${minValue}')
-i18n('isomorphic-schema--integer_field_too_big', 'The value is too big. Max ${maxValue}')
-i18n('isomorphic-schema--decimal_field_not_number', 'The field doesn\'t contain numbers')
-i18n('isomorphic-schema--decimal_field_too_small', 'The value is too small. Min ${minValue}')
-i18n('isomorphic-schema--decimal_field_too_big', 'The value is too big. Max ${maxValue}')
-i18n('isomorphic-schema--credit_card_field_not_supported', 'Entered card type is not supported')
-i18n('isomorphic-schema--credit_card_field_incorrect_formatting', 'The card number is incorrectly entered')
-i18n('isomorphic-schema--date_field_incorrect_formatting', 'This doesn\'t look like a date')
-i18n('isomorphic-schema--date_time_field_incorrect_formatting', 'This doesn\'t look like a date with time')
-i18n('isomorphic-schema--email_field_incorrect_formatting', 'This is not a valid e-mail address')
-i18n('isomorphic-schema--list_field_type_error', 'This is not proper list. This is a bug in the application')
-i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list')
-i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the selected values is not allowed')
-i18n('isomorphic-schema--object_field_value_error', 'There is an error in the content of this object')
-i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted')
-i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short')
-i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)  // TODO: <<<<<<<< Fix this in regex, should be "error)')"
-i18n('isomorphic-schema--password_field_too_short', 'The password must contain at least 8 chars')
-i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed')
+// This is a regex that will return two match groups with i18nLabel and description, you can use it to create a js parser
+const regex = /i18n\(('[^'"]*'(?=(?:[^"]*"[^"]*")*[^"]*$))[^'"]+('[^'"]*'(?=(?:[^"]*"[^"]*")*[^"]*$))\)/g
+
+// If you only want to a simple extraction from commanline, try this:
+$ grep -ohr "i18n(['\"][^'\"]*['\"].*" ./lib/*
+i18n('isomorphic-schema--field_required', 'Required'),
+i18n('isomorphic-schema--text_field_no_string', 'The field doesn\'t contain text'),
+i18n('isomorphic-schema--text_field_too_short', 'The text is too short. Min ${minLength} chars.'),
+i18n('isomorphic-schema--text_field_too_long', 'The text is too long. Max ${maxLength} chars.'),
+i18n('isomorphic-schema--text_area_field_no_string', 'The field doesn\'t contain text'),
+i18n('isomorphic-schema--text_field_too_short', 'The text is too short. Min ${minLength} chars.'),
+i18n('isomorphic-schema--text_field_too_long', 'The text is too long. Max ${maxLength} chars.'),
+i18n('isomorphic-schema--integer_field_not_number', 'The field doesn\'t contain numbers'),
+i18n('isomorphic-schema--integer_field_no_decimals', 'The field may not contain decimals'),
+i18n('isomorphic-schema--integer_field_too_small', 'The value is too small. Min ${minValue}'),
+i18n('isomorphic-schema--integer_field_too_big', 'The value is too big. Max ${maxValue}'),
+i18n('isomorphic-schema--decimal_field_not_number', 'The field doesn\'t contain numbers'),
+i18n('isomorphic-schema--decimal_field_too_small', 'The value is too small. Min ${minValue}'),
+i18n('isomorphic-schema--decimal_field_too_big', 'The value is too big. Max ${maxValue}'),
+i18n('isomorphic-schema--credit_card_field_not_supported', 'Entered card type is not supported');
+i18n('isomorphic-schema--credit_card_field_incorrect_formatting', 'The card number is incorrectly entered');
+i18n('isomorphic-schema--date_field_incorrect_formatting', 'This doesn\'t look like a date'),
+i18n('isomorphic-schema--date_time_field_incorrect_formatting', 'This doesn\'t look like a date with time'),
+i18n('isomorphic-schema--email_field_incorrect_formatting', 'This is not a valid e-mail address'),
+i18n('isomorphic-schema--list_field_type_error', 'This is not proper list. This is a bug in the application'),
+i18n('isomorphic-schema--list_field_value_error_too_many_items', 'Too many items in list, max ${maxItems} allowed'),
+i18n('isomorphic-schema--list_field_value_error_too_few_items', 'Too few items in list, min ${minItems} allowed'),
+i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
+i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the selected values is not allowed'),
+i18n('isomorphic-schema--object_field_value_error', 'There is an error in the content of this object'),
+i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted'),
+i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short'),
+i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)'),
+i18n('isomorphic-schema--password_field_too_short', 'The password must contain at least 8 chars'),
+i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed'),
+i18n('form_label_title', 'The Title')
 ```
 
 You will want to translate these strings in your project to internationalise your forms.
