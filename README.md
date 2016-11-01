@@ -123,30 +123,47 @@ The passed data is converted to proper datatypes by calling the method `fromStri
 
 ## Field Validators ###
 
-Field validators define what values are valid. These field validators are available in the base package:
+Field validators define what values are valid. This is an overview of the field validators available in the base package. Check the inheritance schema to see what options a field has inherited. 
 
 Overview of field options:
 
-
 ### BaseField
-**required:** bool
+**required:** {boolean} this field is required (must evaluate to `val == true`)
 
-**readOnly:** bool
+**readOnly:** {boolean} this is a read only field 
 
 ### TextField
-**minLength:** integer
+**minLength:** {integer} minimum number of chars
 
-**maxLength:** integer
+**maxLength:** {integer} maximum number of chars
 
 ### IntegerField, DecimalField
-**min:** integer 
+**min:** {integer} minimum value 
 
-**max:** integer
+**max:** {integer} maximum value
 
 ### SelectField, MultiselectField
-**options:** array of {name: string, title: string}
+**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
 
-### Validator Hierarchy
+**options:** {array} list of option objects of the form {name: string, title: string}
+
+### ObjectField
+**schema:** {object} another Schema object
+
+### ListField
+**valueType:** {object} a validator that matches the items in the list (can be a simple type such as `textField({})` or `objectField({schema: ...})`)
+
+**minLength:** {integer} minimum number of items
+
+**maxLength:** {integer} maximum number of items
+
+### HTMLAreaField
+**minLength:** {integer} minimum number of chars when tags have been removed
+
+**maxLength:** {integer} maximum number of chars when tags have been removed
+
+
+### Validator Inheritance Hierarchy
 ```
 baseField
     |- decimalField
