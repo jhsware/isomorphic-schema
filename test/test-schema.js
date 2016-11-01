@@ -50,6 +50,20 @@ var _genTestObjectSchema = function (options) {
     });
 };
 
+var _genTestListSchema = function () {
+    var userSchema = new Schema("User Schema", {
+        username:               validators.textField({required: true}),
+        email:                  validators.emailField({required: true}),
+        password:               validators.textField({required: false})
+    });
+
+    return new Schema("Schema With List", {
+        users: validators.listField({
+            valueType: validators.objectField({required: true, schema: userSchema})
+        })
+    })
+}
+
 var _genTestOtherRO = function () {
     return new Schema("RO Schema", {
         titleOtherRO: validators.textField({required: true, readOnly: true}),
@@ -440,6 +454,24 @@ describe('Schema data transformation', function() {
         
         expect(typeof data.numberObj).to.equal('object');
         expect(typeof data.numberObj.number).to.equal('number');
+    });
+
+    it('converts a list field with objects', function() {
+        var listSchema = _genTestListSchema();
+        
+        var formData = {
+            users: [
+                { username: 'user', email: 'email@email.com', password: 'password'},
+                { username: 'user', email: 'email@email.com', password: 'password'},
+                { username: 'user', email: 'email@email.com', password: 'password'}
+            ]
+        };
+        var data = listSchema.transform(formData);
+        
+        expect(Array.isArray(data.users)).to.equal(true);
+        expect(data.users.length).to.equal(3);
+        expect(typeof data.users[0]).to.equal('object');
+        expect(data.users[0].email).to.equal(formData.users[0].email);
     });
 
     it('converts a nested object with readOnly fields removed', function() {
