@@ -27,7 +27,7 @@ To create a schema you make a new instance of the Schema object. There are two r
 
 2 An object containing named fields
 
-```
+```JavaScript
     var Schema = require('isomorphic-schema').Schema;
     var validators = require('isomorphic-schema').validators;
     var simpleSchema = new Schema("MyThing Schema", {
@@ -51,7 +51,7 @@ Besides field validators you can also add form level validation with invariants 
 ### Invariants ####
 An invariant is a test that returns an an invariant error if doesn't pass. A typical invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
 
-```
+```JavaScript
 simpleSchema.addInvariant(function (data, selectedFields) {
     var tmpFields = ['password', 'confirm_password'];
 
@@ -79,7 +79,7 @@ Note that invariants should only be checked if all the fields are passed in sele
 
 Validation constraints are used to skip validation of one or more fields depending on what the passed data looks like. This is useful if you have large forms where some fields depend on the value of other fields. An example could be that a publish_date field only is validated if the staus field of the object is set to published.
 
-```
+```JavaScript
 simpleSchema.addValidationConstraint(function (data, fieldKey) {
     // Don't render or validate author when no title is set
     if (fieldKey === 'author') {
@@ -96,13 +96,13 @@ Validation constraints are very nice in browser rendered forms because they allo
 
 Once you have created an instance of a schema such as `simpleSchema` above you can use it to validate and transform data that you have received from the browser. The validation part checks that the provided input is valid, otherwise returning field level errors that are inteded to be displayed to the user. The transform part makes sure that data is converted to correct data types since the HTML-input fields normally return simple strings.
 
-```
+```JavaScript
 var errors = simpleSchema.validate(inputData)
 ```
 
 When we call validate, the schema calls validate on each field and returns an error object if any data is determined to be invalid.
 
-```
+```JavaScript
 var errors = {
     fieldErrors: {
         [field-name]: { [field-error-object] }
@@ -115,7 +115,7 @@ var errors = {
 
 If the form data passes validation we need transform the form data to proper datatypes, such as integers and real objects, before we can pass it on to our storage mechanism.
 
-```
+```JavaScript
 var outp = simpleSchema.transform(inputData)
 ```
 
@@ -199,7 +199,7 @@ There are three use cases where you will want to create a custom field.
 
 Since each field is identified by it's interface, we first create one.
 
-```
+```JavaScript
 var createInterface = require('component-registry').createInterface;
 
 var IMySpecialField = createInterface({
@@ -210,7 +210,7 @@ module.exports.IMySpecialField = IMySpecialField;
 
 **Note:** we need to export the created interface to allow our custom widget to register itself as renderer for this field. 
 
-```
+```JavaScript
 var createObjectPrototype = require('component-registry').createObjectPrototype;
 var TextField = require('isomorphic-schema').fieldObjectPrototypes.TextField;
 
@@ -229,7 +229,7 @@ This field extends TextField and thus inherits all the functionality of a TextFi
 
 Again you start by creating an interface. 
 
-```
+```JavaScript
 var IMySpecialValidationField = createInterface({
   name: 'IMySpecialValidationField'
 })
@@ -238,7 +238,7 @@ module.exports.IMySpecialValidationField = IMySpecialValidationField;
 
 Now we extend a field that has the basic behaviour we need and then add our custom validation.
 
-```
+```JavaScript
 var i18n = require('isomorphic-schema').i18n
 var MyRegex = /(\d{4}-){3}\d{4}/
 var MySpecialValidationField = createObjectPrototype({
@@ -271,7 +271,7 @@ Note that createObjectPrototype mounts methods of the extended fields using the 
 
 Yupp, you start by creating an interface. 
 
-```
+```JavaScript
 var IMyComplexValidationField = createInterface({
   name: 'IMyComplexValidationField'
 })
@@ -280,7 +280,7 @@ module.exports.IMyComplexValidationField = IMyComplexValidationField;
 
 In this example we will extend a SelectField in order to update data in an object. We will also force the available select options in the constructor to avoid having to enter that data in the schema. Since we are using the standard SelectField validation we don't need to add a validation method.
 
-```
+```JavaScript
 var validators = require('isomorphic-schema').validators;
 var SelectField = require('isomorphic-schema').fieldObjectPrototypes.SelectField;
 
@@ -349,14 +349,14 @@ Rendering a form from a schema is not very difficult but there are several featu
 
 The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget) and adapts the given field (in this case IMySpecialField). The lookup looks like this, but you don't need to worry about that unless you create a form generator:
 
-```
+```JavaScript
 var theField = module.exports.mySpecialField; // The field we exported in the create custom fields part
 registry.getAdapter(theField, IInputFieldWidget);
 ```
 
 The component-registry https://github.com/jhsware/component-registry will find the widget we are creating here:
 
-```
+```JavaScript
 var MySpecialInputAdapter = createAdapter({
   implements: IInputFieldWidget,
   adapts: IMySpecialField,
@@ -396,7 +396,7 @@ isomorphic-schema supports i18n by providing i18nLabel propoerties that you can 
 ### i18n(label: string[, description: string]) ####
 Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library when outputing the strings.
 
-```
+```JavaScript
 var validators = require('isomorphic-schema').validators
 var i18n = require('isomorphic-schema').i18n
 
@@ -410,7 +410,7 @@ description: validators.textAreaField({
 ### renderString(text: string, fieldeDef: object) ####
 Use `renderString` to substitute placeholders for values from the field validator options. This is used in your field widget when rendering a field error.
 
-```
+```JavaScript
 var validators = require('isomorphic-schema').validators
 var renderString = require('isomorphic-schema').renderString
 
@@ -479,7 +479,7 @@ You will want to translate these strings in your project to internationalise you
 
 **Note:** These examples don't use i18n enabled strings for readability. Substitute the strings with i18n(...) as shown above to support translations.
 
-```
+```JavaScript
 var Schema = require('isomorphic-schema').Schema;
 var validators = require('isomorphic-schema').field_validators;
 
