@@ -51,6 +51,18 @@ describe('Field validators', function() {
             expect(tmp).to.not.be(undefined);
         });
 
+        it('throws error on single space if required and trim is true', function() {        
+            var textField = validators.textField({required: true, trim: true});
+            var tmp = textField.validate(' ');
+            expect(tmp).to.not.be(undefined);
+        });
+
+        it('trims spaces if trim is true', function() {        
+            var textField = validators.textField({trim: true});
+            var tmp = textField.fromString(' a ');
+            expect(tmp).to.equal('a');
+        });
+
         it('throws error on integer', function() {        
             var textField = validators.textField({required: false});
             var tmp = textField.validate(4);
