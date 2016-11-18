@@ -568,3 +568,25 @@ DONE - how to creat a formlib to render schemas
     DONE - formGenerator
     DONE - component-registry
     DONE - field widgets
+
+
+options: { utility: IMyOptionsUtility, name: 'my-name'}
+
+createUtility({
+    implements: IMyOptionsUtility,
+    name: 'my-name',
+
+    getOptions: function (context, value) {
+        // Get all the options
+        // MUST CACHE VALUES, at least during this request, this could get VERY slow otherwise
+        // If it returns a huge data set you should consider creating a specialised validator
+        // that doesn't demand fetching data for validation
+        return [{name: ..., title: ...}]
+    },
+
+    getOptionTitle: function (context, value) {
+        // Get option matching value
+        // MUST CACHE VALUES, this could get VERY slow
+        return 'The Title'
+    }
+}) 
