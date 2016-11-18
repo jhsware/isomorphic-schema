@@ -33,7 +33,7 @@
     "moment": "^2.8.4"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter",
-    "debugtest": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts"
+    "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter ./test/**/test-*.js ./test/test-*.js",
+    "debug-test": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js"
   }
 }
