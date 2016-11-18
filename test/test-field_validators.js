@@ -495,6 +495,32 @@ describe('Field validators', function() {
             var tmp = theField.validate("select-me");
             expect(tmp).to.not.be(undefined);
         });
+
+        it('can convert a value to a title', function() {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.textField({required: true}),
+                options: [
+                    {name: "select-me", title: "Select Me"},
+                    {name: "do-not-select", title: "Don't Select Me"}
+                ]});
+        
+            var tmp = theField.getOptionTitle("select-me");
+            expect(tmp).to.equal('Select Me');
+        });
+
+        it('convert a value to a title handles undefined', function() {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.textField({required: true}),
+                options: [
+                    {name: "select-me", title: "Select Me"},
+                    {name: "do-not-select", title: "Don't Select Me"}
+                ]});
+        
+            var tmp = theField.getOptionTitle("no exist");
+            expect(tmp).to.be(undefined);
+        });
     });
     
     describe('List field', function() {
