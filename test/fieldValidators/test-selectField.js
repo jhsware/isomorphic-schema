@@ -15,16 +15,16 @@ createUtility({
     implements: IOptions,
     name: 'test',
     
-    getOptions: function (context, val) {
+    getOptions: function (inp, options, context) {
         return [{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}]
     },
 
-    getOptionTitle: function (context, val) {
+    getOptionTitle: function (inp, options, context) {
         var tmp = {
             one: 'The One',
             two: 'The Two'
         }
-        return tmp[val]
+        return tmp[inp]
     }
 }).registerWith(registry)
 
