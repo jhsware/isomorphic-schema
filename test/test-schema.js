@@ -263,6 +263,86 @@ describe('Schema definition', function() {
 
 });
 
+describe('Schema validation ASYNC', function() {
+    it('ASYNC handles successful post with invariant', function(done) {
+        var testUserSchema = _genTestUserSchema();
+        testUserSchema.addInvariant(_invariantCheck);
+        
+        var promise = testUserSchema.validateAsync({
+            username: 'jhsware',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'mypassword'
+        });
+        
+        promise.then(function (formErrors) {
+            expect(formErrors).to.be(undefined);
+            done()
+        })
+    });
+
+    it('ASYNC throws an error when inherited fields do not validate', function(done) {
+        var userSchema = _genTestUserSchema();
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var promise = specCustUserSchema.validateAsync({
+            username: 'jhsware',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'mypassword'
+            // Missing role and customer property
+        });
+
+        promise.then(function (formErrors) {
+            expect(formErrors.fieldErrors.customer).not.to.be(undefined);
+            expect(formErrors.fieldErrors.role).not.to.be(undefined);
+            done();
+        })        
+    });
+
+    it('ASYNC throws error when inherited invariant check fails', function(done) {
+        var userSchema = _genTestUserSchema();
+        userSchema.addInvariant(_invariantCheck);
+        
+        var custNoSchema = _genCustomerNoSchema();
+        var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
+        
+        var promise = specCustUserSchema.validateAsync({
+            username: 'jhsware',
+            customer: '1234',
+            role: 'normal',
+            email: 'jhsware@email.com',
+            password: 'mypassword',
+            confirm_password: 'wrongpassword'
+        });
+        
+        promise.then(function (formErrors) {
+            expect(formErrors.invariantErrors[0]).not.to.be(undefined);
+            done();
+        })
+    });
+
+    it('ASYNC is valid with correct, required, object field', function() {
+        var testComplexSchema = _genTestObjectSchema({userIsRequired: true});
+        
+        var promise = testComplexSchema.validateAsync({
+            user: {
+                username: 'jhsware',
+                email: 'jhsware@email.com',
+                password: 'mypassword',
+                confirm_password: 'mypassword'
+            },
+            role: 'ceo'
+        });
+        
+        promise.then(function (formErrors) {
+            expect(formErrors).to.be(undefined);
+        })
+    });
+    
+})
+
 describe('Schema validation with read only fields', function() {
     it('correct content is valid', function() {        
         var roSchema = _genTestRO();
@@ -326,7 +406,8 @@ describe('Schema inheritance', function() {
             // Missing role and customer property
         });
         
-        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.fieldErrors.customer).not.to.be(undefined);
+        expect(formErrors.fieldErrors.role).not.to.be(undefined);
     });
     
     it('validates when inherited fields are ok', function() {
@@ -362,7 +443,7 @@ describe('Schema inheritance', function() {
             confirm_password: 'wrongpassword'
         });
         
-        expect(formErrors).not.to.be(undefined);
+        expect(formErrors.invariantErrors[0]).not.to.be(undefined);
     });
     
     it('respects validation constraints for inherited schemas', function() {        

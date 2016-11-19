@@ -8,6 +8,8 @@ var createInterface = require('component-registry').createInterface
 var validators = require('../../lib/field_validators');
 var Schema = require('../../lib/schema');
 
+// TODO: Test select field ASYNC validation with getOptions returning a promise!
+
 var IOptions = createInterface({
     name: 'IOptions'
 })

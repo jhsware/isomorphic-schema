@@ -4,6 +4,8 @@ var expect = require('expect.js');
 var validators = require('../../lib/field_validators');
 var Schema = require('../../lib/schema');
 
+// TODO: Test list field ASYNC validation
+
 describe('List field', function() {
     it('accepts a list of fields', function() {
         var theField = validators.listField({

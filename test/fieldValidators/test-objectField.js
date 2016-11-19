@@ -4,6 +4,8 @@ var expect = require('expect.js');
 var validators = require('../../lib/field_validators');
 var Schema = require('../../lib/schema');
 
+// TODO: Test object field ASYNC validation
+
 describe('Object field', function () {
     describe('Object field with defined schema', function() {
         var objectSchema = new Schema("User Schema", {
