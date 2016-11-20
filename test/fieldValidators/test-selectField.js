@@ -7,6 +7,7 @@ var createInterface = require('component-registry').createInterface
 
 var validators = require('../../lib/field_validators');
 var Schema = require('../../lib/schema');
+var Promise = require('es6-promise');
 
 // TODO: Test select field ASYNC validation with getOptions returning a promise!
 
@@ -27,6 +28,23 @@ createUtility({
             two: 'The Two'
         }
         return tmp[inp]
+    }
+}).registerWith(registry)
+
+createUtility({
+    implements: IOptions,
+    name: 'async',
+    
+    getOptions: function (inp, options, context) {
+        return Promise.resolve([{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}])
+    },
+
+    getOptionTitle: function (inp, options, context) {
+        var tmp = {
+            one: 'The One',
+            two: 'The Two'
+        }
+        return Promise.resolve(tmp[inp])
     }
 }).registerWith(registry)
 
@@ -185,6 +203,64 @@ describe('Select field', function() {
         
             var tmp = theField.getOptionTitle("no exist");
             expect(tmp).to.be(undefined);
+        });
+    });
+
+    describe('Select field with ASYNC options utility', function() {
+        it('allows you to select a value from the list', function(done) {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.textField({required: true}),
+                options: { utilityInterface: IOptions, name: 'async'} 
+            });
+        
+            var tmp = theField.validateAsync("one");
+            tmp.then(function (validationError) {
+                expect(validationError).to.be(undefined);
+                done();
+            })
+        });
+        it('throws an error if wrong type', function(done) {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.integerField({required: true}),
+                options: { utilityInterface: IOptions, name: 'async'} 
+            });
+        
+            var tmp = theField.validateAsync("select-me");
+            tmp.then(function (validationError) {
+                expect(validationError).not.to.be(undefined);
+                done();
+            })
+        });
+
+        it('can convert a value to a title', function(done) {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.textField({required: true}),
+                options: { utilityInterface: IOptions, name: 'async'} 
+            });
+        
+            var tmp = theField.getOptionTitle("one");
+            tmp.then(function (title) {
+                expect(title).to.equal('The One');
+                done();
+            })
+        });
+
+        it('convert a value to a title handles undefined', function(done) {        
+            var theField = validators.selectField({
+                required: true,
+                valueType: validators.textField({required: true}),
+                options: { utilityInterface: IOptions, name: 'async'} 
+            });
+        
+            var tmp = theField.getOptionTitle("no exist");
+            tmp.then(function (title) {
+                expect(title).to.be(undefined);
+                done();
+            })
+
         });
     });
 });
