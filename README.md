@@ -1,4 +1,6 @@
 # Isomorphic Schema
+[![Build Status](https://travis-ci.org/jhsware/isomorphic-schema.svg?branch=master)](https://travis-ci.org/jhsware/isomorphic-schema)
+
 
 Isomorphic Javascript form validation library. Supports nested forms, rules for skipping validation of fields and multi-field validation. Has i18n support.
 
