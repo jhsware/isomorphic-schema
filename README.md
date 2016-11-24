@@ -28,25 +28,40 @@ To create a schema you make a new instance of the Schema object. There are two r
 2 An object containing named fields
 
 ```JavaScript
-    var Schema = require('isomorphic-schema').Schema;
-    var validators = require('isomorphic-schema').validators;
-    var simpleSchema = new Schema("MyThing Schema", {
-        title: validators.textField({
-            label: 'Title',
-            placeholder: 'Type here...',
-            required: true
-        }),
-        author: validators.textField({
-            label: 'Author',
-            placeholder: 'Type here...',
-            required: true
-        }) 
-    })
+var Schema = require('isomorphic-schema').Schema;
+var validators = require('isomorphic-schema').validators;
+var simpleSchema = new Schema("MyThing Schema", {
+    title: validators.textField({
+        label: 'Title',
+        placeholder: 'Type here...',
+        required: true
+    }),
+    author: validators.textField({
+        label: 'Author',
+        placeholder: 'Type here...',
+        required: true
+    }) 
+})
 ```
 
 Each field has a field validator that determines what data that field accepts. There are a bunch a fields in isomorphic-schema, but you can easily create your own fields to get custom behaviour.
 
 Besides field validators you can also add form level validation with invariants and validation constraints.
+
+### Inheritance ###
+Schema supports inheritance to allow you to compose your forms. Instead of adding the debug name as first parameter you pass an object:
+
+```JavaScript
+var compositeSchema = new Schema({ schemaName: "MyComposite Schema", extends: [simpleSchema]}, {
+    status: validators.textField({
+        label: 'Status',
+        placeholder: 'Type here...',
+        required: true
+    }) 
+})
+```
+
+The order in your extends array is important. With duplicate fields, schemas to the left override anything to the right. Fields in schemas to the right will be added first so this affects the order if you auto generate forms. Your schema specific fields are placed last.
 
 ### Invariants ####
 An invariant is a test that returns an an invariant error if doesn't pass. A typical invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
