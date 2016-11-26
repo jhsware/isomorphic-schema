@@ -576,7 +576,7 @@ createUtility({
     implements: IMyOptionsUtility,
     name: 'my-name',
 
-    getOptions: function (context, value) {
+    getOptions: function () {
         // Get all the options
         // MUST CACHE VALUES, at least during this request, this could get VERY slow otherwise
         // If it returns a huge data set you should consider creating a specialised validator
@@ -584,7 +584,7 @@ createUtility({
         return [{name: ..., title: ...}]
     },
 
-    getOptionTitle: function (context, value) {
+    getOptionTitle: function (value) {
         // Get option matching value
         // MUST CACHE VALUES, this could get VERY slow
         return 'The Title'

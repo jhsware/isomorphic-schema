@@ -22,7 +22,7 @@ createUtility({
         return [{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}]
     },
 
-    getOptionTitle: function (inp, options, context) {
+    getOptionTitle: function (inp) {
         var tmp = {
             one: 'The One',
             two: 'The Two'
@@ -39,7 +39,7 @@ createUtility({
         return Promise.resolve([{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}])
     },
 
-    getOptionTitle: function (inp, options, context) {
+    getOptionTitle: function (inp) {
         var tmp = {
             one: 'The One',
             two: 'The Two'
