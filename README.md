@@ -360,7 +360,7 @@ These two methods allow us great flexibility in what data a field can handle.
 
 ### Creating a Form Renderer ####
 
-Rendering a form from a schema is not very difficult but there are several features you need to make sure you support. If you want to create your own form renderer you should take a look at an existing implementation and make the changes that suit your purpose. For server side template based rendering engines check the NPM-package XXX (to be published) and for React style isomorphic form rendering look at `protoncms-formlib` https://github.com/jhsware/protoncms-formlib
+Rendering a form from a schema is not very difficult but there are several features you need to make sure you support. If you want to create your own form renderer you should take a look at an existing implementation and make the changes that suit your purpose. For server side template based rendering engines check the NPM-package `kth-node-formlib` https://github.com/KTH/kth-node-formlib and for React style isomorphic form rendering look at `protoncms-formlib` https://github.com/jhsware/protoncms-formlib
 
 ### Creating a Field Widget ####
 
