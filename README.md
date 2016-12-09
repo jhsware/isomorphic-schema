@@ -145,11 +145,38 @@ Field validators define what values are valid. This is an overview of the field 
 Overview of field options:
 
 ### BaseField
+
+*NOTE:* ALL fields except BoolField inherit from BaseField, so all fields have the following options
+
 **required:** {boolean} this field is required (must evaluate to `val == true`)
 
 **readOnly:** {boolean} this is a read only field 
 
 ### TextField
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### DateField
+Checks for a valid date format using moment.js.
+
+### DateTimeField
+Checks for a valid date and time format using moment.js.
+
+### EmailField
+Checks for a valid e-mail address.
+
+### OrgNrField
+Checks for a valid swedish social security number.
+
+### PasswordField
+Basically a text field that allows you to implement a password input field when rendering. 
+
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### TextAreaField
 **minLength:** {integer} minimum number of chars
 
 **maxLength:** {integer} maximum number of chars
@@ -163,6 +190,17 @@ Overview of field options:
 **valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
 
 **options:** {array} list of option objects of the form {name: string, title: string}
+
+### DynamicSelectField
+**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
+
+**options:** {object} defines a utility to look up which has methods to get the list of options (either using a sync and an async lookup for network or DB calls)
+```
+options: {
+    utilityInterface: IMyOptions,
+    name: 'my-field-options' // Optional
+}
+```
 
 ### ObjectField
 **schema:** {object} another Schema object
@@ -198,6 +236,7 @@ baseField
     |- objectRelationField
     |- multiSelectField
     |- selectField
+    |   |- dynamicSelectField
     |- creditCardField
 boolField    
 ```
