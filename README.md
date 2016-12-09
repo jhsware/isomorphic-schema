@@ -115,7 +115,14 @@ Once you have created an instance of a schema such as `simpleSchema` above you c
 
 ```JavaScript
 var errors = simpleSchema.validate(inputData)
+
+// or if you have async options in a DynamicSelectField:
+var errors = simpleSchema.validateAsync(inputData, options, context)
 ```
+
+options -- (optional) an options object you could use to pass i18n props to a DynamicSelectField (WARNING! it is mutated internally)
+
+context -- (optional) an optional param passed to all fields. If you fetch options etc. in your controller you could pass these in the context object and access them from the options utility for a DynamicSelectField.
 
 When we call validate, the schema calls validate on each field and returns an error object if any data is determined to be invalid.
 
@@ -192,14 +199,81 @@ Basically a text field that allows you to implement a password input field when 
 **options:** {array} list of option objects of the form {name: string, title: string}
 
 ### DynamicSelectField
+The DynamicSelectField allows you to generate the list of options at runtime. You can either do an ordinary sync lookup, or an async lookup to allow you to perform DB or network calls. In an isomorphic app you might register a utility that does a DB-lookup on the server and a API-lookup over network. 
+
 **valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
 
-**options:** {object} defines a utility to look up which has methods to get the list of options (either using a sync and an async lookup for network or DB calls)
+**options:** {object} defines which utility to use to get options
+
+```JavaScript
+var createInterface = require('component-registry').createInterface
+
+var IOptions = createInterface({
+    name: 'IOptions'
+})
+
+validators.dynamicSelectField({
+    valueType: validators.textField({required: true}),
+    options: { utilityInterface: IOptions, name: 'test'} 
+});
 ```
-options: {
-    utilityInterface: IMyOptions,
-    name: 'my-field-options' // Optional
-}
+
+#### Standard lookup
+
+```JavaScript
+var registry = require('component-registry').globalRegistry
+var createUtility = require('component-registry').createUtility
+
+createUtility({
+    implements: IOptions,
+    name: 'test',
+    
+    getOptions: function (inp, options, context) {
+        // You would include i18n properties with an options object you pass to .validate(data, options, context)
+
+        // Implement some clever code here and return a list that looks like this
+        return [{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}]
+    },
+
+    getOptionTitle: function (inp) {
+        // Implement some clever code here and return the option title
+        var tmp = {
+            one: 'The One',
+            two: 'The Two'
+        }
+        return tmp[inp]
+    }
+}).registerWith(registry)
+```
+
+#### Async lookup
+
+*Note:* If you have included an async lookup in your schema you need to call `.validateAsync()` which returns an error otherwise you will get an error.
+
+```JavaScript
+var registry = require('component-registry').globalRegistry
+var createUtility = require('component-registry').createUtility
+
+createUtility({
+    implements: IOptions,
+    name: 'test',
+    
+    getOptions: function (inp, options, context) {
+        // You would include i18n properties with an options object you pass to .validateAsync(data, options, context)
+
+        // Implement some clever code here and return a list that looks like this
+        return Promise.resolve([{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}])
+    },
+
+    getOptionTitle: function (inp) {
+        // Implement some clever code here and return the option title
+        var tmp = {
+            one: 'The One',
+            two: 'The Two'
+        }
+        return Promise.resolve(tmp[inp])
+    }
+}).registerWith(registry)
 ```
 
 ### ObjectField
