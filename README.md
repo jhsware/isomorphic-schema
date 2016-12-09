@@ -115,7 +115,14 @@ Once you have created an instance of a schema such as `simpleSchema` above you c
 
 ```JavaScript
 var errors = simpleSchema.validate(inputData)
+
+// or if you have async options in a DynamicSelectField:
+var errors = simpleSchema.validateAsync(inputData, options, context)
 ```
+
+options -- (optional) an options object you could use to pass i18n props to a DynamicSelectField (WARNING! it is mutated internally)
+
+context -- (optional) an optional param passed to all fields. If you fetch options etc. in your controller you could pass these in the context object and access them from the options utility for a DynamicSelectField.
 
 When we call validate, the schema calls validate on each field and returns an error object if any data is determined to be invalid.
 
@@ -145,11 +152,38 @@ Field validators define what values are valid. This is an overview of the field 
 Overview of field options:
 
 ### BaseField
+
+*NOTE:* ALL fields except BoolField inherit from BaseField, so all fields have the following options
+
 **required:** {boolean} this field is required (must evaluate to `val == true`)
 
 **readOnly:** {boolean} this is a read only field 
 
 ### TextField
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### DateField
+Checks for a valid date format using moment.js.
+
+### DateTimeField
+Checks for a valid date and time format using moment.js.
+
+### EmailField
+Checks for a valid e-mail address.
+
+### OrgNrField
+Checks for a valid swedish social security number.
+
+### PasswordField
+Basically a text field that allows you to implement a password input field when rendering. 
+
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### TextAreaField
 **minLength:** {integer} minimum number of chars
 
 **maxLength:** {integer} maximum number of chars
@@ -163,6 +197,84 @@ Overview of field options:
 **valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
 
 **options:** {array} list of option objects of the form {name: string, title: string}
+
+### DynamicSelectField
+The DynamicSelectField allows you to generate the list of options at runtime. You can either do an ordinary sync lookup, or an async lookup to allow you to perform DB or network calls. In an isomorphic app you might register a utility that does a DB-lookup on the server and a API-lookup over network. 
+
+**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
+
+**options:** {object} defines which utility to use to get options
+
+```JavaScript
+var createInterface = require('component-registry').createInterface
+
+var IOptions = createInterface({
+    name: 'IOptions'
+})
+
+validators.dynamicSelectField({
+    valueType: validators.textField({required: true}),
+    options: { utilityInterface: IOptions, name: 'test'} 
+});
+```
+
+#### Standard lookup
+
+```JavaScript
+var registry = require('component-registry').globalRegistry
+var createUtility = require('component-registry').createUtility
+
+createUtility({
+    implements: IOptions,
+    name: 'test',
+    
+    getOptions: function (inp, options, context) {
+        // You would include i18n properties with an options object you pass to .validate(data, options, context)
+
+        // Implement some clever code here and return a list that looks like this
+        return [{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}]
+    },
+
+    getOptionTitle: function (inp) {
+        // Implement some clever code here and return the option title
+        var tmp = {
+            one: 'The One',
+            two: 'The Two'
+        }
+        return tmp[inp]
+    }
+}).registerWith(registry)
+```
+
+#### Async lookup
+
+*Note:* If you have included an async lookup in your schema you need to call `.validateAsync()` which returns an error otherwise you will get an error.
+
+```JavaScript
+var registry = require('component-registry').globalRegistry
+var createUtility = require('component-registry').createUtility
+
+createUtility({
+    implements: IOptions,
+    name: 'test',
+    
+    getOptions: function (inp, options, context) {
+        // You would include i18n properties with an options object you pass to .validateAsync(data, options, context)
+
+        // Implement some clever code here and return a list that looks like this
+        return Promise.resolve([{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}])
+    },
+
+    getOptionTitle: function (inp) {
+        // Implement some clever code here and return the option title
+        var tmp = {
+            one: 'The One',
+            two: 'The Two'
+        }
+        return Promise.resolve(tmp[inp])
+    }
+}).registerWith(registry)
+```
 
 ### ObjectField
 **schema:** {object} another Schema object
@@ -198,6 +310,7 @@ baseField
     |- objectRelationField
     |- multiSelectField
     |- selectField
+    |   |- dynamicSelectField
     |- creditCardField
 boolField    
 ```
@@ -568,3 +681,25 @@ DONE - how to creat a formlib to render schemas
     DONE - formGenerator
     DONE - component-registry
     DONE - field widgets
+
+
+options: { utility: IMyOptionsUtility, name: 'my-name'}
+
+createUtility({
+    implements: IMyOptionsUtility,
+    name: 'my-name',
+
+    getOptions: function () {
+        // Get all the options
+        // MUST CACHE VALUES, at least during this request, this could get VERY slow otherwise
+        // If it returns a huge data set you should consider creating a specialised validator
+        // that doesn't demand fetching data for validation
+        return [{name: ..., title: ...}]
+    },
+
+    getOptionTitle: function (value) {
+        // Get option matching value
+        // MUST CACHE VALUES, this could get VERY slow
+        return 'The Title'
+    }
+}) 
