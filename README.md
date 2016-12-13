@@ -308,7 +308,7 @@ var MySpecialValidationField = createObjectPrototype({
   implements: [IMySpecialValidationField],
   extends: [TextField],
   
-  validate: function (inp) {
+  validate: function (inp, options, context) {
     // Call the TextField validate method to invoke the validation we inherited
     var error = this._ITextField.validate.call(this, inp)
     if (error) { return error }
@@ -453,7 +453,7 @@ registry.registerAdapter(MySpecialInputAdapter)
 The fact that we place the widget rendering code in a render method is determined by the form generator. Also the parameters are determined by the form generator. This example matches `kth-node-formlib`.
 
 ## i18n ###
-isomorphic-schema supports i18n by providing i18nLabel propoerties that you can translate with your library of choice. There are two useful helper methods i18n and renderString:
+isomorphic-schema supports i18n by providing i18nLabel properties that you can translate with your library of choice. There are two useful helper methods i18n and renderString:
 
 
 ### i18n(label: string[, description: string]) ####
@@ -614,25 +614,3 @@ DONE - how to creat a formlib to render schemas
     DONE - formGenerator
     DONE - component-registry
     DONE - field widgets
-
-
-options: { utility: IMyOptionsUtility, name: 'my-name'}
-
-createUtility({
-    implements: IMyOptionsUtility,
-    name: 'my-name',
-
-    getOptions: function () {
-        // Get all the options
-        // MUST CACHE VALUES, at least during this request, this could get VERY slow otherwise
-        // If it returns a huge data set you should consider creating a specialised validator
-        // that doesn't demand fetching data for validation
-        return [{name: ..., title: ...}]
-    },
-
-    getOptionTitle: function (value) {
-        // Get option matching value
-        // MUST CACHE VALUES, this could get VERY slow
-        return 'The Title'
-    }
-}) 
