@@ -198,83 +198,15 @@ Basically a text field that allows you to implement a password input field when 
 
 **options:** {array} list of option objects of the form {name: string, title: string}
 
-### DynamicSelectField
-The DynamicSelectField allows you to generate the list of options at runtime. You can either do an ordinary sync lookup, or an async lookup to allow you to perform DB or network calls. In an isomorphic app you might register a utility that does a DB-lookup on the server and a API-lookup over network. 
+### DynamicSelectBaseField (Abstract class)
+By subclassing DynamicSelectBaseField you can create a custom select field that generates options at runtime.
 
-**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
+Any options are specified by your implementation.
 
-**options:** {object} defines which utility to use to get options
+### DynamicSelectAsyncBaseField (Abstract class)
+By subclassing DynamicSelectAsyncBaseField you can create a custom select field that generates options at runtime through an API-call, DB-call or other async operation.
 
-```JavaScript
-var createInterface = require('component-registry').createInterface
-
-var IOptions = createInterface({
-    name: 'IOptions'
-})
-
-validators.dynamicSelectField({
-    valueType: validators.textField({required: true}),
-    options: { utilityInterface: IOptions, name: 'test'} 
-});
-```
-
-#### Standard lookup
-
-```JavaScript
-var registry = require('component-registry').globalRegistry
-var createUtility = require('component-registry').createUtility
-
-createUtility({
-    implements: IOptions,
-    name: 'test',
-    
-    getOptions: function (inp, options, context) {
-        // You would include i18n properties with an options object you pass to .validate(data, options, context)
-
-        // Implement some clever code here and return a list that looks like this
-        return [{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}]
-    },
-
-    getOptionTitle: function (inp) {
-        // Implement some clever code here and return the option title
-        var tmp = {
-            one: 'The One',
-            two: 'The Two'
-        }
-        return tmp[inp]
-    }
-}).registerWith(registry)
-```
-
-#### Async lookup
-
-*Note:* If you have included an async lookup in your schema you need to call `.validateAsync()` which returns an error otherwise you will get an error.
-
-```JavaScript
-var registry = require('component-registry').globalRegistry
-var createUtility = require('component-registry').createUtility
-
-createUtility({
-    implements: IOptions,
-    name: 'test',
-    
-    getOptions: function (inp, options, context) {
-        // You would include i18n properties with an options object you pass to .validateAsync(data, options, context)
-
-        // Implement some clever code here and return a list that looks like this
-        return Promise.resolve([{name: 'one', title: 'The One'}, {name: 'two', title: 'The Two'}])
-    },
-
-    getOptionTitle: function (inp) {
-        // Implement some clever code here and return the option title
-        var tmp = {
-            one: 'The One',
-            two: 'The Two'
-        }
-        return Promise.resolve(tmp[inp])
-    }
-}).registerWith(registry)
-```
+Any options are specified by your implementation.
 
 ### ObjectField
 **schema:** {object} another Schema object
@@ -310,7 +242,8 @@ baseField
     |- objectRelationField
     |- multiSelectField
     |- selectField
-    |   |- dynamicSelectField
+    |- DynamicSelectBaseField (abstract class, requires subclassing)
+    |   |- DynamicSelectAsyncBaseField (abstract class, requires subclassing)
     |- creditCardField
 boolField    
 ```
@@ -375,7 +308,7 @@ var MySpecialValidationField = createObjectPrototype({
   implements: [IMySpecialValidationField],
   extends: [TextField],
   
-  validate: function (inp) {
+  validate: function (inp, options, context) {
     // Call the TextField validate method to invoke the validation we inherited
     var error = this._ITextField.validate.call(this, inp)
     if (error) { return error }
@@ -520,7 +453,7 @@ registry.registerAdapter(MySpecialInputAdapter)
 The fact that we place the widget rendering code in a render method is determined by the form generator. Also the parameters are determined by the form generator. This example matches `kth-node-formlib`.
 
 ## i18n ###
-isomorphic-schema supports i18n by providing i18nLabel propoerties that you can translate with your library of choice. There are two useful helper methods i18n and renderString:
+isomorphic-schema supports i18n by providing i18nLabel properties that you can translate with your library of choice. There are two useful helper methods i18n and renderString:
 
 
 ### i18n(label: string[, description: string]) ####
@@ -681,25 +614,3 @@ DONE - how to creat a formlib to render schemas
     DONE - formGenerator
     DONE - component-registry
     DONE - field widgets
-
-
-options: { utility: IMyOptionsUtility, name: 'my-name'}
-
-createUtility({
-    implements: IMyOptionsUtility,
-    name: 'my-name',
-
-    getOptions: function () {
-        // Get all the options
-        // MUST CACHE VALUES, at least during this request, this could get VERY slow otherwise
-        // If it returns a huge data set you should consider creating a specialised validator
-        // that doesn't demand fetching data for validation
-        return [{name: ..., title: ...}]
-    },
-
-    getOptionTitle: function (value) {
-        // Get option matching value
-        // MUST CACHE VALUES, this could get VERY slow
-        return 'The Title'
-    }
-}) 
