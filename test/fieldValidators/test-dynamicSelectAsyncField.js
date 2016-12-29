@@ -26,32 +26,38 @@ var MyDynamicSelectAsyncField = createObjectPrototype({
     },
 
     validateAsync: function (inp, options, context) {
-        var result = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp);
+        var promise = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp);
 
         // Check if we failed validation in DynamicSelectAsyncBaseField
-        if (result) return result;
+        var _this = this
+        return promise.then(function (error) {
+            if (error) {
+                return Promise.resolve(error)
+            } else {
+                return _this.getOptionsAsync()
+                    .then(function (options) {
+                        var matches = false
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].name === inp) {
+                                matches = true
+                                break
+                            }
+                        }
+                    
+                        if (!matches) {
+                            error = {
+                                type: 'constraint_error',
+                                message: "Valt värde finns inte i listan över tillåtna värden"
+                            }
+                            //console.log(error);
+                            return Promise.resolve(error);
+                        } else {
+                            return Promise.resolve(undefined);
+                        }
+                    })
+            }
+        })
 
-        return this.getOptionsAsync()
-            .then(function (options) {
-                var matches = false
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].name === inp) {
-                        matches = true
-                        break
-                    }
-                }
-            
-                if (!matches) {
-                    error = {
-                        type: 'constraint_error',
-                        message: "Valt värde finns inte i listan över tillåtna värden"
-                    }
-                    //console.log(error);
-                    return Promise.resolve(error);
-                } else {
-                    return Promise.resolve(undefined);
-                }
-            })
     },
 
     getOptionsAsync: function (inp, options, context) {
