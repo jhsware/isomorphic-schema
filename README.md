@@ -600,6 +600,7 @@ if (typeof errors === 'undfined') {
 
 ## Internal Notes ###
 
+TODO - do basic type checking of params (such as adding valdiator as schema)
 DONE - explain purpose of isomorphic-schema
 DONE - What is a schema and what is a field validator
 TODO - What is component-registry
