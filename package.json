@@ -35,6 +35,8 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter ./test/**/test-*.js ./test/test-*.js",
-    "debug-test": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js"
+    "debug-test": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js",
+    "preversion": "npm run test",
+    "postversion": "git push && git push --tags"
   }
 }
