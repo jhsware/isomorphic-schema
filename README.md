@@ -223,6 +223,16 @@ Any options are specified by your implementation.
 
 **maxLength:** {integer} maximum number of chars when tags have been removed
 
+### AnyOf
+**valueTypes:** {array} list of value types than are allowed
+
+```JavaScript
+validators.anyOf({
+    valueTypes: [
+        validators.textField({})
+    ]
+})
+```
 
 ### Validator Inheritance Hierarchy
 ```
@@ -245,6 +255,7 @@ baseField
     |- DynamicSelectBaseField (abstract class, requires subclassing)
     |   |- DynamicSelectAsyncBaseField (abstract class, requires subclassing)
     |- creditCardField
+    |- anyOf
 boolField    
 ```
 
