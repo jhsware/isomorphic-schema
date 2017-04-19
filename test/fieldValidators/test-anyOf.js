@@ -42,7 +42,7 @@ describe('Any of', function() {
         expect(tmp).not.to.be(undefined);
     });
 
-    it('is ok if at least one value type validates', function() {
+    it('is ok if at least one value type validates (string)', function() {
         var anyOf = validators.anyOf({
             required: true,
             valueTypes: [
@@ -52,6 +52,18 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate("not a number");
+        expect(tmp).to.be(undefined);
+    });
+
+    it('is ok if at least one value type validates (integer)', function() {
+        var anyOf = validators.anyOf({
+            required: true,
+            valueTypes: [
+                validators.integerField({})
+            ]
+        });
+    
+        var tmp = anyOf.validate("234");
         expect(tmp).to.be(undefined);
     });
 });
