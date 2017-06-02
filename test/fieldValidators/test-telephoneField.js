@@ -31,6 +31,15 @@ describe('Telephone field', function() {
         expect(tmp).to.not.be(undefined);
     });
 
+    it('throws error on malformed phonenumber when called twice', function() {
+        var inp = "+4567$707 555 555"
+        var phoneField = validators.telephoneField({required: false});
+        var tmp = phoneField.validate(inp);
+        expect(tmp).to.not.be(undefined);
+        var tmp = phoneField.validate(inp);
+        expect(tmp).to.not.be(undefined);
+    });
+
     it('throws error on too many characters', function() {        
         var phoneField = validators.telephoneField({required: false});
         var tmp = phoneField.validate("1234567890123456");
