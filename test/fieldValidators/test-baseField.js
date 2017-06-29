@@ -1,12 +1,12 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../../lib/field_validators');
+var BaseField = require('../../lib/field_validators/BaseField');
 var Schema = require('../../lib/schema');
 
 describe('Base field', function() {
     it('supports required', function() {        
-        var baseField = validators.baseField({required: true});
+        var baseField = new BaseField({required: true});
     
         var tmp = baseField.validate();
         expect(tmp).to.not.be(undefined);
@@ -16,7 +16,7 @@ describe('Base field', function() {
     });
     
     it('shows error on required test if null', function() {        
-        var baseField = validators.baseField({required: true});
+        var baseField = new BaseField({required: true});
     
         var tmp = baseField.validate(null);
         expect(tmp).to.not.be(undefined);
@@ -26,11 +26,11 @@ describe('Base field', function() {
     });
 
     it('supports being optional', function() {        
-        var baseField = validators.baseField({required: false});
+        var baseField = new BaseField({required: false});
         var tmp = baseField.validate();
         expect(tmp).to.be(undefined);
 
-        var baseField = validators.baseField();
+        var baseField = new BaseField();
         var tmp = baseField.validate();
         expect(tmp).to.be(undefined);
     });

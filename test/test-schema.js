@@ -2,42 +2,46 @@ var assert = require('assert');
 var expect = require('expect.js');
 
 var Schema = require('../lib/schema');
-var validators = require('../lib/field_validators');
+var TextField = require('../lib/field_validators/TextField');
+var IntegerField = require('../lib/field_validators/IntegerField');
+var EmailField = require('../lib/field_validators/EmailField');
+var ObjectField = require('../lib/field_validators/ObjectField');
+var ListField = require('../lib/field_validators/ListField');
 
 var _genTestUserSchema = function () {
     
     return new Schema("User Schema", {
-        username:               validators.textField({required: true}),
-        email:                  validators.emailField({required: true}),
-        password:               validators.textField({required: false}),
-        confirm_password:       validators.textField({required: false}),
+        username:               new TextField({required: true}),
+        email:                  new EmailField({required: true}),
+        password:               new TextField({required: false}),
+        confirm_password:       new TextField({required: false}),
     });
 };
 
 var _genCustomerNoSchema = function () {    
     return new Schema("Customer Schema", {
-        customer: validators.textField({required: true}),
+        customer: new TextField({required: true}),
     });
 };
 
 var _genSpecialUserThatExtends = function (extendWithSchemas) {
     return new Schema({schemaName: "Special User Schema", extends: extendWithSchemas}, {
-        role: validators.textField({required: true})
+        role: new TextField({required: true})
     });
 };
 
 var _genSpecialUserThatExtendsAndOverrides = function (extendWithSchemas) {
     return new Schema({schemaName: "Override Schema", extends: extendWithSchemas}, {
-        email: validators.textField({required: true})
+        email: new TextField({required: true})
     });
 };
 
 var _genTestObjectSchema = function (options) {
     var userSchema = new Schema("User Schema", {
-        username:               validators.textField({required: true}),
-        email:                  validators.emailField({required: true}),
-        password:               validators.textField({required: false}),
-        confirm_password:       validators.textField({required: false}),
+        username:               new TextField({required: true}),
+        email:                  new EmailField({required: true}),
+        password:               new TextField({required: false}),
+        confirm_password:       new TextField({required: false}),
     });
     
     if (options.doNotValidateUserName) {
@@ -45,29 +49,29 @@ var _genTestObjectSchema = function (options) {
     }
     
     return new Schema("Composed Schema", {
-        user: validators.objectField({required: options.userIsRequired, schema: userSchema}),
-        role: validators.textField({required: true})
+        user: new ObjectField({required: options.userIsRequired, schema: userSchema}),
+        role: new TextField({required: true})
     });
 };
 
 var _genTestListSchema = function () {
     var userSchema = new Schema("User Schema", {
-        username:               validators.textField({required: true}),
-        email:                  validators.emailField({required: true}),
-        password:               validators.textField({required: false})
+        username:               new TextField({required: true}),
+        email:                  new EmailField({required: true}),
+        password:               new TextField({required: false})
     });
 
     return new Schema("Schema With List", {
-        users: validators.listField({
-            valueType: validators.objectField({required: true, schema: userSchema})
+        users: new ListField({
+            valueType: new ObjectField({required: true, schema: userSchema})
         })
     })
 }
 
 var _genTestOtherRO = function () {
     return new Schema("RO Schema", {
-        titleOtherRO: validators.textField({required: true, readOnly: true}),
-        ageOtherRO: validators.textField({required: true, readOnly: true}),
+        titleOtherRO: new TextField({required: true, readOnly: true}),
+        ageOtherRO: new TextField({required: true, readOnly: true}),
     });
 };
 
@@ -75,9 +79,9 @@ var _genTestRO = function () {
     var otherRO = _genTestOtherRO()
 
     return new Schema("RO Schema", {
-        titleRO: validators.textField({required: true, readOnly: true}),
-        ageRO: validators.textField({required: true, readOnly: true}),
-        otherObj: validators.objectField({required: true, schema: otherRO})
+        titleRO: new TextField({required: true, readOnly: true}),
+        ageRO: new TextField({required: true, readOnly: true}),
+        otherObj: new ObjectField({required: true, schema: otherRO})
     });
 };
 
@@ -481,7 +485,7 @@ describe('Schema inheritance', function() {
 
 var _genSchemaWithInteger = function () {    
     return new Schema("Integer Schema", {
-        number: validators.integerField({required: true}),
+        number: new IntegerField({required: true}),
     });
 };
 
@@ -489,15 +493,15 @@ var _genSchemaWithObject = function () {
     var integerSchema = _genSchemaWithInteger();
 
     return new Schema("Object Schema", {
-        numberObj: validators.objectField({schema: integerSchema, required: true}),
+        numberObj: new ObjectField({schema: integerSchema, required: true}),
     });
 };
 
 
 var _genOtherSchemaWithReadOnly = function () {
     return new Schema("Object Schema", {
-        otherTitleRO: validators.textField({readOnly: true, required: true}),
-        otherAge: validators.integerField({required: true})
+        otherTitleRO: new TextField({readOnly: true, required: true}),
+        otherAge: new IntegerField({required: true})
     });
 };
 
@@ -505,10 +509,10 @@ var _genSchemaWithReadOnly = function () {
     var otherSchema = _genOtherSchemaWithReadOnly();
 
     return new Schema("ReadOnly Schema", {
-        other: validators.objectField({schema: otherSchema, required: true}),
-        otherRO: validators.objectField({schema: otherSchema, readOnly: true, required: true}),
-        titleRO: validators.textField({readOnly: true}),
-        age: validators.integerField({required: true})
+        other: new ObjectField({schema: otherSchema, required: true}),
+        otherRO: new ObjectField({schema: otherSchema, readOnly: true, required: true}),
+        titleRO: new TextField({readOnly: true}),
+        age: new IntegerField({required: true})
     });
 };
 

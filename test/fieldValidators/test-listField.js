@@ -1,76 +1,78 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../../lib/field_validators');
+var ListField = require('../../lib/field_validators/ListField');
+var TextField = require('../../lib/field_validators/TextField');
+var ObjectField = require('../../lib/field_validators/ObjectField');
 var Schema = require('../../lib/schema');
 
 // TODO: Test list field ASYNC validation
 
 describe('List field', function() {
     it('accepts a list of fields', function() {
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
-            valueType: validators.textField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
         expect(tmp).to.be(undefined);
     });
     it('accepts a list of objects', function() {
         var objSchema = new Schema("Obj Schema", {
-            title: validators.textField({required: true})
+            title: new TextField({required: true})
         })
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
-            valueType: validators.objectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{title: "one"}, {title: "two"}]);
         expect(tmp).to.be(undefined);
     });
     it('throws error if single item is invalid', function() {
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
-            valueType: validators.textField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", undefined, "three"]);
         expect(tmp).not.to.be(undefined);
     });
     it('throws error if sub form is invalid', function() {
         var objSchema = new Schema("Obj Schema", {
-            title: validators.textField({required: true})
+            title: new TextField({required: true})
         })
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
-            valueType: validators.objectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{}, {title: "two"}]);
         expect(tmp).not.to.be(undefined);
     });
     it('throws error if too few items', function() {
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
             minItems: 4,
-            valueType: validators.textField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
         expect(tmp).not.to.be(undefined);
     });
     it('throws error if too many items', function() {
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
             maxItems: 2,
-            valueType: validators.textField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
         expect(tmp).not.to.be(undefined);
     });
     it('throws correct error if too few items and sub form error', function() {
         var objSchema = new Schema("Obj Schema", {
-            title: validators.textField({required: true})
+            title: new TextField({required: true})
         })
-        var theField = validators.listField({
+        var theField = new ListField({
             required: true,
             minItems: 5,
-            valueType: validators.objectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{}, {title: "two"}]);
         expect(tmp).not.to.be(undefined);

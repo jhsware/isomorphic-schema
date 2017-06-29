@@ -31,14 +31,14 @@ To create a schema you make a new instance of the Schema object. There are two r
 
 ```JavaScript
 var Schema = require('isomorphic-schema').Schema;
-var validators = require('isomorphic-schema').validators;
+var TextField = require('isomorphic-schema/lib/field_validators/TextField');
 var simpleSchema = new Schema("MyThing Schema", {
-    title: validators.textField({
+    title: new TextField({
         label: 'Title',
         placeholder: 'Type here...',
         required: true
     }),
-    author: validators.textField({
+    author: new TextField({
         label: 'Author',
         placeholder: 'Type here...',
         required: true
@@ -55,7 +55,7 @@ Schema supports inheritance to allow you to compose your forms. Instead of addin
 
 ```JavaScript
 var compositeSchema = new Schema({ schemaName: "MyComposite Schema", extends: [simpleSchema]}, {
-    status: validators.textField({
+    status: new TextField({
         label: 'Status',
         placeholder: 'Type here...',
         required: true
@@ -212,7 +212,7 @@ Any options are specified by your implementation.
 **schema:** {object} another Schema object
 
 ### ListField
-**valueType:** {object} a validator that matches the items in the list (can be a simple type such as `textField({})` or `objectField({schema: ...})`)
+**valueType:** {object} a validator that matches the items in the list (can be a simple type such as `new TextField({})` or `new ObjectField({schema: ...})`)
 
 **minLength:** {integer} minimum number of items
 
@@ -355,8 +355,8 @@ module.exports.IMyComplexValidationField = IMyComplexValidationField;
 In this example we will extend a SelectField in order to update data in an object. We will also force the available select options in the constructor to avoid having to enter that data in the schema. Since we are using the standard SelectField validation we don't need to add a validation method.
 
 ```JavaScript
-var validators = require('isomorphic-schema').validators;
-var SelectField = require('isomorphic-schema').fieldObjectPrototypes.SelectField;
+var TextField = require('isomorphic-schema/lib/field_validators/TextField');
+var SelectField = require('isomorphic-schema/lib/field_validators/SelectField');
 
 var MyComplexValidationField = createObjectPrototype({
   implements: [IMyComplexValidationField],
@@ -373,7 +373,7 @@ var MyComplexValidationField = createObjectPrototype({
       {name: 'sad_strong', title: i18n('form_visibility__option_sad_strong', 'Feeling sad but strong')},
       {name: 'sad_weak', title: i18n('form_visibility__option_sad_weak', 'Feeling sad and weak')}
     ]
-    options.valueType = validators.textField({required: true})
+    options.valueType = new TextField({required: true})
 
     this._ISelectField.constructor.call(this, options)
   },
@@ -471,10 +471,10 @@ isomorphic-schema supports i18n by providing i18nLabel properties that you can t
 Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library when outputing the strings.
 
 ```JavaScript
-var validators = require('isomorphic-schema').validators
+var TextAreaField = require('isomorphic-schema/lib/field_validators/TextAreaField');
 var i18n = require('isomorphic-schema').i18n
 
-description: validators.textAreaField({
+description: new TextAreaField({
     label: i18n('form_description_label', 'Description'),
     placeholder: i18n('form_description_placeholder', 'Type here...'),
     required: true
@@ -485,10 +485,10 @@ description: validators.textAreaField({
 Use `renderString` to substitute placeholders for values from the field validator options. This is used in your field widget when rendering a field error.
 
 ```JavaScript
-var validators = require('isomorphic-schema').validators
+var IntegerField = require('isomorphic-schema/lib/field_validators/IntegerField');
 var renderString = require('isomorphic-schema').renderString
 
-var fieldDef = validators.integerField({
+var fieldDef = new IntegerField({
     min: 10,
     max: 20
 })
@@ -555,15 +555,20 @@ You will want to translate these strings in your project to internationalise you
 
 ```JavaScript
 var Schema = require('isomorphic-schema').Schema;
-var validators = require('isomorphic-schema').field_validators;
+var TextAreaField = require('isomorphic-schema/lib/field_validators/TextAreaField');
+var TextField = require('isomorphic-schema/lib/field_validators/TextField');
+var SelectField = require('isomorphic-schema/lib/field_validators/SelectField');
+var ListField = require('isomorphic-schema/lib/field_validators/ListField');
+var ObjectField = require('isomorphic-schema/lib/field_validators/ObjectField');
+
 
 var mediaSchema = new Schema("Media Schema", {
-    image_url: validators.textField({
+    image_url: new TextField({
         label: 'Image URL',
         placeholder: 'http://...',
         required: true
     }),
-    description: validators.textAreaField({
+    description: new TextAreaField({
         label: 'Description',
         placeholder: 'Type here...',
         required: true
@@ -572,25 +577,25 @@ var mediaSchema = new Schema("Media Schema", {
 
 
 var myThing = new Schema("MyThing Schema", {
-    difficulty: validators.selectField({
+    difficulty: new SelectField({
         label: 'Difficulty',
         required: true,
-        valueType: validators.integerField(),
+        valueType: new IntegerField(),
         options: [
             {name: 0, title: "Easy"},
             {name: 1, title: "Medium"},
             {name: 2, title: "Hard"}
         ]
     }),
-    description: validators.textAreaField({
+    description: new TextAreaField({
         label: 'Description',
         placeholder: 'Type here...',
         required: true
     }),
-    media: validators.listField({
+    media: new ListField({
         label: 'Media',
         required: false,
-        valueType: validators.objectField({
+        valueType: new ObjectField({
             label: 'Media File',
             schema: mediaSchema,
             requried: true,

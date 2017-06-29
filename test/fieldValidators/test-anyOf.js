@@ -1,16 +1,18 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../../lib/field_validators');
+var AnyOf = require('../../lib/field_validators/AnyOf');
+var TextField = require('../../lib/field_validators/TextField');
+var IntegerField = require('../../lib/field_validators/IntegerField');
 var Schema = require('../../lib/schema');
 
 // TODO: Write async tests
 
 describe('Any of', function() {
     it('handles undefined when not required', function() {        
-        var anyOf = validators.anyOf({
+        var anyOf = new AnyOf({
             valueTypes: [
-                validators.textField({ required: true })
+                new TextField({ required: true })
             ]
         });
     
@@ -19,10 +21,10 @@ describe('Any of', function() {
     });
 
     it('throws error on undefined when required', function() {
-        var anyOf = validators.anyOf({
+        var anyOf = new AnyOf({
             required: true,
             valueTypes: [
-                validators.textField({})
+                new TextField({})
             ]
         });
     
@@ -31,10 +33,10 @@ describe('Any of', function() {
     });
 
     it('throws error if no value type validates', function() {
-        var anyOf = validators.anyOf({
+        var anyOf = new AnyOf({
             required: true,
             valueTypes: [
-                validators.integerField({})
+                new IntegerField({})
             ]
         });
     
@@ -43,11 +45,11 @@ describe('Any of', function() {
     });
 
     it('is ok if at least one value type validates (string)', function() {
-        var anyOf = validators.anyOf({
+        var anyOf = new AnyOf({
             required: true,
             valueTypes: [
-                validators.integerField({}),
-                validators.textField({})
+                new IntegerField({}),
+                new TextField({})
             ]
         });
     
@@ -56,10 +58,10 @@ describe('Any of', function() {
     });
 
     it('is ok if at least one value type validates (integer)', function() {
-        var anyOf = validators.anyOf({
+        var anyOf = new AnyOf({
             required: true,
             valueTypes: [
-                validators.integerField({})
+                new IntegerField({})
             ]
         });
     

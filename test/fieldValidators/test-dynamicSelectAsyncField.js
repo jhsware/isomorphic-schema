@@ -4,8 +4,8 @@ var expect = require('expect.js');
 var createObjectPrototype = require('component-registry').createObjectPrototype
 var createInterface = require('component-registry').createInterface
 
-var validators = require('../../lib/field_validators');
-var DynamicSelectAsyncBaseField = require('../../lib').fieldObjectPrototypes.DynamicSelectAsyncBaseField;
+var TextField = require('../../lib/field_validators/TextField');
+var DynamicSelectAsyncBaseField = require('../../lib/field_validators/DynamicSelectAsyncBaseField');
 var Schema = require('../../lib/schema');
 var Promise = require('es6-promise');
 
@@ -22,7 +22,7 @@ var MyDynamicSelectAsyncField = createObjectPrototype({
     constructor: function (options) {
         this._IDynamicSelectAsyncBaseField.constructor.call(this, options);
         
-        this.valueType = validators.textField({required: true}); 
+        this.valueType = new TextField({required: true}); 
     },
 
     validateAsync: function (inp, options, context) {

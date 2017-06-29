@@ -1,15 +1,17 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../../lib/field_validators');
+var SelectField = require('../../lib/field_validators/SelectField');
+var TextField = require('../../lib/field_validators/TextField');
+var EmailField = require('../../lib/field_validators/EmailField');
 var Schema = require('../../lib/schema');
 
 describe('Select field', function() {
     describe('Select field with options array', function() {
         it('allows you to select a value from the list', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: true,
-                valueType: validators.textField({required: true}),
+                valueType: new TextField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -20,9 +22,9 @@ describe('Select field', function() {
         });
         
         it('allows undefined or null if not required', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: false,
-                valueType: validators.textField({required: true}),
+                valueType: new TextField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -36,9 +38,9 @@ describe('Select field', function() {
         });
 
         it('throws an error if selected value is outside list', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: true,
-                valueType: validators.textField({required: true}),
+                valueType: new TextField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -51,9 +53,9 @@ describe('Select field', function() {
         
 
         it('throws an error if wrong type', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: true,
-                valueType: validators.emailField({required: true}),
+                valueType: new EmailField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -64,9 +66,9 @@ describe('Select field', function() {
         });
 
         it('can convert a value to a title', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: true,
-                valueType: validators.textField({required: true}),
+                valueType: new TextField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}
@@ -77,9 +79,9 @@ describe('Select field', function() {
         });
 
         it('convert a value to a title handles undefined', function() {        
-            var theField = validators.selectField({
+            var theField = new SelectField({
                 required: true,
-                valueType: validators.textField({required: true}),
+                valueType: new TextField({required: true}),
                 options: [
                     {name: "select-me", title: "Select Me"},
                     {name: "do-not-select", title: "Don't Select Me"}

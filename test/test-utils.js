@@ -1,7 +1,8 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../lib/field_validators');
+var IntegerField = require('../lib/field_validators/IntegerField');
+var BaseField = require('../lib/field_validators/BaseField');
 var i18n = require('../lib/utils').i18n;
 var clone = require('../lib/utils').clone;
 var renderString = require('../lib/utils').renderString;
@@ -41,19 +42,19 @@ describe('Utils', function() {
 
     describe('renderString', function() {
         it('substitute placeholders with field definition values', function() {
-            var integerField = validators.integerField({required: true, min: 1});
+            var integerField = new IntegerField({required: true, min: 1});
             var result = renderString('Min ${minValue}', integerField);
             expect(result).to.equal('Min 1');
         })
 
         it('is ok with not getting any placeholders', function() {
-            var baseField = validators.baseField({required: true});
+            var baseField = new BaseField({required: true});
             var result = renderString('Required', baseField);
             expect(result).to.equal('Required');
         })
 
         it('leaves placeholders that don\'t have corresponding values', function() {
-            var integerField = validators.integerField({required: true, min: 1});
+            var integerField = new IntegerField({required: true, min: 1});
             var result = renderString('Min ${notFound}', integerField);
             expect(result).to.equal('Min ${notFound}');
         })

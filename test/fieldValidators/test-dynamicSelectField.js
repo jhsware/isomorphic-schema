@@ -4,8 +4,9 @@ var expect = require('expect.js');
 var createObjectPrototype = require('component-registry').createObjectPrototype
 var createInterface = require('component-registry').createInterface
 
-var validators = require('../../lib/field_validators');
-var DynamicSelectBaseField = require('../../lib').fieldObjectPrototypes.DynamicSelectBaseField;
+var TextField = require('../../lib/field_validators/TextField');
+var IntegerField = require('../../lib/field_validators/IntegerField');
+var DynamicSelectBaseField = require('../../lib/field_validators/DynamicSelectBaseField');
 
 var IMyDynamicSelectField = createInterface({
     name: 'IMyDynamicSelectField'
@@ -20,7 +21,7 @@ var MyDynamicSelectField = createObjectPrototype({
     constructor: function (options) {
         this._IDynamicSelectBaseField.constructor.call(this, options);
         
-        this.valueType = validators.textField({required: true}); 
+        this.valueType = new TextField({required: true}); 
         
     },
 
@@ -44,7 +45,7 @@ describe('Dynamic select field', function() {
     it('allows you to select a value from the list', function() {        
         var theField = myDynamicSelectField({
             required: true,
-            valueType: validators.textField({required: true})
+            valueType: new TextField({required: true})
         });
     
         var tmp = theField.validate("one");
@@ -54,7 +55,7 @@ describe('Dynamic select field', function() {
     it('allows undefined or null if not required', function() {        
         var theField = myDynamicSelectField({
             required: false,
-            valueType: validators.textField({required: true})
+            valueType: new TextField({required: true})
         });
     
         var tmp = theField.validate(undefined);
@@ -66,7 +67,7 @@ describe('Dynamic select field', function() {
     it('throws an error if selected value is outside list', function() {        
         var theField = myDynamicSelectField({
             required: true,
-            valueType: validators.textField({required: true})
+            valueType: new TextField({required: true})
         });
     
         var tmp = theField.validate("outside-list");
@@ -76,7 +77,7 @@ describe('Dynamic select field', function() {
     it('throws an error if wrong type', function() {        
         var theField = myDynamicSelectField({
             required: true,
-            valueType: validators.integerField({required: true})
+            valueType: new IntegerField({required: true})
         });
     
         var tmp = theField.validate("select-me");
@@ -86,7 +87,7 @@ describe('Dynamic select field', function() {
     it('can convert a value to a title', function() {        
         var theField = myDynamicSelectField({
             required: true,
-            valueType: validators.textField({required: true})
+            valueType: new TextField({required: true})
         });
     
         var tmp = theField.getOptionTitle("one");
@@ -96,7 +97,7 @@ describe('Dynamic select field', function() {
     it('convert a value to a title handles undefined', function() {        
         var theField = myDynamicSelectField({
             required: true,
-            valueType: validators.textField({required: true})
+            valueType: new TextField({required: true})
         });
     
         var tmp = theField.getOptionTitle("no exist");

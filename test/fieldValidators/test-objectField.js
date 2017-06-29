@@ -1,7 +1,8 @@
 var assert = require('assert');
 var expect = require('expect.js');
 
-var validators = require('../../lib/field_validators');
+var ObjectField = require('../../lib/field_validators/ObjectField');
+var TextField = require('../../lib/field_validators/TextField');
 var Schema = require('../../lib/schema');
 
 // TODO: Test object field ASYNC validation
@@ -9,11 +10,11 @@ var Schema = require('../../lib/schema');
 describe('Object field', function () {
     describe('Object field with defined schema', function() {
         var objectSchema = new Schema("User Schema", {
-            username: validators.textField({required: true}),
+            username: new TextField({required: true}),
         })
         
         it('accepts valid object', function() {
-            var objectField = validators.objectField({
+            var objectField = new ObjectField({
                 required: true,
                 schema: objectSchema
             });
@@ -26,7 +27,7 @@ describe('Object field', function () {
         });
 
         it('throws error on undefined if required', function() {        
-            var objectField = validators.objectField({
+            var objectField = new ObjectField({
                 required: true,
                 schema: objectSchema
             });
@@ -36,7 +37,7 @@ describe('Object field', function () {
         });
 
         it("throws error when object schema doesn't validate", function() {        
-            var objectField =  validators.objectField({
+            var objectField =  new ObjectField({
                 required: true,
                 schema: objectSchema
             });
@@ -51,14 +52,14 @@ describe('Object field', function () {
 
     describe('Object field with defined interface', function() {
         var objectSchema = new Schema("User Schema", {
-            username: validators.textField({required: true}),
+            username: new TextField({required: true}),
         })
         var fakeInterface = {
             schema: objectSchema
         };
         
         it('accepts valid object', function() {
-            var objectField = validators.objectField({
+            var objectField = new ObjectField({
                 required: true,
                 interface: fakeInterface
             });
@@ -71,7 +72,7 @@ describe('Object field', function () {
         });
 
         it('throws error on undefined if required', function() {        
-            var objectField = validators.objectField({
+            var objectField = new ObjectField({
                 required: true,
                 interface: fakeInterface
             });
@@ -81,7 +82,7 @@ describe('Object field', function () {
         });
 
         it("throws error when object schema doesn't validate", function() {        
-            var objectField =  validators.objectField({
+            var objectField =  new ObjectField({
                 required: true,
                 interface: fakeInterface
             });
