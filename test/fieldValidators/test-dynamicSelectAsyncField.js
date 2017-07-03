@@ -7,7 +7,7 @@ var createInterface = require('component-registry').createInterface
 var TextField = require('../../lib/field_validators/TextField');
 var DynamicSelectAsyncBaseField = require('../../lib/field_validators/DynamicSelectAsyncBaseField');
 var Schema = require('../../lib/schema');
-var Promise = require('es6-promise');
+
 
 var IMyDynamicSelectAsyncField = createInterface({
     name: 'IMyDynamicSelectAsyncField'

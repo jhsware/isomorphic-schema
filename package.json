@@ -21,8 +21,7 @@
   "peerDependencies": {
     "component-registry": "^0.1.1 || ^0.2.0",
     "striptags": "^3.0.0",
-    "moment": "^2.8.4",
-    "es6-promise": "^4.0.5"
+    "moment": "^2.8.4"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
@@ -30,8 +29,7 @@
     "mocha-better-spec-reporter": "^3.0.2",
     "component-registry": "^0.1.1 || ^0.2.0",
     "striptags": "^3.0.0",
-    "moment": "^2.8.4",
-    "es6-promise": "^4.0.5"
+    "moment": "^2.8.4"
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter ./test/**/test-*.js ./test/test-*.js",
