@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-schema",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Isomorphic Javascript form validation library. Supports nested forms, rules for skipping validation of fields and multi-field validation. Has i18n support.",
   "author": {
     "name": "Sebastian Ware",
