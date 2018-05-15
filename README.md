@@ -8,6 +8,8 @@ Field validators use object prototype mechanism from [component-registry](https:
 
 For more examples, please check out the tests.
 
+If you want to see automatic form generation based on isomorphic-schema form definitions head over to [inferno-formlib](https://github.com/jhsware/inferno-formlib). That library could easily be ported to React.js. There is a handlebars library available at [kth-node-formlib](https://github.com/KTH/kth-node-formlib).
+
 ## Overview ###
 
 The purpose of the isomorphic-schema form validation package is to help create great user experiences when working with forms and form validation. With simple and readable syntax it both works both as a single source of truth and documentation of forms and/or the complete data model.
