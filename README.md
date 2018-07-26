@@ -118,8 +118,10 @@ Once you have created an instance of a schema such as `simpleSchema` above you c
 ```JavaScript
 var errors = simpleSchema.validate(inputData)
 
-// or if you have async options in a DynamicSelectField:
-var errors = simpleSchema.validateAsync(inputData, options, context)
+// or if you have async fields such as something based on DynamicSelectAsyncBaseField:
+simpleSchema.validateAsync(inputData, options, context).then((errors) => {
+    
+})
 ```
 
 options -- (optional) an options object you could use to pass i18n props to a DynamicSelectField (WARNING! it is mutated internally)
@@ -149,92 +151,7 @@ The passed data is converted to proper datatypes by calling the method `fromStri
 
 ## Field Validators ###
 
-Field validators define what values are valid. This is an overview of the field validators available in the base package. Check the inheritance schema to see what options a field has inherited. 
-
-Overview of field options:
-
-### BaseField
-
-*NOTE:* ALL fields except BoolField inherit from BaseField, so all fields have the following options
-
-**required:** {boolean} this field is required (must evaluate to `val == true`)
-
-**readOnly:** {boolean} this is a read only field 
-
-### TextField
-**minLength:** {integer} minimum number of chars
-
-**maxLength:** {integer} maximum number of chars
-
-### DateField
-Checks for a valid date format using moment.js.
-
-### DateTimeField
-Checks for a valid date and time format using moment.js.
-
-### EmailField
-Checks for a valid e-mail address.
-
-### OrgNrField
-Checks for a valid swedish social security number.
-
-### PasswordField
-Basically a text field that allows you to implement a password input field when rendering. 
-
-**minLength:** {integer} minimum number of chars
-
-**maxLength:** {integer} maximum number of chars
-
-### TextAreaField
-**minLength:** {integer} minimum number of chars
-
-**maxLength:** {integer} maximum number of chars
-
-### IntegerField, DecimalField
-**min:** {integer} minimum value 
-
-**max:** {integer} maximum value
-
-### SelectField, MultiselectField
-**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
-
-**options:** {array} list of option objects of the form {name: string, title: string}
-
-### DynamicSelectBaseField (Abstract class)
-By subclassing DynamicSelectBaseField you can create a custom select field that generates options at runtime.
-
-Any options are specified by your implementation.
-
-### DynamicSelectAsyncBaseField (Abstract class)
-By subclassing DynamicSelectAsyncBaseField you can create a custom select field that generates options at runtime through an API-call, DB-call or other async operation.
-
-Any options are specified by your implementation.
-
-### ObjectField
-**schema:** {object} another Schema object
-
-### ListField
-**valueType:** {object} a validator that matches the items in the list (can be a simple type such as `new TextField({})` or `new ObjectField({schema: ...})`)
-
-**minLength:** {integer} minimum number of items
-
-**maxLength:** {integer} maximum number of items
-
-### HTMLAreaField
-**minLength:** {integer} minimum number of chars when tags have been removed
-
-**maxLength:** {integer} maximum number of chars when tags have been removed
-
-### AnyOf
-**valueTypes:** {array} list of value types than are allowed
-
-```JavaScript
-validators.anyOf({
-    valueTypes: [
-        validators.textField({})
-    ]
-})
-```
+Field validators define what values are valid. This is an overview of the field validators available in the base package.
 
 ### Validator Inheritance Hierarchy
 ```
@@ -261,42 +178,177 @@ baseField
 boolField    
 ```
 
+Overview of field options:
+
+### BaseField
+
+*NOTE:* ALL fields except BoolField inherit from BaseField, so all fields have the following options
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+### TextField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### DateField
+Checks for a valid date format using moment.js.
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+### DateTimeField
+Checks for a valid date and time format using moment.js.
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+### EmailField
+Checks for a valid e-mail address.
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+### OrgNrField
+Checks for a valid swedish social security number.
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+### PasswordField
+Basically a text field that allows you to implement a password input field when rendering. 
+
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### TextAreaField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**minLength:** {integer} minimum number of chars
+
+**maxLength:** {integer} maximum number of chars
+
+### IntegerField, DecimalField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**min:** {integer} minimum value 
+
+**max:** {integer} maximum value
+
+### SelectField, MultiselectField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**valueType:** a validator where the type matches 'name' in options (usually `textField({})`)
+
+**options:** {array} list of option objects of the form {name: string, title: string}
+
+### DynamicSelectBaseField (Abstract class)
+By subclassing DynamicSelectBaseField you can create a custom select field that generates options at runtime.
+
+Any options are specified by your implementation.
+
+### DynamicSelectAsyncBaseField (Abstract class)
+By subclassing DynamicSelectAsyncBaseField you can create a custom select field that generates options at runtime through an API-call, DB-call or other async operation.
+
+Any options are specified by your implementation.
+
+### ObjectField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**schema:** {object} another Schema object
+
+### ListField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**valueType:** {object} a validator that matches the items in the list (can be a simple type such as `new TextField({})` or `new ObjectField({schema: ...})`)
+
+**minLength:** {integer} minimum number of items
+
+**maxLength:** {integer} maximum number of items
+
+### HTMLAreaField
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**minLength:** {integer} minimum number of chars when tags have been removed
+
+**maxLength:** {integer} maximum number of chars when tags have been removed
+
+### AnyOf
+**required:** {boolean} this field is required (must evaluate to `val == true`)
+
+**readOnly:** {boolean} this is a read only field 
+
+**valueTypes:** {array} list of value types than are allowed
+
+```JavaScript
+validators.anyOf({
+    valueTypes: [
+        validators.textField({})
+    ]
+})
+```
+
 ## Creating Custom Fields ###
 
 There are three use cases where you will want to create a custom field.
 
-1. You want to allow your form rendering library to render a custom widgets
+1. You want to allow your form rendering library to render a custom widget
 
-2. You need to extend the validation rules
+2. You need to create custom validation rules
 
-3. You need to some transformation of the property in order to render it nicely
+3. You need to transform the value in order to render it nicely
 
 ### Creating a Dead Simple Field to Enable Custom Widget ####
 
 Since each field is identified by it's interface, we first create one.
 
 ```JavaScript
-var createInterface = require('component-registry').createInterface;
+import { createInterface } from 'component-registry');
 
-var IMySpecialField = createInterface({
+export const IMySpecialField = createInterface({
   name: 'IMySpecialField'
 })
-module.exports.IMySpecialField = IMySpecialField;
 ```
 
 **Note:** we need to export the created interface to allow our custom widget to register itself as renderer for this field. 
 
 ```JavaScript
-var createObjectPrototype = require('component-registry').createObjectPrototype;
-var TextField = require('isomorphic-schema').fieldObjectPrototypes.TextField;
+import { createObjectPrototype } from 'component-registry');
+import TextField from 'isomorphic-schema/lib/field_validators/TextField');
 
-var MySpecialField = createObjectPrototype({
+export const MySpecialField = createObjectPrototype({
   implements: [IMySpecialField],
   extends: [TextField]
   // We don't change any functionality so we don't need to implement any methods
   // to override the inherited TextField behaviour
 })
-module.exports.mySpecialField = function (options) { return new MySpecialField(options) }
 ```
 
 This field extends TextField and thus inherits all the functionality of a TextField. Because of this inheritance it also inherits the ITextField interface. If we don't create a custom widget that renders IMySpecialField, this field will be rendered with the widget that renders ITextField.
@@ -306,18 +358,21 @@ This field extends TextField and thus inherits all the functionality of a TextFi
 Again you start by creating an interface. 
 
 ```JavaScript
-var IMySpecialValidationField = createInterface({
+import { createInterface } from 'component-registry');
+
+export const IMySpecialValidationField = createInterface({
   name: 'IMySpecialValidationField'
 })
-module.exports.IMySpecialValidationField = IMySpecialValidationField;
 ```
 
 Now we extend a field that has the basic behaviour we need and then add our custom validation.
 
 ```JavaScript
-var i18n = require('isomorphic-schema').i18n
-var MyRegex = /(\d{4}-){3}\d{4}/
-var MySpecialValidationField = createObjectPrototype({
+import { createObjectPrototype } from 'component-registry');
+import { i18n } from 'isomorphic-schema/lib/utils')
+const MyRegex = /(\d{4}-){3}\d{4}/
+
+export const MySpecialValidationField = createObjectPrototype({
   implements: [IMySpecialValidationField],
   extends: [TextField],
   
@@ -338,7 +393,6 @@ var MySpecialValidationField = createObjectPrototype({
     }
   }
 })
-module.exports.mySpecialValidationField = function (options) { return new MySpecialValidationField(options) }
 ```
 
 Note that createObjectPrototype mounts methods of the extended fields using the interface name of that object prototype. That is why we type `this._ITextField` to access the validate method of the TextField. If we extend from our new MySpecialValidationField we would access it's validate method at `this._IMySpecialValidationField` which is also the name we set on the interface IMySpecialValidationField.
@@ -348,19 +402,20 @@ Note that createObjectPrototype mounts methods of the extended fields using the 
 Yupp, you start by creating an interface. 
 
 ```JavaScript
-var IMyComplexValidationField = createInterface({
+import { createInterface } from 'component-registry');
+
+export const IMyComplexValidationField = createInterface({
   name: 'IMyComplexValidationField'
 })
-module.exports.IMyComplexValidationField = IMyComplexValidationField;
 ```
 
 In this example we will extend a SelectField in order to update data in an object. We will also force the available select options in the constructor to avoid having to enter that data in the schema. Since we are using the standard SelectField validation we don't need to add a validation method.
 
 ```JavaScript
-var TextField = require('isomorphic-schema/lib/field_validators/TextField');
-var SelectField = require('isomorphic-schema/lib/field_validators/SelectField');
+import TextField from 'isomorphic-schema/lib/field_validators/TextField';
+import SelectField from 'isomorphic-schema/lib/field_validators/SelectField';
 
-var MyComplexValidationField = createObjectPrototype({
+export const MyComplexValidationField = createObjectPrototype({
   implements: [IMyComplexValidationField],
   extends: [SelectField],
   
@@ -406,7 +461,6 @@ var MyComplexValidationField = createObjectPrototype({
     return outp;
   }
 })
-module.exports.myComplexValidationField = function (options) { return new MyComplexValidationField(options) }
 ```
 
 The method `toFormattedString` converts the value sent to the field to a representation used internally in the field. In this case transforming it to be compatible with the SelectField we are extending.
@@ -423,25 +477,42 @@ Rendering a form from a schema is not very difficult but there are several featu
 
 ### Creating a Field Widget ####
 
-The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget) and adapts the given field (in this case IMySpecialField). The lookup looks like this, but you don't need to worry about that unless you create a form generator:
+The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget)
 
 ```JavaScript
-var theField = module.exports.mySpecialField; // The field we exported in the create custom fields part
-registry.getAdapter(theField, IInputFieldWidget);
+import { createInterface } from 'component-registry');
+
+export const IInputFieldWidget = createInterface({
+  name: 'IInputFieldWidget'
+})
+```
+
+and adapts the given field (in the example bellow IMySpecialField).
+
+The actual lookup looks like this:
+
+```JavaScript
+import { globalRegistry } from 'component-registry'
+
+const theField = new MySpecialField(...);
+globalRegistry.getAdapter(theField, IInputFieldWidget);
 ```
 
 The component-registry https://github.com/jhsware/component-registry will find the widget we are creating here:
 
 ```JavaScript
-var MySpecialInputAdapter = createAdapter({
-  implements: IInputFieldWidget,
-  adapts: IMySpecialField,
+import { globalRegistry } from 'component-registry'
+import { createAdapter } from 'component-registry');
+
+const MySpecialInputAdapter = createAdapter({
+  implements: IInputFieldWidget, // Which we just created
+  adapts: IMySpecialField, // Which was created a bit further up
 
   render: function (key, data, fieldError, lang, objectNamespace) {
     // this.context is the field validator object
     var inputName = (objectNamespace ? objectNamespace + '.' + key : key)
     
-    // Conveniece method that creates the label of this widget
+    // Convenience method that creates the label of this widget
     var outp = _standardLabel(key, this.context, lang)
 
     // Always handle readOnly attribute
@@ -459,8 +530,7 @@ var MySpecialInputAdapter = createAdapter({
 
     return outp
   }
-})
-registry.registerAdapter(MySpecialInputAdapter)
+}).registerWith(globalRegistry)
 ```
 
 The fact that we place the widget rendering code in a render method is determined by the form generator. Also the parameters are determined by the form generator. This example matches `kth-node-formlib`.
@@ -473,10 +543,10 @@ isomorphic-schema supports i18n by providing i18nLabel properties that you can t
 Use `i18n` to create nice i18n labels when defining your schema. All it does is return the first argument, but it also allows you to parse your code to find i18n messages to translate. You will need to translate the message with your chosen i18n library when outputing the strings.
 
 ```JavaScript
-var TextAreaField = require('isomorphic-schema/lib/field_validators/TextAreaField');
-var i18n = require('isomorphic-schema').i18n
+import TextAreaField from 'isomorphic-schema/lib/field_validators/TextAreaField');
+import { i18n } from 'isomorphic-schema/lib/utils');
 
-description: new TextAreaField({
+const description = new TextAreaField({
     label: i18n('form_description_label', 'Description'),
     placeholder: i18n('form_description_placeholder', 'Type here...'),
     required: true
@@ -487,15 +557,15 @@ description: new TextAreaField({
 Use `renderString` to substitute placeholders for values from the field validator options. This is used in your field widget when rendering a field error.
 
 ```JavaScript
-var IntegerField = require('isomorphic-schema/lib/field_validators/IntegerField');
-var renderString = require('isomorphic-schema').renderString
+import IntegerField from 'isomorphic-schema/lib/field_validators/IntegerField';
+import { renderString } from 'isomorphic-schema/lib/utils';
 
-var fieldDef = new IntegerField({
+const fieldDef = new IntegerField({
     min: 10,
     max: 20
 })
 
-var outp = renderString('Value too low. Min ${minValue}', fieldDef)
+const outp = renderString('Value too low. Min ${minValue}', fieldDef)
 // outp === 'Value too low. Min 10'
 ```
 
@@ -556,15 +626,14 @@ You will want to translate these strings in your project to internationalise you
 **Note:** These examples don't use i18n enabled strings for readability. Substitute the strings with i18n(...) as shown above to support translations.
 
 ```JavaScript
-var Schema = require('isomorphic-schema').Schema;
-var TextAreaField = require('isomorphic-schema/lib/field_validators/TextAreaField');
-var TextField = require('isomorphic-schema/lib/field_validators/TextField');
-var SelectField = require('isomorphic-schema/lib/field_validators/SelectField');
-var ListField = require('isomorphic-schema/lib/field_validators/ListField');
-var ObjectField = require('isomorphic-schema/lib/field_validators/ObjectField');
+import Schema from 'isomorphic-schema/lib/schema';
+import TextAreaField from 'isomorphic-schema/lib/field_validators/TextAreaField';
+import TextField from 'isomorphic-schema/lib/field_validators/TextField';
+import SelectField from 'isomorphic-schema/lib/field_validators/SelectField';
+import ListField from 'isomorphic-schema/lib/field_validators/ListField';
+import ObjectField from 'isomorphic-schema/lib/field_validators/ObjectField';
 
-
-var mediaSchema = new Schema("Media Schema", {
+const mediaSchema = new Schema("Media Schema", {
     image_url: new TextField({
         label: 'Image URL',
         placeholder: 'http://...',
@@ -578,7 +647,7 @@ var mediaSchema = new Schema("Media Schema", {
 });
 
 
-var myThing = new Schema("MyThing Schema", {
+const myThing = new Schema("MyThing Schema", {
     difficulty: new SelectField({
         label: 'Difficulty',
         required: true,
@@ -606,7 +675,7 @@ var myThing = new Schema("MyThing Schema", {
     })
 });
 
-var errors = mySchema.validate({
+const errors = mySchema.validate({
     difficulty: 0,
     description: "This is my thing"
 });
