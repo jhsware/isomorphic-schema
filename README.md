@@ -74,7 +74,7 @@ The order in your extends array is important. The fields are added in the order 
 Note! validation constraints and invariants are also inherited. Se the 
 
 ### Invariants ####
-An invariant is a test that returns an an invariant error if doesn't pass. A typical invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
+An invariant is a test on the entire data of a form that always needs to evaluate as true. A classic invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
 
 ```JavaScript
 simpleSchema.addInvariant(function (data, selectedFields) {
@@ -98,7 +98,7 @@ simpleSchema.addInvariant(function (data, selectedFields) {
 })
 ```
 
-Note that invariants should only be checked if all the fields are passed in selectedFields. Both data and selectedFields are passed by the simpleSchema.validate method to the invariant validator function.
+Note! Invariants should only evaluate if all the fields that are part of that test are passed in selectedFields. Both data and selectedFields are passed by the simpleSchema.validate method to the invariant validator function.
 
 ### Validation Constraints ####
 
