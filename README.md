@@ -56,16 +56,22 @@ Besides field validators you can also add form level validation with invariants 
 Schema supports inheritance to allow you to compose your forms. Instead of adding the debug name as first parameter you pass an object:
 
 ```JavaScript
-var compositeSchema = new Schema({ schemaName: "MyComposite Schema", extends: [simpleSchema]}, {
-    status: new TextField({
-        label: 'Status',
-        placeholder: 'Type here...',
-        required: true
-    }) 
+var compositeSchema = new Schema({
+    schemaName: "MyComposite Schema",
+    extends: [simpleSchema],
+    fields: {
+        status: new TextField({
+            label: 'Status',
+            placeholder: 'Type here...',
+            required: true
+        })
+    }
 })
 ```
 
-The order in your extends array is important. With duplicate fields, schemas to the left override anything to the right. Fields in schemas to the right will be added first so this affects the order if you auto generate forms. Your schema specific fields are placed last.
+The order in your extends array is important. The fields are added in the order of the extends array and in case of naming conflicts, fields in schemas to the right overwrite those to the left. Your schema specific fields are placed last.
+
+Note! validation constraints and invariants are also inherited. Se the 
 
 ### Invariants ####
 An invariant is a test that returns an an invariant error if doesn't pass. A typical invariant test is that password and confirm_password is a match, or that to_date is larger than from_date.
