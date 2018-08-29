@@ -19,7 +19,7 @@
   "main": "./lib/index.js",
   "dependencies": {},
   "peerDependencies": {
-    "component-registry": "^0.1.1 || ^0.2.0",
+    "component-registry": "^0.1.1 || ^0.2.0 || ^0.3.0",
     "striptags": "^3.0.0",
     "moment": "^2.8.4"
   },
@@ -27,7 +27,7 @@
     "expect.js": "^0.3.1",
     "mocha": "^3.1.2",
     "mocha-better-spec-reporter": "^3.0.2",
-    "component-registry": "^0.1.1 || ^0.2.0",
+    "component-registry": "^0.1.1 || ^0.2.0 || ^0.3.0",
     "striptags": "^3.0.0",
     "moment": "^2.8.4"
   },
