@@ -1,6 +1,6 @@
 {
   "name": "isomorphic-schema",
-  "version": "0.8.3",
+  "version": "1.0.0-beta.1",
   "description": "Isomorphic Javascript form validation library. Supports nested forms, rules for skipping validation of fields and multi-field validation. Has i18n support.",
   "author": {
     "name": "Sebastian Ware",
@@ -19,17 +19,17 @@
   "main": "./lib/index.js",
   "dependencies": {},
   "peerDependencies": {
-    "component-registry": "^0.1.1 || ^0.2.0 || ^0.3.0",
-    "striptags": "^3.0.0",
-    "moment": "^2.8.4"
+    "component-registry": "1.0.0-rc.2",
+    "striptags": "^3.1.1",
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
     "mocha": "^3.1.2",
     "mocha-better-spec-reporter": "^3.0.2",
-    "component-registry": "^0.1.1 || ^0.2.0 || ^0.3.0",
-    "striptags": "^3.0.0",
-    "moment": "^2.8.4"
+    "component-registry": "1.0.0-rc.2",
+    "striptags": "^3.1.1",
+    "moment": "^2.22.2"
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter ./test/**/test-*.js ./test/test-*.js",
