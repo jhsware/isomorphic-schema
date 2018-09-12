@@ -385,7 +385,7 @@ describe('Schema inheritance', function() {
         var userSchema = _genTestUserSchema();
         var specUserSchema = _genSpecialUserThatExtends([userSchema]);
         
-        expect(specUserSchema._fields.username).to.not.be(undefined);
+        expect(specUserSchema.getFields().username).to.not.be(undefined);
     });
     
     it('we can inherit multiple schemas', function() {        
@@ -393,8 +393,8 @@ describe('Schema inheritance', function() {
         var custNoSchema = _genCustomerNoSchema();
         var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
         
-        expect(specCustUserSchema._fields.username).to.not.be(undefined);
-        expect(specCustUserSchema._fields.customer).to.not.be(undefined);
+        expect(specCustUserSchema.getFields().username).to.not.be(undefined);
+        expect(specCustUserSchema.getFields().customer).to.not.be(undefined);
     });
     
     it('throws an error when inherited fields do not validate', function() {
