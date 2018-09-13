@@ -19,20 +19,19 @@
   "main": "./lib/index.js",
   "dependencies": {},
   "peerDependencies": {
-    "component-registry": "1.0.0-rc.2",
+    "component-registry": "1.0.0-rc.3",
     "striptags": "^3.1.1",
     "moment": "^2.22.2"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
-    "mocha": "^3.1.2",
-    "mocha-better-spec-reporter": "^3.0.2",
-    "component-registry": "1.0.0-rc.2",
+    "mocha": "^5.2.0",
+    "component-registry": "1.0.0-rc.3",
     "striptags": "^3.1.1",
     "moment": "^2.22.2"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter mocha-better-spec-reporter ./test/**/test-*.js ./test/test-*.js",
+    "test": "./node_modules/mocha/bin/mocha ./test/**/test-*.js ./test/test-*.js",
     "debug-test": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags"
