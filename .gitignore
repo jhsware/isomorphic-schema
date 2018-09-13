@@ -32,5 +32,6 @@ assets/build/*
 build/
 .vscode
 package-lock.json
+launch.json
 dist
 lib
