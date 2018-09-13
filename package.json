@@ -19,14 +19,14 @@
   "main": "./lib/index.js",
   "dependencies": {},
   "peerDependencies": {
-    "component-registry": "1.0.0-rc.3",
+    "component-registry": "1.0.0-rc.4",
     "striptags": "^3.1.1",
     "moment": "^2.22.2"
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
     "mocha": "^5.2.0",
-    "component-registry": "1.0.0-rc.3",
+    "component-registry": "1.0.0-rc.4",
     "striptags": "^3.1.1",
     "moment": "^2.22.2"
   },
