@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
     Standard options:
@@ -7,29 +7,29 @@
 
 */
 
-const { createObjectPrototype } = require('component-registry')
+import { createObjectPrototype } from 'component-registry'
 
-const { IAnyOf } = require('../interfaces')
-const { i18n } = require('../utils')
+import { IAnyOf } from '../interfaces'
+import { i18n } from '../utils'
 
-const BaseField = require('./BaseField')
+import BaseField from './BaseField'
 
 const AnyOf = createObjectPrototype({
     extends: [BaseField],
     implements: [IAnyOf],
 
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         if (options) {
-            this._valueTypes = options.valueTypes;
-            delete options.valueTypes;
+            this._valueTypes = options.valueTypes
+            delete options.valueTypes
         }
     },
     
     // TODO: Validate against one of several
     validate: function (inp, options, context, async) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
 
         if (inp) {
             if (async) {
@@ -77,7 +77,7 @@ const AnyOf = createObjectPrototype({
             }
         } else {
             if (!async) {
-                return undefined;
+                return undefined
             } else {
                 return Promise.resolve(undefined)
             }
@@ -92,5 +92,5 @@ const AnyOf = createObjectPrototype({
         return inp
     }
     
-});
-module.exports = AnyOf;
+})
+module.exports = AnyOf

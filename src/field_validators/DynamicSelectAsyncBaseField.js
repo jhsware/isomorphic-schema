@@ -1,7 +1,7 @@
-'use strict';
-const { createObjectPrototype } = require('component-registry')
-const DynamicSelectBaseField = require('./DynamicSelectBaseField');
-const { i18n } = require('../utils')
+'use strict'
+import { createObjectPrototype } from 'component-registry'
+import DynamicSelectBaseField from './DynamicSelectBaseField'
+import { i18n } from '../utils'
 
 
 /*
@@ -16,7 +16,7 @@ const { i18n } = require('../utils')
 
 // TODO: Write tests
 
-const IDynamicSelectAsyncBaseField = require('../interfaces').IDynamicSelectAsyncBaseField;
+import { IDynamicSelectAsyncBaseField } from '../interfaces'
 
 const DynamicSelectAsyncBaseField = createObjectPrototype({
     implements: [IDynamicSelectAsyncBaseField],
@@ -24,23 +24,23 @@ const DynamicSelectAsyncBaseField = createObjectPrototype({
     extends: [DynamicSelectBaseField],
     
     constructor: function (options) {
-        this._IDynamicSelectBaseField.constructor.call(this, options);
+        this._IDynamicSelectBaseField.constructor.call(this, options)
     },
 
     // DynamicSelectAsyncBaseField:
     validateAsync: function (inp, options, context) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp);
+        var error = this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) };    
     
         // Since we have passed the required test we can just check if the value is undefined
         // or null and return field errors undefined 
         if (inp === null || typeof inp === 'undefined') {
             return Promise.resolve(undefined)
-        };
+        }
 
         if (inp) {
-            return this.valueType.validateAsync(inp, options, context);
+            return this.valueType.validateAsync(inp, options, context)
         } else {
             return Promise.resolve(undefined)
         }
@@ -49,11 +49,11 @@ const DynamicSelectAsyncBaseField = createObjectPrototype({
 
         Example implementation:
 
-        var result = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp);
+        var result = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp)
 
         // Check if we failed validation in DynamicSelectAsyncBaseField
         if (result) {
-            return result;
+            return result
         }
 
         return doAsyncCall(inp)
@@ -124,12 +124,12 @@ const DynamicSelectAsyncBaseField = createObjectPrototype({
     },
 
     toFormattedString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     },
 
     fromString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     }
-});
+})
 
-module.exports = DynamicSelectAsyncBaseField;
+module.exports = DynamicSelectAsyncBaseField

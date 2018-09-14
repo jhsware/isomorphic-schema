@@ -1,15 +1,15 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
-const parse = require('date-fns/parse')
-const format = require('date-fns/format')
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { i18n } from '../utils'
+import parse from 'date-fns/parse'
+import format from 'date-fns/format'
 
 /*
     Date-field
 */
-const IDateTimeField = require('../interfaces').IDateTimeField;
+import { IDateTimeField } from '../interfaces'
 
 const DateTimeField = createObjectPrototype({
     implements: [IDateTimeField],
@@ -17,12 +17,12 @@ const DateTimeField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._IBaseField.validate.call(this, inp);;
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp);
+        if (error) { return error }
         
         if(inp && !(inp instanceof Date)) {
             error = {
@@ -31,8 +31,8 @@ const DateTimeField = createObjectPrototype({
                 message: "Det ser inte ut som ett riktigt datumobjekt med tid"
             }
     
-            return error;
-        };
+            return error
+        }
     
     },
 
@@ -43,6 +43,6 @@ const DateTimeField = createObjectPrototype({
     fromString: function (inp) {
         return parse(inp)
     }
-});
+})
 
-module.exports = DateTimeField;
+module.exports = DateTimeField

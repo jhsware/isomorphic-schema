@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const IObjectField = require('../interfaces').IObjectField;
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { IObjectField } from '../interfaces'
+import { i18n } from '../utils'
 
 /*
     Object field
@@ -16,33 +16,33 @@ const ObjectField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         if (options) {
-            this._schema = options.schema;
-            this._interface = options.interface;
-            this.objectFactoryName = options.objectFactoryName;
+            this._schema = options.schema
+            this._interface = options.interface
+            this.objectFactoryName = options.objectFactoryName
         }
     },
     
     validate: function (inp, options, context, async) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
     
         // Validate data and return an error object
         if (inp) {
             
             if (this._interface) {
                 if (!async) {
-                    var schema = this._interface.schema;
+                    var schema = this._interface.schema
                 } else {
 
                 }
             } else {
-                var schema = this._schema;
+                var schema = this._schema
             }
 
             if (!async) {
-                var formErrors = schema.validate(inp, options, context, async);
+                var formErrors = schema.validate(inp, options, context, async)
                 if (formErrors) {
                     // report error if data is passed and errors are found
                     return {
@@ -57,17 +57,17 @@ const ObjectField = createObjectPrototype({
                 var promise = schema.validateAsync(inp, options, context)
 
                 if (!(promise && promise.then)) {
-                    return Promise.resolve(promise);
+                    return Promise.resolve(promise)
                 } else {
                     return promise.then(function (formErrors) {
-                        return Promise.resolve(formErrors);
+                        return Promise.resolve(formErrors)
                     })
                 }
             }
             
         } else {
             if (!async) {
-                return undefined;
+                return undefined
             } else {
                 return Promise.resolve(undefined)
             }
@@ -75,24 +75,24 @@ const ObjectField = createObjectPrototype({
     },
 
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
 
     fromString: function (inp, doNotRemoveReadOnly) {
         var _this = this
         if (typeof inp === 'object') {
-            var outp = {};
+            var outp = {}
             Object.keys(inp).forEach(function (key) {
                 if (!_this._schema.getFields()[key].readOnly || doNotRemoveReadOnly) {
-                    outp[key] = _this._schema.getFields()[key].fromString(inp[key], doNotRemoveReadOnly, inp);
+                    outp[key] = _this._schema.getFields()[key].fromString(inp[key], doNotRemoveReadOnly, inp)
                 }
             })
-            return outp;
+            return outp
         } else {
-            return inp;
+            return inp
         }
     }
     
-});
+})
 
-module.exports = ObjectField;
+module.exports = ObjectField

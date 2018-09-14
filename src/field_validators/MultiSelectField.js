@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { i18n } from '../utils'
 
 
 /*
@@ -16,7 +16,7 @@ const { i18n } = require('../utils')
 
 // TODO: Write tests
 
-const IMultiSelectField = require('../interfaces').IMultiSelectField;
+import { IMultiSelectField } from '../interfaces'
 
 const MultiSelectField = createObjectPrototype({
     implements: [IMultiSelectField],
@@ -24,21 +24,21 @@ const MultiSelectField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         
         if (options) {
             // Always set valueType to required to get validation per item
             // Should be an instance of a field.
             this.valueType = options.valueType; 
             this.options = options.options;            
-        };
+        }
         
     },
     
     validate: function (inp, options, context, async) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
         
         // If undefined and not required just return ok
         if (typeof inp === 'undefined' || inp === null) {
@@ -48,10 +48,10 @@ const MultiSelectField = createObjectPrototype({
         // We need to check every item in the list to see that they are valid
         var errors = inp.map(function (item) {
             // Chack value is of valueType
-            var error = this.valueType.validate(item);
+            var error = this.valueType.validate(item)
             if (typeof error !== 'undefined') {
                 if (!aync) {
-                    return error;
+                    return error
                 } else {
                     return Promise.resolve(error)
                 }
@@ -87,11 +87,11 @@ const MultiSelectField = createObjectPrototype({
     },
 
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
 
     fromString: function (inp) {
-        return inp;
+        return inp
     },
 
     getOptionTitle: function (name) {
@@ -99,6 +99,6 @@ const MultiSelectField = createObjectPrototype({
             if (this.options[i].name === name) return this.options[i].title 
         }
     }
-});
+})
 
-module.exports = MultiSelectField;
+module.exports = MultiSelectField

@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const TextField = require('./TextField');
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import TextField from './TextField'
+import { i18n } from '../utils'
 
 /*
     Email-field
 */
-const IEmailField = require('../interfaces').IEmailField;
+import { IEmailField } from '../interfaces'
 
 const EmailField = createObjectPrototype({
     implements: [IEmailField],
@@ -15,48 +15,48 @@ const EmailField = createObjectPrototype({
     extends: [TextField],
     
     constructor: function (options) {
-        this._ITextField.constructor.call(this, options);
+        this._ITextField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._ITextField.validate.call(this, inp)
+        if (error) { return error }
     
         // Required has been checked so if it is empty it is ok
         if (!inp) {
-            return;
+            return
         }
     
         /* 
             Using a proper e-mail testing algorithm
             http://thedailywtf.com/articles/Validating_Email_Addresses
         */
-        var add = inp;
-        var ampisthere = false;
-        var spacesthere = false;
+        var add = inp
+        var ampisthere = false
+        var spacesthere = false
 
-        var textbeforeamp = false;
-        var textafteramp = false;
-        var dotafteramp = false;
-        var othererror = false;
+        var textbeforeamp = false
+        var textafteramp = false
+        var dotafteramp = false
+        var othererror = false
 
         for(var i = 0; i < add.length; ++i) {
           if(add.charAt(i) == '@') {
               if(ampisthere)
-                  othererror = true;
+                  othererror = true
 
-              ampisthere = true;
+              ampisthere = true
           } else if(!ampisthere)
-              textbeforeamp = true;
+              textbeforeamp = true
 
           else if(add.charAt(i) == '.')
-              dotafteramp = true;
+              dotafteramp = true
 
           else
-              textafteramp = true;
+              textafteramp = true
 
           if(add.charAt(i) == ' ' || add.charAt(i) == ',')
-              spacesthere = true;
+              spacesthere = true
 
         }
 
@@ -67,18 +67,18 @@ const EmailField = createObjectPrototype({
                 message: "Det här är inte en riktig e-postadress"
             }
         
-            return error;
+            return error
         }
     
     },
     
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
 
     fromString: function (inp) {
-        return inp;
+        return inp
     }
-});
+})
 
-module.exports = EmailField;
+module.exports = EmailField

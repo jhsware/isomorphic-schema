@@ -1,17 +1,17 @@
-'use strict';
+'use strict'
 
 /*
     Ineteger-field
 */
 
-const { createObjectPrototype } = require('component-registry')
+import { createObjectPrototype } from 'component-registry'
 
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
+import BaseField from './BaseField'
+import { i18n } from '../utils'
 
-const IIntegerField = require('../interfaces').IIntegerField;
+import { IIntegerField } from '../interfaces'
 
-var reInteger = /[^0-9\.]/g;
+var reInteger = /[^0-9\.]/g
 
 const IntegerField = createObjectPrototype({
     implements: [IIntegerField],
@@ -19,18 +19,18 @@ const IntegerField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         if (options) {
-            this._minValue = options.min;
-            delete options.min;
-            this._maxValue = options.max;
+            this._minValue = options.min
+            delete options.min
+            this._maxValue = options.max
             delete options.max;            
         }
     },
     
     validate: function (inp) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
 
         if (!this._isRequired && (inp === null || typeof inp === "undefined" || inp === '')) {
             return
@@ -70,20 +70,20 @@ const IntegerField = createObjectPrototype({
     },
     
     toFormattedString: function (inp) {
-        return (typeof inp === 'undefined' || inp === null ? '' : inp + '');
+        return (typeof inp === 'undefined' || inp === null ? '' : inp + '')
     },
     
     fromString: function (inp) {
         if (typeof inp === "string") {
-            var tmp = parseInt(inp.replace(reInteger, ""));
+            var tmp = parseInt(inp.replace(reInteger, ""))
         } else {
-            var tmp = parseInt(inp);
-        };
+            var tmp = parseInt(inp)
+        }
         if (isNaN(tmp)) {
-            return undefined;
+            return undefined
         } else {
-            return tmp;
+            return tmp
         }
     }
-});
-module.exports = IntegerField;
+})
+module.exports = IntegerField

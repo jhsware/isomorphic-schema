@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * 
@@ -10,50 +10,49 @@
 function cloneArray (arr) {
     var outp = arr.map(function (item) {
         if (Array.isArray(item)) {
-            return cloneArray(item);
+            return cloneArray(item)
         } else if (typeof item === 'object') {
-            var tmp = cloneObj(item);
-            return tmp;
+            var tmp = cloneObj(item)
+            return tmp
         } else {
-            return item;
+            return item
         }
     })
     
-    return outp;
+    return outp
 }
 
 // TODO: Handle Date objects?
-var cloneObj = function (obj) {
-    var fn = function () {};
-    fn.prototype = obj.prototype;
-    var outp = new fn();
+export function clone(obj) {
+    var fn = function () {}
+    fn.prototype = obj.prototype
+    var outp = new fn()
     
     Object.keys(obj).forEach(function (key) {
         if (!obj.hasOwnProperty(key)) return
             
-        var tmp = obj[key];
+        var tmp = obj[key]
         if (Array.isArray(tmp)) {
-            outp[key] = cloneArray(tmp);
+            outp[key] = cloneArray(tmp)
         } else if (typeof tmp === 'object') {
-            outp[key] = cloneObj(tmp);
+            outp[key] = cloneObj(tmp)
         } else {
-            outp[key] = tmp;
+            outp[key] = tmp
         }
     })    
-    return outp;
+    return outp
 }
-module.exports.clone = cloneObj;
 
-module.exports.cloneShallow = function (obj) {
-    var fn = function () {};
-    fn.prototype = obj.prototype;
-    var outp = new fn();
+export function cloneShallow(obj) {
+    var fn = function () {}
+    fn.prototype = obj.prototype
+    var outp = new fn()
     
     Object.keys(obj).forEach(function (key) {
         if (!obj.hasOwnProperty(key)) return
-        outp[key] = obj[key];
+        outp[key] = obj[key]
     })    
-    return outp;
+    return outp
 }
 
 /**
@@ -70,12 +69,11 @@ module.exports.cloneShallow = function (obj) {
  * @example
  * i18n('form_label_title', 'The Title')
  */
-const i18n = function (i18nKey, helpText) {
-    return i18nKey;
+export function i18n(i18nKey, helpText) {
+    return i18nKey
 }
-module.exports.i18n = i18n;
 
-const regex = /\${([^}]+)}/g;
+const regex = /\${([^}]+)}/g
 /**
  * A helper method that substitutes placeholders of the form ${propertyName}
  * with the value found in the field definition. Such as minValue on IntegerField
@@ -90,12 +88,12 @@ const regex = /\${([^}]+)}/g;
  * 
  * Where personSchema.age is an IntegerField validator
  */
-const renderString = function (str, fieldDef) {
-    var m;
+export function renderString(str, fieldDef) {
+    var m
     while ((m = regex.exec(str)) !== null) {
         // This is necessary to avoid infinite loops with zero-width matches
         if (m.index === regex.lastIndex) {
-            regex.lastIndex++;
+            regex.lastIndex++
         }
         
         // The result can be accessed through the `m`-variable.
@@ -103,8 +101,7 @@ const renderString = function (str, fieldDef) {
             if (fieldDef[match] || fieldDef['_' + match]) {
                 str = str.replace('${' + match + '}', fieldDef[match] || fieldDef['_' + match] )
             }
-        });
+        })
     }
-    return str;
+    return str
 }
-module.exports.renderString = renderString;

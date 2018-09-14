@@ -1,7 +1,7 @@
-'use strict';
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
+'use strict'
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { i18n } from '../utils'
 
 /*
 
@@ -14,7 +14,7 @@ const { i18n } = require('../utils')
 
 // TODO: Write tests
 
-const ISelectField = require('../interfaces').ISelectField;
+import { ISelectField } from '../interfaces'
 
 const SelectField = createObjectPrototype({
     implements: [ISelectField],
@@ -22,35 +22,35 @@ const SelectField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         
         if (options) {
             // Always set valueType to required to get validation per item
             // Should be an instance of a field.
             this.valueType = options.valueType; 
             this.options = options.options;            
-        };
+        }
         
     },
     
     validate: function (inp, options, context, async) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
     
-        var error = inp && this.valueType.validate(inp);
-        if (error) { return error };
+        var error = inp && this.valueType.validate(inp)
+        if (error) { return error }
     
-        //console.log("[Select] options:");
-        //console.log(this.options);
+        //console.log("[Select] options:")
+        //console.log(this.options)
     
-        //console.log("[Select] current:");
-        //console.log(inp);
+        //console.log("[Select] current:")
+        //console.log(inp)
         
         // Since we have passed the required test we can just check if the value is undefined
         // or null and return field errors undefined 
         if (inp === null || typeof inp === 'undefined') {
             return
-        };
+        }
         
         var options = this.options
 
@@ -68,17 +68,17 @@ const SelectField = createObjectPrototype({
                 i18nLabel: i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed'),
                 message: "Valt värde finns inte i listan över tillåtna värden"
             }
-            //console.log(error);
-            return error;
+            //console.log(error)
+            return error
         }
     },
 
     toFormattedString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     },
 
     fromString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     },
 
     getOptionTitle: function (inp) {
@@ -86,6 +86,6 @@ const SelectField = createObjectPrototype({
             if (this.options[i].name === inp) return this.options[i].title 
         }
     }
-});
+})
 
-module.exports = SelectField;
+module.exports = SelectField

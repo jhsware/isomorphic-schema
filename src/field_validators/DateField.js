@@ -1,13 +1,13 @@
-'use strict';
-const { createObjectPrototype } = require('component-registry')
-const isValid = require('date-fns/is_valid')
-const TextField = require('./TextField');
-const { i18n } = require('../utils')
+'use strict'
+import { createObjectPrototype } from 'component-registry'
+import isValid from 'date-fns/is_valid'
+import TextField from './TextField'
+import { i18n } from '../utils'
 
 /*
     Date-field
 */
-const IDateField = require('../interfaces').IDateField;
+import { IDateField } from '../interfaces'
 
 const DateField = createObjectPrototype({
     implements: [IDateField],
@@ -15,12 +15,12 @@ const DateField = createObjectPrototype({
     extends: [TextField],
     
     constructor: function (options) {
-        this._ITextField.constructor.call(this, options);
+        this._ITextField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);;
-        if (error) { return error };
+        var error = this._ITextField.validate.call(this, inp);
+        if (error) { return error }
     
         if(inp && (inp.length != 10 || !isValid(new Date(inp)))) {
             error = {
@@ -29,18 +29,18 @@ const DateField = createObjectPrototype({
                 message: "Det ser inte ut som datum"
             }
         
-            return error;
+            return error
         }
     
     },
 
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
 
     fromString: function (inp) {
-        return inp;
+        return inp
     }
-});
+})
 
-module.exports = DateField;
+module.exports = DateField

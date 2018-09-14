@@ -1,17 +1,17 @@
-'use strict';
+'use strict'
 
 /*
     Decimal-field
 */
 
-const { createObjectPrototype } = require('component-registry')
+import { createObjectPrototype } from 'component-registry'
 
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
+import BaseField from './BaseField'
+import { i18n } from '../utils'
 
-const IDecimalField = require('../interfaces').IDecimalField;
+import { IDecimalField } from '../interfaces'
 
-const reDecimal = /[^0-9\.]/g;
+const reDecimal = /[^0-9\.]/g
 
 const DecimalField = createObjectPrototype({
     implements: [IDecimalField],
@@ -19,21 +19,21 @@ const DecimalField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         if (options) {
-            this._minValue = options.min;
-            delete options.min;
-            this._maxValue = options.max;
-            delete options.max;
-            this._precision = options.precision && (options.precision >= 0) && options.precision;
-            delete options.precision;
+            this._minValue = options.min
+            delete options.min
+            this._maxValue = options.max
+            delete options.max
+            this._precision = options.precision && (options.precision >= 0) && options.precision
+            delete options.precision
             
         }
     },
     
     validate: function (inp) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
 
         if (!this._isRequired && (inp === null || typeof inp === "undefined" || inp === '')) {
             return
@@ -65,43 +65,43 @@ const DecimalField = createObjectPrototype({
     },
     
     toFormattedString: function (inp) {
-        var outp = inp + '';
+        var outp = inp + ''
         
         if (inp === null || typeof inp === "undefined") {
-            return inp;
+            return inp
         }
         // Print only nrof decimals shown in precision if set
         if (typeof this._precision !== 'undefined') {
-            var tmp = outp.split('.');
-            outp = tmp[0];
+            var tmp = outp.split('.')
+            outp = tmp[0]
             if (this._precision > 0) {
                 outp += '.' 
                 if (tmp.length > 1) {
-                    outp += (tmp[1] + '').substr(0, this._precision);
+                    outp += (tmp[1] + '').substr(0, this._precision)
                 }
             }
         }
-        return outp;
+        return outp
     },
     
     fromString: function (inp) {
         if (typeof inp === "string") {
-            var tmp = parseFloat(inp.replace(reDecimal, ""));
+            var tmp = parseFloat(inp.replace(reDecimal, ""))
         } else {
-            var tmp = parseFloat(inp);
-        };
+            var tmp = parseFloat(inp)
+        }
         if (isNaN(tmp)) {
-            return undefined;
+            return undefined
         } else {
             // Round to precision if set
             if (typeof this._precision !== 'undefined') {
-                var tmp = tmp * Math.pow(10, this._precision);
-                var tmp = Math.round(tmp);
-                var tmp = tmp / Math.pow(10, this._precision);
+                var tmp = tmp * Math.pow(10, this._precision)
+                var tmp = Math.round(tmp)
+                var tmp = tmp / Math.pow(10, this._precision)
             }
             
-            return tmp;
+            return tmp
         }
     }
-});
-module.exports = DecimalField;
+})
+module.exports = DecimalField
