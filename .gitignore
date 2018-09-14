@@ -19,17 +19,11 @@ bower_components/
 
 # Stuff
 npm-debug.log
-*.komodoproject
-dump.rdb
 .env
-bundle.js
-assets/css
 
 # Generated files
-assets/css/*
-assets/js/*
-assets/build/*
-build/
+dist/
+lib/
 .vscode
 package-lock.json
 launch.json
