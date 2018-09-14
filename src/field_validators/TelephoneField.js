@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const TextField = require('./TextField');
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import TextField from './TextField'
+import { i18n } from '../utils'
 
 /*
     Email-field
 */
-const ITelephoneField = require('../interfaces').ITelephoneField;
+import { ITelephoneField } from '../interfaces'
 
 var allowedCharsRegex = /[^\d().\/+ -]+/
 const TelephoneField = createObjectPrototype({
@@ -16,16 +16,16 @@ const TelephoneField = createObjectPrototype({
     extends: [TextField],
     
     constructor: function (options) {
-        this._ITextField.constructor.call(this, options);
+        this._ITextField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._ITextField.validate.call(this, inp)
+        if (error) { return error }
     
         // Required has been checked so if it is empty it is ok
         if (!inp) {
-            return;
+            return
         }
     
         var tmpInp = inp.replace(/[^\d]/, '')
@@ -46,6 +46,6 @@ const TelephoneField = createObjectPrototype({
 
         }
     }
-});
+})
 
-module.exports = TelephoneField;
+module.exports = TelephoneField

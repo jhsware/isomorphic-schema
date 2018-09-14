@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
-const cloneShallow = require('../utils').cloneShallow;
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { i18n } from '../utils'
+import { cloneShallow } from '../utils'
 
 
 /*
@@ -17,7 +17,7 @@ const cloneShallow = require('../utils').cloneShallow;
 
 // TODO: Write tests
 
-const IListField = require('../interfaces').IListField;
+import { IListField } from '../interfaces'
 
 const ListField = createObjectPrototype({
     implements: [IListField],
@@ -25,30 +25,30 @@ const ListField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         
         if (options) {
             // Always set valueType to required to get validation per item
             // Should be an instance of a field.
-            this.valueType = options.valueType || options.valueFieldType;
-            this.options = options.options;
-            this._minItems = options.minItems;
-            delete options.minItems;
-            this._maxItems = options.maxItems;
-            delete options.maxItems;
-        };
+            this.valueType = options.valueType || options.valueFieldType
+            this.options = options.options
+            this._minItems = options.minItems
+            delete options.minItems
+            this._maxItems = options.maxItems
+            delete options.maxItems
+        }
         
     },
     
     validate: function (inp, options, context, async) {
-        if (inp && inp.length == 0) { inp = undefined };
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        if (inp && inp.length == 0) { inp = undefined }
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
         
         // If it is undefined or null, then we just return 
         // that this value is ok
         if (!inp) {
-            return undefined;
+            return undefined
         }
         
         // Check that this is an array
@@ -58,7 +58,7 @@ const ListField = createObjectPrototype({
                 i18nLabel: i18n('isomorphic-schema--list_field_type_error', 'This is not a proper list. This is a bug in the application'),
                 message: "This is not a proper list. This is a bug in the application"
             }
-            //console.log(error);
+            //console.log(error)
             return error;            
         }
         
@@ -78,15 +78,15 @@ const ListField = createObjectPrototype({
             }
         }
 
-        var tmpValidationErrors = [];
-        var validationPromises = [];
+        var tmpValidationErrors = []
+        var validationPromises = []
         inp.forEach(function (item, i) {
             // Make sure we have a new options object...
             if (!options) {
-                var newOptions = {};
+                var newOptions = {}
             } else {
-                var newOptions = cloneShallow(options);
-            };
+                var newOptions = cloneShallow(options)
+            }
             
             // ...so we can add objectPath to determine where we are
             if (Array.isArray(newOptions.objectPath)) {
@@ -96,32 +96,32 @@ const ListField = createObjectPrototype({
             }
 
             if (!async) {
-                var tmpError = this.valueType.validate(item, newOptions, context);
+                var tmpError = this.valueType.validate(item, newOptions, context)
                 if (tmpError) {
-                    tmpValidationErrors.push({id: i, error: tmpError});
-                };
+                    tmpValidationErrors.push({id: i, error: tmpError})
+                }
             } else {
-                var promise = this.valueType.validateAsync(item, newOptions, context);
+                var promise = this.valueType.validateAsync(item, newOptions, context)
                 // Do not return this promise, add it to validationPromises. We will 
                 // handle the list of validationPromises further down
                 if (promise && promise.then) {
                     validationPromises.push(
                         promise.then(function (tmpError) {
                             if (tmpError) {
-                                return Promise.resolve({id: i, error: tmpError});
+                                return Promise.resolve({id: i, error: tmpError})
                             }
                         })
                     )
                 }
             }
-        }.bind(this));
+        }.bind(this))
     
         if (!async || validationPromises.length === 0) {
             if (tmpValidationErrors.length > 0) {
                 var tmpErrors = {}
                 tmpValidationErrors.map(function (item) {
-                    tmpErrors[item.id] = item.error;
-                });
+                    tmpErrors[item.id] = item.error
+                })
             
                 if (error !== undefined) {
                     error.errors = tmpErrors
@@ -146,8 +146,8 @@ const ListField = createObjectPrototype({
                     } else {
                         var tmpErrors = {}
                         errors.forEach(function (err) {
-                            tmpErrors[err.id] = err.error;
-                        });
+                            tmpErrors[err.id] = err.error
+                        })
                         return Promise.resolve({
                             type: 'list_error',
                             i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
@@ -161,19 +161,19 @@ const ListField = createObjectPrototype({
     },
     
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
     
     fromString: function (inp) {
-        var _this = this;
+        var _this = this
         if ((inp instanceof Array)) {
             return inp.map(function (item) {
-                return _this.valueType.fromString(item);
-            });
+                return _this.valueType.fromString(item)
+            })
         } else {
-            return inp;
+            return inp
         }
     }
-});
+})
 
-module.exports = ListField;
+module.exports = ListField

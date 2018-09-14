@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /*
     Standard options:
@@ -7,10 +7,10 @@
 
 */
 
-const { createObjectPrototype } = require('component-registry')
+import { createObjectPrototype } from 'component-registry'
 
-const { IBaseField } = require('../interfaces')
-const { i18n } = require('../utils')
+import { IBaseField } from '../interfaces'
+import { i18n } from '../utils'
 
 
 var BaseField = createObjectPrototype({
@@ -18,8 +18,8 @@ var BaseField = createObjectPrototype({
 
     constructor: function (options) {
         if (options) {
-            this._isRequired = options.required;
-            delete options.required;
+            this._isRequired = options.required
+            delete options.required
         }
     },
 
@@ -44,12 +44,12 @@ var BaseField = createObjectPrototype({
     },
 
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
     
     fromString: function (inp) {
-        return inp;
+        return inp
     }
     
-});
-module.exports = BaseField;
+})
+module.exports = BaseField

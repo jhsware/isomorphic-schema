@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const TextField = require('./TextField');
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import TextField from './TextField'
+import { i18n } from '../utils'
 
 /*
     Credit card field validator
@@ -10,7 +10,7 @@ const { i18n } = require('../utils')
     Port of:
     http://jquerycreditcardvalidator.com/
 */
-const IOrgNrField = require('../interfaces').IOrgNrField;
+import { IOrgNrField } from '../interfaces'
 
 const OrgNrField = createObjectPrototype({
     implements: [IOrgNrField],
@@ -18,28 +18,28 @@ const OrgNrField = createObjectPrototype({
     extends: [TextField],
     
     constructor: function (options) {
-        this._ITextField.constructor.call(this, options);
+        this._ITextField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._ITextField.validate.call(this, inp)
+        if (error) { return error }
 
         if (inp) {
-            var message;
+            var message
             try {
-                var error = _validateOrgNr(inp);
+                var error = _validateOrgNr(inp)
         
             } catch (e) {
-                var type = 'value_error';
+                var type = 'value_error'
                 const i18nLabel = i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted'),
-                message = "Inmatat organisations-/personnummer har något seriöst fel";
+                message = "Inmatat organisations-/personnummer har något seriöst fel"
             } finally {
                 if (!message && error) {
-                    var type = 'type_error';
-                    message = error.message;
-                    var i18nLabel = error.i18nLabel;
-                };
+                    var type = 'type_error'
+                    message = error.message
+                    var i18nLabel = error.i18nLabel
+                }
                 if (message) {
                     return {
                         type: type,
@@ -53,7 +53,7 @@ const OrgNrField = createObjectPrototype({
     
     toFormattedString: function (inp) {
         if (inp) {
-            var tmp = inp.match(/.{1,6}/g);
+            var tmp = inp.match(/.{1,6}/g)
             return tmp.join("-");       
         } else {
             return ""
@@ -61,17 +61,17 @@ const OrgNrField = createObjectPrototype({
     },
 
     fromString: function (inp) {
-        var tmp = inp.replace(/([^0-9]*)/g, '');
+        var tmp = inp.replace(/([^0-9]*)/g, '')
         if (tmp.length > 10) {
-            tmp = tmp.split("");
-            tmp = tmp.splice(0,10);
-            tmp = tmp.join("");
+            tmp = tmp.split("")
+            tmp = tmp.splice(0,10)
+            tmp = tmp.join("")
         }
         return tmp
     }
-});
+})
 
-module.exports = OrgNrField;
+module.exports = OrgNrField
 
 
 var _validateOrgNr = function(inp, options) {
@@ -85,22 +85,22 @@ var _validateOrgNr = function(inp, options) {
         1+6+1+2+2+2+8+1+8+8+1+4+6 = 50
     */
     
-    var inpLst = inp.split("");
+    var inpLst = inp.split("")
     if (inpLst.length < 10) {
         return {
             i18nLabel: i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short'),
             message: "Inmatat nummer är för kort"
-        };
+        }
     }
     
-    var luhLst = [2,1,2,1,2,1,2,1,2,1];
+    var luhLst = [2,1,2,1,2,1,2,1,2,1]
     var calcLst = luhLst.map(function (val, i) {
-        return  luhLst[i] * parseInt(inpLst[i]);
-    });
-    var tmp = 0;
+        return  luhLst[i] * parseInt(inpLst[i])
+    })
+    var tmp = 0
     calcLst.map(function (val) {
-        tmp += (val % 10) + Math.floor(val/10);
-    });
+        tmp += (val % 10) + Math.floor(val/10)
+    })
     if (tmp % 10 == 0) {
         return undefined
     } else {
@@ -109,4 +109,4 @@ var _validateOrgNr = function(inp, options) {
             message: "Kontrollsiffran stämmer inte"
         }
     }
-};
+}

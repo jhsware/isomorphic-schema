@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
 /*
     Bool field
 */
 
-const { createObjectPrototype } = require('component-registry')
+import { createObjectPrototype } from 'component-registry'
 
-const { IBoolField } = require('../interfaces')
+import { IBoolField } from '../interfaces'
 
 const BoolField = createObjectPrototype({
     implements: [IBoolField],
@@ -25,21 +25,21 @@ const BoolField = createObjectPrototype({
     },
     
     toFormattedString: function (inp) {
-        return inp;
+        return inp
     },
     
     fromString: function (inp) {
         if (inp == "true" || inp === true) {
-            return true;
+            return true
         } else if (inp == "false" || inp === false) {
-            return false;
+            return false
         } else if (inp === "undefined" || inp === undefined ){
-            return undefined;
+            return undefined
         } else if (inp === 'null' || inp === null) {
-            return null;
+            return null
         } else {
             return inp
         }
     }
-});
-module.exports = BoolField;
+})
+module.exports = BoolField

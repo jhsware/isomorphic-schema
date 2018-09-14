@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const IObjectRelationField = require('../interfaces').IObjectRelationField;
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { IObjectRelationField } from '../interfaces'
+import { i18n } from '../utils'
 
 /*
     Object field
@@ -16,19 +16,19 @@ const ObjectRelationField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
         if (options) {
-            this._resolverName = options.resolverName;
-            this._interface = options.interface;
+            this._resolverName = options.resolverName
+            this._interface = options.interface
         }
     },
     
     validate: function (inp, options) {
         // We need to resolve the relation to validate it
-        var val = inp.get();
+        var val = inp.get()
         
-        var error = this._IBaseField.validate.call(this, val);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, val)
+        if (error) { return error }
     
         /*
         // TODO: Implement object type validation
@@ -44,12 +44,12 @@ const ObjectRelationField = createObjectPrototype({
                 }
             }            
         } else {
-            return undefined;
+            return undefined
         }
         */
-        return undefined;
+        return undefined
     }
     
-});
+})
 
-module.exports = ObjectRelationField;
+module.exports = ObjectRelationField

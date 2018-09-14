@@ -1,7 +1,7 @@
-'use strict';
-const { createObjectPrototype } = require('component-registry')
-const BaseField = require('./BaseField');
-const { i18n } = require('../utils')
+'use strict'
+import { createObjectPrototype } from 'component-registry'
+import BaseField from './BaseField'
+import { i18n } from '../utils'
 
 /*
 
@@ -15,7 +15,7 @@ const { i18n } = require('../utils')
 
 // TODO: Write tests
 
-const IDynamicSelectBaseField = require('../interfaces').IDynamicSelectBaseField;
+import { IDynamicSelectBaseField } from '../interfaces'
 
 const DynamicSelectField = createObjectPrototype({
     implements: [IDynamicSelectBaseField],
@@ -23,22 +23,22 @@ const DynamicSelectField = createObjectPrototype({
     extends: [BaseField],
     
     constructor: function (options) {
-        this._IBaseField.constructor.call(this, options);
+        this._IBaseField.constructor.call(this, options)
     },
 
     validate: function (inp, options, context) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._IBaseField.validate.call(this, inp)
+        if (error) { return error }
     
-        var error = inp && this.valueType.validate(inp);
-        if (error) { return error };
+        var error = inp && this.valueType.validate(inp)
+        if (error) { return error }
     
         // Since we have passed the required test we can just check if the value is undefined
         // or null and return field errors undefined 
         if (inp === null || typeof inp === 'undefined') {
             return
-        };
+        }
         
         
         var options = this.getOptions(inp, options, context)
@@ -57,17 +57,17 @@ const DynamicSelectField = createObjectPrototype({
                 i18nLabel: i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed'),
                 message: "Valt värde finns inte i listan över tillåtna värden"
             }
-            //console.log(error);
-            return error;
+            //console.log(error)
+            return error
         }
     },
 
     toFormattedString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     },
 
     fromString: function (inp) {
-        return this.valueType.fromString(inp);
+        return this.valueType.fromString(inp)
     },
 
     getOptions: function (inp, options, context) {},
@@ -80,6 +80,6 @@ const DynamicSelectField = createObjectPrototype({
             }
         }
     },
-});
+})
 
-module.exports = DynamicSelectField;
+module.exports = DynamicSelectField

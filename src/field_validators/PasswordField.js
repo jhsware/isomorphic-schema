@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-const { createObjectPrototype } = require('component-registry')
-const TextField = require('./TextField');
-const { i18n } = require('../utils')
+import { createObjectPrototype } from 'component-registry'
+import TextField from './TextField'
+import { i18n } from '../utils'
 
 /*
     Password-field
 */
-const IPasswordField = require('../interfaces').IPasswordField;
+import { IPasswordField } from '../interfaces'
 
 const PasswordField = createObjectPrototype({
     implements: [IPasswordField],
@@ -15,12 +15,12 @@ const PasswordField = createObjectPrototype({
     extends: [TextField],
     
     constructor: function (options) {
-        this._ITextField.constructor.call(this, options);
+        this._ITextField.constructor.call(this, options)
     },
     
     validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);
-        if (error) { return error };
+        var error = this._ITextField.validate.call(this, inp)
+        if (error) { return error }
     
         if(inp !== null && typeof inp !== 'undefined' && inp.length < 8) {
             error = {
@@ -29,10 +29,10 @@ const PasswordField = createObjectPrototype({
                 message: "Lösenordet måste innehålla minst 8 tecken"
             }
         
-            return error;
+            return error
         }
     
     }
-});
+})
 
-module.exports = PasswordField;
+module.exports = PasswordField
