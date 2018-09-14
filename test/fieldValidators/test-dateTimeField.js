@@ -41,7 +41,7 @@ describe('DateTime field', function() {
         var tmpDt = dateTimeField.fromString(inpStr);
         var outpStr = dateTimeField.toFormattedString(tmpDt);
         //console.log(inpStr);
-        //console.log(tmpDt.toISOString());
+        //console.log(tmpDt.toISOString());x
         //console.log(outpStr);
         
         var tmpDtConverted = dateTimeField.fromString(outpStr);
