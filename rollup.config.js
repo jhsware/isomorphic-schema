@@ -36,7 +36,6 @@ const baseConfig = (outputFormat) => {
       }) : false,
     ],
     external: [
-      'classnames',
       'component-registry',
       'date-fns'
     ],
