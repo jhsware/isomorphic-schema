@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var IntegerField = require('../../lib/field_validators/IntegerField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import IntegerField from '../../src/field_validators/IntegerField'
+import Schema from '../../src/schema'
 
 describe('Integer field', function() {
     it('accepts non decimal numbers', function() {        

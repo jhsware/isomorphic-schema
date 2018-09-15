@@ -12,7 +12,7 @@ function cloneArray (arr) {
         if (Array.isArray(item)) {
             return cloneArray(item)
         } else if (typeof item === 'object') {
-            var tmp = cloneObj(item)
+            var tmp = clone(item)
             return tmp
         } else {
             return item
@@ -35,7 +35,7 @@ export function clone(obj) {
         if (Array.isArray(tmp)) {
             outp[key] = cloneArray(tmp)
         } else if (typeof tmp === 'object') {
-            outp[key] = cloneObj(tmp)
+            outp[key] = clone(tmp)
         } else {
             outp[key] = tmp
         }

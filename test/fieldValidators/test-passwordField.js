@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var PasswordField = require('../../lib/field_validators/PasswordField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import PasswordField from '../../src/field_validators/PasswordField'
+import Schema from '../../src/schema'
 
 describe('Password field', function() {
     

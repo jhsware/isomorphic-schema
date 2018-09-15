@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var EmailField = require('../../lib/field_validators/EmailField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import EmailField from '../../src/field_validators/EmailField'
+import Schema from '../../src/schema'
 
 describe('Email field', function() {
     it('accepts valid e-mail', function() {        

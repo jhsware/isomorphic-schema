@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var TelephoneField = require('../../lib/field_validators/TelephoneField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import TelephoneField from '../../src/field_validators/TelephoneField'
+import Schema from '../../src/schema'
 
 describe('Telephone field', function() {
     it('accepts international phonenumber', function() {        

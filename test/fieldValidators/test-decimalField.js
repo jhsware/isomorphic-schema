@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var DecimalField = require('../../lib/field_validators/DecimalField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import DecimalField from '../../src/field_validators/DecimalField'
+import Schema from '../../src/schema'
 
 describe('Decimal field', function() {
     it('accepts non decimal numbers', function() {        

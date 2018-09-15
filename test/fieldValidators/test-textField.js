@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var TextField = require('../../lib/field_validators/TextField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import TextField from '../../src/field_validators/TextField'
+import Schema from '../../src/schema'
 
 describe('Text field', function() {
     it('accepts strings', function() {        

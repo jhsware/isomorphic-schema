@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var DateField = require('../../lib/field_validators/DateField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import DateField from '../../src/field_validators/DateField'
+import Schema from '../../src/schema'
 
 describe('Date field', function() {
     it('accepts strings', function() {        

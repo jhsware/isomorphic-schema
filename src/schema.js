@@ -183,7 +183,7 @@ class Schema {
                                 validationPromises.push(Promise.resolve(formErrors))
                                 // Errors are added when promises are resolved at end of this function
                             } else {
-                                var _this = this
+                                var _this = this;
                                 (function (formErrors, key) {
                                     validationPromises.push(tmpPromise.then(function (tmpError) {
                                         tmpError && _this._addFieldError(formErrors, key, tmpError)

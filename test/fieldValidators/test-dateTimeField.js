@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var DateTimeField = require('../../lib/field_validators/DateTimeField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import DateTimeField from '../../src/field_validators/DateTimeField'
+import Schema from '../../src/schema'
 
 describe('DateTime field', function() {
     it('accepts valid date object without timezone', function() {        

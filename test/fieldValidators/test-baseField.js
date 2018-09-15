@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var BaseField = require('../../lib/field_validators/BaseField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import BaseField from '../../src/field_validators/BaseField'
+import Schema from '../../src/schema'
 
 describe('Base field', function() {
     it('supports required', function() {        

@@ -1,12 +1,12 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var createObjectPrototype = require('component-registry').createObjectPrototype
-var createInterface = require('component-registry').createInterface
+import expect from 'expect.js'
 
-var TextField = require('../../lib/field_validators/TextField');
-var IntegerField = require('../../lib/field_validators/IntegerField');
-var DynamicSelectBaseField = require('../../lib/field_validators/DynamicSelectBaseField');
+import { createObjectPrototype } from 'component-registry'
+import { createInterface } from 'component-registry'
+
+import TextField from '../../src/field_validators/TextField'
+import IntegerField from '../../src/field_validators/IntegerField'
+import DynamicSelectBaseField from '../../src/field_validators/DynamicSelectBaseField'
 
 var IMyDynamicSelectField = createInterface({
     name: 'IMyDynamicSelectField'

@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var BoolField = require('../../lib/field_validators/BoolField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import BoolField from '../../src/field_validators/BoolField'
+import Schema from '../../src/schema'
 
 describe('Bool field', function() {
     it('accepts boolean true', function() {        
