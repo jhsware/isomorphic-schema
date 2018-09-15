@@ -2,5 +2,15 @@
   "presets": [
     ["env", { "modules": false }],
     "stage-2"
-  ]
+  ],
+  "plugins": [
+    "add-module-exports"
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "env"
+      ]
+    }
+  }
 }

@@ -1,10 +1,10 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var SelectField = require('../../lib/field_validators/SelectField');
-var TextField = require('../../lib/field_validators/TextField');
-var EmailField = require('../../lib/field_validators/EmailField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import SelectField from '../../src/field_validators/SelectField'
+import TextField from '../../src/field_validators/TextField'
+import EmailField from '../../src/field_validators/EmailField'
+import Schema from '../../src/schema'
 
 describe('Select field', function() {
     describe('Select field with options array', function() {

@@ -1,11 +1,11 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var IntegerField = require('../lib/field_validators/IntegerField');
-var BaseField = require('../lib/field_validators/BaseField');
-var i18n = require('../lib/utils').i18n;
-var clone = require('../lib/utils').clone;
-var renderString = require('../lib/utils').renderString;
+import expect from 'expect.js'
+
+import IntegerField from '../src/field_validators/IntegerField'
+import BaseField from '../src/field_validators/BaseField'
+var i18n = require('../src/utils').i18n;
+var clone = require('../src/utils').clone;
+var renderString = require('../src/utils').renderString;
 
 describe('Utils', function() {
     describe('i18n', function() {

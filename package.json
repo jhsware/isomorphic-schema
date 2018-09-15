@@ -31,9 +31,11 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
     "component-registry": "^1.0.0-rc.4",
     "cross-env": "^5.2.0",
     "expect.js": "^0.3.1",
@@ -48,8 +50,8 @@
     "striptags": "^3.1.1"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha ./test/**/test-*.js ./test/test-*.js",
-    "debug-test": "./node_modules/mocha/bin/mocha --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js",
+    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require babel-register ./test/**/test-*.js ./test/test-*.js",
+    "debug-test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require babel-register --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js",
     "prepublish": "npm run build",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",

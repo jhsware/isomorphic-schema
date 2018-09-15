@@ -1,9 +1,9 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var ObjectField = require('../../lib/field_validators/ObjectField');
-var TextField = require('../../lib/field_validators/TextField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import ObjectField from '../../src/field_validators/ObjectField'
+import TextField from '../../src/field_validators/TextField'
+import Schema from '../../src/schema'
 
 // TODO: Test object field ASYNC validation
 

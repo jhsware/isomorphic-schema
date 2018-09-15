@@ -1,12 +1,11 @@
-var assert = require('assert');
-var expect = require('expect.js');
+import expect from 'expect.js'
 
-var Schema = require('../lib/schema');
-var TextField = require('../lib/field_validators/TextField');
-var IntegerField = require('../lib/field_validators/IntegerField');
-var EmailField = require('../lib/field_validators/EmailField');
-var ObjectField = require('../lib/field_validators/ObjectField');
-var ListField = require('../lib/field_validators/ListField');
+import Schema from '../src/schema'
+import TextField from '../src/field_validators/TextField'
+import IntegerField from '../src/field_validators/IntegerField'
+import EmailField from '../src/field_validators/EmailField'
+import ObjectField from '../src/field_validators/ObjectField'
+import ListField from '../src/field_validators/ListField'
 
 var _genTestUserSchema = function () {
     

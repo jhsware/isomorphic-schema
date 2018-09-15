@@ -1,10 +1,9 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var fields = require('../../lib/field_validators');
-var TextField = require('../../lib/field_validators/TextField');
-var IntegerField = require('../../lib/field_validators/IntegerField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import fields from '../../src/field_validators'
+import TextField from '../../src/field_validators/TextField'
+import IntegerField from '../../src/field_validators/IntegerField'
 
 // TODO: Write async tests
 

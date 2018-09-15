@@ -1,8 +1,8 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var MultiSelectField = require('../../lib/field_validators/MultiSelectField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import MultiSelectField from '../../src/field_validators/MultiSelectField'
+import Schema from '../../src/schema'
 
 describe('Multi select field', function() {
     

@@ -1,8 +1,7 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var CreditCardField = require('../../lib/field_validators/CreditCardField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import CreditCardField from '../../src/field_validators/CreditCardField'
 
 describe('Credit Card field', function() {
     it('accepts valid Visa card', function() {        

@@ -1,10 +1,10 @@
-var assert = require('assert');
-var expect = require('expect.js');
 
-var AnyOf = require('../../lib/field_validators/AnyOf');
-var TextField = require('../../lib/field_validators/TextField');
-var IntegerField = require('../../lib/field_validators/IntegerField');
-var Schema = require('../../lib/schema');
+import expect from 'expect.js'
+
+import AnyOf from '../../src/field_validators/AnyOf'
+import TextField from '../../src/field_validators/TextField'
+import IntegerField from '../../src/field_validators/IntegerField'
+import Schema from '../../src/schema'
 
 // TODO: Write async tests
 
