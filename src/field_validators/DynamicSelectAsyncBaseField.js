@@ -18,7 +18,7 @@ import { i18n } from '../utils'
 
 import { IDynamicSelectAsyncBaseField } from '../interfaces'
 
-const DynamicSelectAsyncBaseField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IDynamicSelectAsyncBaseField],
 
     extends: [DynamicSelectBaseField],
@@ -131,5 +131,3 @@ const DynamicSelectAsyncBaseField = createObjectPrototype({
         return this.valueType.fromString(inp)
     }
 })
-
-module.exports = DynamicSelectAsyncBaseField

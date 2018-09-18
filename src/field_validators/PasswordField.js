@@ -9,7 +9,7 @@ import { i18n } from '../utils'
 */
 import { IPasswordField } from '../interfaces'
 
-const PasswordField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IPasswordField],
 
     extends: [TextField],
@@ -34,5 +34,3 @@ const PasswordField = createObjectPrototype({
     
     }
 })
-
-module.exports = PasswordField

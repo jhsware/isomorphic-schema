@@ -13,7 +13,7 @@ import { IIntegerField } from '../interfaces'
 
 var reInteger = /[^0-9\.]/g
 
-const IntegerField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IIntegerField],
 
     extends: [BaseField],
@@ -86,4 +86,3 @@ const IntegerField = createObjectPrototype({
         }
     }
 })
-module.exports = IntegerField

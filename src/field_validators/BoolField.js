@@ -8,7 +8,7 @@ import { createObjectPrototype } from 'component-registry'
 
 import { IBoolField } from '../interfaces'
 
-const BoolField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IBoolField],
     
     constructor: function (options) {
@@ -42,4 +42,3 @@ const BoolField = createObjectPrototype({
         }
     }
 })
-module.exports = BoolField

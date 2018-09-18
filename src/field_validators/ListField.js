@@ -19,7 +19,7 @@ import { cloneShallow } from '../utils'
 
 import { IListField } from '../interfaces'
 
-const ListField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IListField],
 
     extends: [BaseField],
@@ -175,5 +175,3 @@ const ListField = createObjectPrototype({
         }
     }
 })
-
-module.exports = ListField

@@ -17,7 +17,7 @@ import { i18n } from '../utils'
 
 import { IDynamicSelectBaseField } from '../interfaces'
 
-const DynamicSelectField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IDynamicSelectBaseField],
 
     extends: [BaseField],
@@ -81,5 +81,3 @@ const DynamicSelectField = createObjectPrototype({
         }
     },
 })
-
-module.exports = DynamicSelectField

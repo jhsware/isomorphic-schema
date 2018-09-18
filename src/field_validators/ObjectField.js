@@ -11,7 +11,7 @@ import { i18n } from '../utils'
 
 
 
-const ObjectField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IObjectField],
     extends: [BaseField],
     
@@ -94,5 +94,3 @@ const ObjectField = createObjectPrototype({
     }
     
 })
-
-module.exports = ObjectField

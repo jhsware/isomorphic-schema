@@ -4,12 +4,11 @@
 */
 import { createObjectPrototype } from 'component-registry'
 import TextAreaField from './TextAreaField'
-import { i18n } from '../utils'
-import striptags from 'striptags'
+const striptags = require('striptags')
 
 import { IHTMLAreaField } from '../interfaces'
 
-const HTMLAreaField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IHTMLAreaField],
     extends: [TextAreaField],
     
@@ -31,4 +30,3 @@ const HTMLAreaField = createObjectPrototype({
         // stripping
     }
 })
-module.exports = HTMLAreaField

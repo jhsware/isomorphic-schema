@@ -124,7 +124,7 @@ const IAnyOf =  new Interface({
 })
 addMethods(IAnyOf)
 
-export default {
+export {
     IBaseField,
     ITextField,
     ITextAreaField,

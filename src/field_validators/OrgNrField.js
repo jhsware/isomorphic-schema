@@ -12,7 +12,7 @@ import { i18n } from '../utils'
 */
 import { IOrgNrField } from '../interfaces'
 
-const OrgNrField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IOrgNrField],
 
     extends: [TextField],
@@ -70,9 +70,6 @@ const OrgNrField = createObjectPrototype({
         return tmp
     }
 })
-
-module.exports = OrgNrField
-
 
 var _validateOrgNr = function(inp, options) {
     /*

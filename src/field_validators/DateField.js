@@ -1,6 +1,6 @@
 'use strict'
 import { createObjectPrototype } from 'component-registry'
-import isValid from 'date-fns/is_valid'
+const isValid = require('date-fns/is_valid')
 import TextField from './TextField'
 import { i18n } from '../utils'
 
@@ -9,7 +9,7 @@ import { i18n } from '../utils'
 */
 import { IDateField } from '../interfaces'
 
-const DateField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IDateField],
 
     extends: [TextField],
@@ -42,5 +42,3 @@ const DateField = createObjectPrototype({
         return inp
     }
 })
-
-module.exports = DateField
