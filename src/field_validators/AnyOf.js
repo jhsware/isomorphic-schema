@@ -14,7 +14,7 @@ import { i18n } from '../utils'
 
 import BaseField from './BaseField'
 
-const AnyOf = createObjectPrototype({
+export default createObjectPrototype({
     extends: [BaseField],
     implements: [IAnyOf],
 
@@ -93,4 +93,3 @@ const AnyOf = createObjectPrototype({
     }
     
 })
-module.exports = AnyOf

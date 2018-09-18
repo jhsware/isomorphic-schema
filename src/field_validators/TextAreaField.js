@@ -11,7 +11,7 @@ import { i18n } from '../utils'
 
 import { ITextAreaField } from '../interfaces'
 
-const TextAreaField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [ITextAreaField],
     extends: [BaseField],
     
@@ -55,4 +55,3 @@ const TextAreaField = createObjectPrototype({
         }
     }
 })
-module.exports = TextAreaField

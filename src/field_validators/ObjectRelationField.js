@@ -11,7 +11,7 @@ import { i18n } from '../utils'
 
 
 
-const ObjectRelationField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IObjectRelationField],
     extends: [BaseField],
     
@@ -51,5 +51,3 @@ const ObjectRelationField = createObjectPrototype({
     }
     
 })
-
-module.exports = ObjectRelationField

@@ -9,7 +9,7 @@ import { i18n } from '../utils'
 */
 import { IEmailField } from '../interfaces'
 
-const EmailField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IEmailField],
 
     extends: [TextField],
@@ -80,5 +80,3 @@ const EmailField = createObjectPrototype({
         return inp
     }
 })
-
-module.exports = EmailField

@@ -12,7 +12,7 @@ import { i18n } from '../utils'
 */
 import { ICreditCardField } from '../interfaces'
 
-const CreditCardField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [ICreditCardField],
 
     extends: [BaseField],
@@ -249,6 +249,3 @@ var _cardFormatters = {
         return tmp.join(" ")
     }
 }
-
-
-module.exports = CreditCardField

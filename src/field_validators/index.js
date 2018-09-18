@@ -21,7 +21,7 @@ import TelephoneField from './TelephoneField'
 import TextAreaField from './TextAreaField'
 import TextField from './TextField'
 
-export default {
+export {
   AnyOf,
   BaseField,
   BoolField,

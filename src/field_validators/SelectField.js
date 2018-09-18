@@ -16,7 +16,7 @@ import { i18n } from '../utils'
 
 import { ISelectField } from '../interfaces'
 
-const SelectField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [ISelectField],
 
     extends: [BaseField],
@@ -87,5 +87,3 @@ const SelectField = createObjectPrototype({
         }
     }
 })
-
-module.exports = SelectField

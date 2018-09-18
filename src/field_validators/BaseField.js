@@ -13,7 +13,7 @@ import { IBaseField } from '../interfaces'
 import { i18n } from '../utils'
 
 
-var BaseField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IBaseField],
 
     constructor: function (options) {
@@ -52,4 +52,3 @@ var BaseField = createObjectPrototype({
     }
     
 })
-module.exports = BaseField

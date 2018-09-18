@@ -10,7 +10,7 @@ import { i18n } from '../utils'
 import { ITelephoneField } from '../interfaces'
 
 var allowedCharsRegex = /[^\d().\/+ -]+/
-const TelephoneField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [ITelephoneField],
 
     extends: [TextField],
@@ -47,5 +47,3 @@ const TelephoneField = createObjectPrototype({
         }
     }
 })
-
-module.exports = TelephoneField

@@ -3,15 +3,15 @@
 import { createObjectPrototype } from 'component-registry'
 import BaseField from './BaseField'
 import { i18n } from '../utils'
-import parse from 'date-fns/parse'
-import format from 'date-fns/format'
+const parse = require('date-fns/parse')
+const format = require('date-fns/format')
 
 /*
     Date-field
 */
 import { IDateTimeField } from '../interfaces'
 
-const DateTimeField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IDateTimeField],
 
     extends: [BaseField],
@@ -44,5 +44,3 @@ const DateTimeField = createObjectPrototype({
         return parse(inp)
     }
 })
-
-module.exports = DateTimeField

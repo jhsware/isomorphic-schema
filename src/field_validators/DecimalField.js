@@ -13,7 +13,7 @@ import { IDecimalField } from '../interfaces'
 
 const reDecimal = /[^0-9\.]/g
 
-const DecimalField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IDecimalField],
 
     extends: [BaseField],
@@ -104,4 +104,3 @@ const DecimalField = createObjectPrototype({
         }
     }
 })
-module.exports = DecimalField

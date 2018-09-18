@@ -18,7 +18,7 @@ import { i18n } from '../utils'
 
 import { IMultiSelectField } from '../interfaces'
 
-const MultiSelectField = createObjectPrototype({
+export default createObjectPrototype({
     implements: [IMultiSelectField],
 
     extends: [BaseField],
@@ -100,5 +100,3 @@ const MultiSelectField = createObjectPrototype({
         }
     }
 })
-
-module.exports = MultiSelectField
