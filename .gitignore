@@ -26,9 +26,5 @@ dist/
 lib/
 .vscode
 package-lock.json
-<<<<<<< HEAD
-launch.json
-=======
 dist
 lib
->>>>>>> ignore some stuff
