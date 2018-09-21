@@ -1,47 +1,22 @@
-import AnyOf from './AnyOf'
-import BaseField from './BaseField'
-import BoolField from './BoolField'
-import CreditCardField from './CreditCardField'
-import DateField from './DateField'
-import DateTimeField from './DateTimeField'
-import DecimalField from './DecimalField'
-import DynamicSelectAsyncBaseField from './DynamicSelectAsyncBaseField'
-import DynamicSelectBaseField from './DynamicSelectBaseField'
-import EmailField from './EmailField'
-import HTMLAreaField from './HTMLAreaField'
-import IntegerField from './IntegerField'
-import ListField from './ListField'
-import MultiSelectField from './MultiSelectField'
-import ObjectField from './ObjectField'
-import ObjectRelationField from './ObjectRelationField'
-import OrgNrField from './OrgNrField'
-import PasswordField from './PasswordField'
-import SelectField from './SelectField'
-import TelephoneField from './TelephoneField'
-import TextAreaField from './TextAreaField'
-import TextField from './TextField'
-
-export {
-  AnyOf,
-  BaseField,
-  BoolField,
-  CreditCardField,
-  DateField,
-  DateTimeField,
-  DecimalField,
-  DynamicSelectAsyncBaseField,
-  DynamicSelectBaseField,
-  EmailField,
-  HTMLAreaField,
-  IntegerField,
-  ListField,
-  MultiSelectField,
-  ObjectField,
-  ObjectRelationField,
-  OrgNrField,
-  PasswordField,
-  SelectField,
-  TelephoneField,
-  TextAreaField,
-  TextField
-}
+export { default as AnyOf } from './AnyOf'
+export { default as BaseField} from './BaseField'
+export { default as BoolField} from './BoolField'
+export { default as CreditCardField} from './CreditCardField'
+export { default as DateField} from './DateField'
+export { default as DateTimeField} from './DateTimeField'
+export { default as DecimalField} from './DecimalField'
+export { default as DynamicSelectAsyncBaseField} from './DynamicSelectAsyncBaseField'
+export { default as DynamicSelectBaseField} from './DynamicSelectBaseField'
+export { default as EmailField} from './EmailField'
+export { default as HTMLAreaField} from './HTMLAreaField'
+export { default as IntegerField} from './IntegerField'
+export { default as ListField} from './ListField'
+export { default as MultiSelectField} from './MultiSelectField'
+export { default as ObjectField} from './ObjectField'
+export { default as ObjectRelationField} from './ObjectRelationField'
+export { default as OrgNrField} from './OrgNrField'
+export { default as PasswordField} from './PasswordField'
+export { default as SelectField} from './SelectField'
+export { default as TelephoneField} from './TelephoneField'
+export { default as TextAreaField} from './TextAreaField'
+export { default as TextField} from './TextField'
