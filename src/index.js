@@ -1,13 +1,6 @@
 'use strict'
-import Schema from './schema'
-import { i18n, renderString } from './utils'
+export { default as Schema } from './schema'
+export { i18n, renderString } from './utils'
+export * from './field_validators'
 import * as interfaces from './interfaces'
-import * as fieldValidators from './field_validators'
-
-export {
-  Schema,
-  interfaces,
-  i18n,
-  renderString,
-  fieldValidators
-}
+export { interfaces }
