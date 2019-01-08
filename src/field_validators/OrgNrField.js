@@ -54,7 +54,8 @@ export default createObjectPrototype({
     toFormattedString: function (inp) {
         if (inp) {
             var tmp = inp.match(/.{1,8}/g)
-            return tmp.join("-");       
+            var outp = tmp.join('-');
+            return (outp.length === 8 ? outp + '-' : outp)
         } else {
             return ""
         }

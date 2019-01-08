@@ -31,10 +31,16 @@ describe('OrgNrField field', function() {
       expect(tmp).to.be('199501010012');
     });
 
-    it('throws error on undefined if required', function() {        
+    it('format full value properly', function() {        
       var orgNrField = new OrgNrField({required: true});
       var tmp = orgNrField.toFormattedString("199501010012");
       expect(tmp).to.be("19950101-0012");
+    });
+
+    it('format partial value properly', function() {        
+      var orgNrField = new OrgNrField({required: true});
+      var tmp = orgNrField.toFormattedString("19950101");
+      expect(tmp).to.be("19950101-");
     });
     
     it('throws error on null if required', function() {        
