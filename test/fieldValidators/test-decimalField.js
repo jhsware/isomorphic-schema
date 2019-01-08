@@ -9,28 +9,28 @@ describe('Decimal field', function() {
         var integerField = new DecimalField({required: true});
     
         var tmp = integerField.validate(6);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('accepts decimal numbers', function() {        
         var integerField = new DecimalField({required: true});
     
         var tmp = integerField.validate(6.0);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('accepts decimal numbers with fractions', function() {        
         var integerField = new DecimalField({required: true});
     
         var tmp = integerField.validate(13.3);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('accepts null as empty if field not required', function() {        
         var integerField = new DecimalField({required: false});
     
         var tmp = integerField.validate(null);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('converts string input properly with leading charaters and decimal', function() {        
@@ -58,7 +58,7 @@ describe('Decimal field', function() {
         var integerField = new DecimalField({required: false, precision: 2});
     
         var tmp = integerField.toFormattedString(undefined);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
         var tmp = integerField.toFormattedString(null);
         expect(tmp).to.be.null;
     });
@@ -67,7 +67,7 @@ describe('Decimal field', function() {
         var integerField = new DecimalField({required: true});
     
         var tmp = integerField.fromString('');
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
 

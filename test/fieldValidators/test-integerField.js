@@ -9,21 +9,21 @@ describe('Integer field', function() {
         var integerField = new IntegerField({required: true});
     
         var tmp = integerField.validate(6);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('accepts decimal numbers without fractions', function() {        
         var integerField = new IntegerField({required: true});
     
         var tmp = integerField.validate(13.0);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('accepts null as empty if field not required', function() {        
         var integerField = new IntegerField({required: false});
     
         var tmp = integerField.validate(null);
-        expect(tmp).to.be.undefined;
+        expect(tmp).to.be(undefined);
     });
     
     it('converts string input properly with leading charaters and decimal', function() {        
