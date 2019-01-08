@@ -50,7 +50,9 @@
     "striptags": "^3.1.1"
   },
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require babel-register ./test/**/test-*.js ./test/test-*.js",
+    "test:cjs": "NODE_ENV=test ./node_modules/mocha/bin/mocha test/cjs-test.js",
+    "test:es": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require babel-register ./test/**/test-*.js ./test/test-*.js",
+    "test": "npm run test:es && npm run test:cjs",
     "debug-test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --require babel-register --debug-brk --no-timeouts ./test/**/test-*.js ./test/test-*.js",
     "prepublish": "npm run build",
     "preversion": "npm run test",
