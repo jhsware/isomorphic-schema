@@ -53,7 +53,7 @@ export default createObjectPrototype({
     
     toFormattedString: function (inp) {
         if (inp) {
-            var tmp = inp.match(/.{1,6}/g)
+            var tmp = inp.match(/.{1,8}/g)
             return tmp.join("-");       
         } else {
             return ""
@@ -62,9 +62,9 @@ export default createObjectPrototype({
 
     fromString: function (inp) {
         var tmp = inp.replace(/([^0-9]*)/g, '')
-        if (tmp.length > 10) {
+        if (tmp.length > 12) {
             tmp = tmp.split("")
-            tmp = tmp.splice(0,10)
+            tmp = tmp.splice(0,12)
             tmp = tmp.join("")
         }
         return tmp
@@ -83,14 +83,14 @@ var _validateOrgNr = function(inp, options) {
     */
     
     var inpLst = inp.split("")
-    if (inpLst.length < 10) {
+    if (inpLst.length < 12) {
         return {
             i18nLabel: i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short'),
             message: "Inmatat nummer är för kort"
         }
     }
     
-    var luhLst = [2,1,2,1,2,1,2,1,2,1]
+    var luhLst = [0,0,2,1,2,1,2,1,2,1,2,1]
     var calcLst = luhLst.map(function (val, i) {
         return  luhLst[i] * parseInt(inpLst[i])
     })
