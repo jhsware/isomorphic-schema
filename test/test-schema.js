@@ -84,6 +84,16 @@ var _genTestRO = function () {
     });
 };
 
+var _genNested = function () {
+  var testUserSchema = _genTestUserSchema()
+
+  return new Schema("Nested Schema", {
+      title: new TextField({required: true}),
+      age: new TextField({required: true}),
+      user: new ObjectField({required: true, schema: testUserSchema})
+  });
+};
+
 var _invariantCheck = function (data, selectedFields) {
     var tmpFields = ['password', 'confirm_password'];
 
@@ -595,7 +605,7 @@ describe('Schema data transformation', function() {
                 otherTitleRO: "otherReadOnly",
                 otherAge: 20
             }
-        }, undefined, true);
+        }, { doNotRemoveReadOnly: true });
         
         expect(data.titleRO).to.equal('readOnly');
         expect(data.otherRO).not.to.be(undefined);
@@ -606,3 +616,145 @@ describe('Schema data transformation', function() {
         expect(data.age).to.equal(5);
     });
 });
+
+describe('Select and omit fields during validation', function() {
+  it('Simple nested validate', function() {
+      var nestedSchema = _genNested();
+      
+      var errors = nestedSchema.validate({
+          title: "my_title",
+          age: "666",
+          user: {
+            username: 'my_username',
+            email: 'my@email.com'
+          }
+      });
+      
+      expect(typeof errors).to.equal('undefined');
+  });
+
+  it('Missing root level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        age: "666",
+        user: {
+          username: 'my_username',
+          email: 'my@email.com'
+        }
+    });
+    
+    expect(typeof errors).to.equal('object');
+  });
+
+
+  it('Select root level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        age: "666",
+        user: {
+          username: 'my_username',
+          email: 'my@email.com'
+        }
+    }, {
+      selectedFields: ['age', 'user']
+    });
+    
+    expect(typeof errors).to.equal('undefined');
+  });
+
+  it('Omit root level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        age: "666",
+        user: {
+          username: 'my_username',
+          email: 'my@email.com'
+        }
+    }, {
+      omittedFields: ['title']
+    });
+    
+    expect(typeof errors).to.equal('undefined');
+  });
+
+
+  it('Missing nested properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        title: 'my_title',
+        age: "666",
+        user: {
+          email: 'my@email.com'
+        }
+    });
+    
+    expect(typeof errors).to.equal('object');
+  });
+
+
+  it('Select nested level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+      title: 'my_title',
+      age: "666",
+      user: {
+        email: 'my@email.com'
+      }
+    }, {
+      selectedFields: ['user.email']
+    });
+    
+    expect(typeof errors).to.equal('undefined');
+  });
+
+  it('Omit nested level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+      title: 'my_title',
+      age: "666",
+      user: {
+        email: 'my@email.com'
+      }
+    }, {
+      omittedFields: ['user.username']
+    });
+  
+    expect(typeof errors).to.equal('undefined');
+  });
+
+  it('Fail root level when select nested level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+      title: 'my_title',
+      user: {
+        email: 'my@email.com'
+      }
+    }, {
+      selectedFields: ['age', 'user.email']
+    });
+    
+    expect(typeof errors).to.equal('object');
+  });
+
+  it('Fail root level when omit nested level properties', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+      age: "666",
+      user: {
+        email: 'my@email.com'
+      }
+    }, {
+      omittedFields: ['user.username']
+    });
+  
+    expect(typeof errors).to.equal('object');
+  });
+})

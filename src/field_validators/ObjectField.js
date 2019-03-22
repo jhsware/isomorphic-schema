@@ -78,16 +78,11 @@ export default createObjectPrototype({
         return inp
     },
 
-    fromString: function (inp, doNotRemoveReadOnly) {
-        var _this = this
+    fromString: function (inp, options) {
+        let schema = (this._interface ? this._interface.schema : this._schema)
+
         if (typeof inp === 'object') {
-            var outp = {}
-            Object.keys(inp).forEach(function (key) {
-                if (!_this._schema.getFields()[key].readOnly || doNotRemoveReadOnly) {
-                    outp[key] = _this._schema.getFields()[key].fromString(inp[key], doNotRemoveReadOnly, inp)
-                }
-            })
-            return outp
+            return schema.transform(inp, options)  
         } else {
             return inp
         }

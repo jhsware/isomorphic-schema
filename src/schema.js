@@ -24,8 +24,6 @@
     ]
 */
 
-import { cloneShallow } from './utils'
-
 class Schema { 
     
     constructor (opts, fieldDefs) {
@@ -98,18 +96,41 @@ class Schema {
         formErrors.invariantErrors.push(error)
     }
     
-    _getSelectedFieldsList(selectedFields) {
-        if (typeof selectedFields === "string") {
-            selectedFields = [selectedFields]
+    _getSelectedFieldsList(selected, omitted, objectPath) {
+        const namespace = (Array.isArray(objectPath) && objectPath.join('.')) || ''
+        const newFieldOptions = {}
+        if (typeof selected === "string") {
+          selected = selected.split(',')
         }
+
+        if (typeof omitted === "string") {
+          omitted = omitted.split(',')
+        }
+
+        const selectedFields = []
         
-        if (typeof selectedFields === 'undefined') {
-            selectedFields = []
-            for (var key in this._fields) {
-                selectedFields.push(key)
+        for (var key in this._fields) {
+          const dottedName = namespace ? `${namespace}.${key}` : key
+
+          if (selected === undefined || selected.indexOf(dottedName) >= 0) {
+            // This field has been selected
+            if (!omitted || omitted.indexOf(dottedName) < 0 ) {
+              // And not omitted
+              selectedFields.push(key)
             }
+          }
         }
-        return selectedFields
+
+        // Remove root level props so they aren't counted when we pass on to next level
+        // so we can select all if none are passed
+        if (Array.isArray(selected)) {
+          selected = selected.filter((key) => key.indexOf('.') >= 0)
+        }
+
+        return {
+          selectedFields,
+          newFieldOptions
+        }
     }
     
     // TODO: validate async
@@ -118,12 +139,14 @@ class Schema {
     }
     
     validate(data, options, context, async) {    
-        var skipInvariants = false,
-            selectedFields = undefined
+        let skipInvariants = false,
+            selected = undefined,
+            omitted = undefined
         
         if (options) {
             skipInvariants = options.skipInvariants || false
-            selectedFields = options.selectedFields
+            selected = options.selectedFields
+            omitted = options.omittedFields
         }
         
         // We are making the validation stateless to avoid contaminating schemas
@@ -134,7 +157,7 @@ class Schema {
         }
         
         
-        selectedFields = this._getSelectedFieldsList(selectedFields)
+        const { selectedFields, newFieldOptions } = this._getSelectedFieldsList(selected, omitted, options && options['objectPath'])
         
         var validationPromises = []
         // Validate selected fields
@@ -145,7 +168,7 @@ class Schema {
             if (!options) {
                 var newOptions = {}
             } else {
-                var newOptions = cloneShallow(options)
+                var newOptions = Object.assign({}, options, newFieldOptions)
             }
             
             // ...so we can add objectPath to determine where we are
@@ -277,14 +300,16 @@ class Schema {
         return this._fields
     }
     
-    transform(data, selectedFields, doNotRemoveReadOnly) {
-        selectedFields = this._getSelectedFieldsList(selectedFields)
+    transform(data, options = {}) {
+        const { selectedFields: selected, omittedFields: omitted, objectPath = [], doNotRemoveReadOnly  } = options
+        const { selectedFields, newFieldOptions } = this._getSelectedFieldsList(selected, omitted, objectPath)
         var outp = {}
         for (var i in selectedFields) {
             var key = selectedFields[i]
+            newFieldOptions['objectPath'] = objectPath.concat(key)
             try {
                 if (!this._fields[key].readOnly || doNotRemoveReadOnly) {
-                    outp[key] = this._fields[key].fromString(data[key], doNotRemoveReadOnly)
+                    outp[key] = this._fields[key].fromString(data[key], Object.assign(options, newFieldOptions))
                 }
             } catch (err) {
                 // TODO: Error handling

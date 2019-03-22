@@ -694,6 +694,12 @@ if (typeof errors === 'undfined') {
 
 ## Internal Notes ###
 
+TODO: Refactor 2.0:
+  - use async await instead of validateAsync for more readable code
+  - move filtering to helper function which operates on a schema and returns a new schema
+  - use this new filtering etc. in inferno-formlib to make it simpler
+
+
 TODO (SEB): Write async tests for AnyOf
 
 TODO - do basic type checking of params (such as adding valdiator as schema)
