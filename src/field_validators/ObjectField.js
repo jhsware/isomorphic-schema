@@ -41,6 +41,11 @@ export default createObjectPrototype({
                 var schema = this._schema
             }
 
+            // Allow object fields without schema (useful for modelling objects that we don't know what they look like)
+            if (typeof schema === 'undefined') {
+              return (async ? Promise.resolve(undefined) : undefined)
+            }
+
             if (!async) {
                 var formErrors = schema.validate(inp, options, context, async)
                 if (formErrors) {
@@ -81,7 +86,7 @@ export default createObjectPrototype({
     fromString: function (inp, options) {
         let schema = (this._interface ? this._interface.schema : this._schema)
 
-        if (typeof inp === 'object') {
+        if (typeof inp === 'object' && typeof schema !== 'undefined') {
             return schema.transform(inp, options)  
         } else {
             return inp
