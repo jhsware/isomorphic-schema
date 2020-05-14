@@ -145,8 +145,8 @@ class Schema {
         
         if (options) {
             skipInvariants = options.skipInvariants || false
-            selected = options.selectedFields
-            omitted = options.omittedFields
+            selected = options.selectedFields || options.selectFields
+            omitted = options.omittedFields || options.omitFields
         }
         
         // We are making the validation stateless to avoid contaminating schemas

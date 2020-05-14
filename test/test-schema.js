@@ -664,6 +664,22 @@ describe('Select and omit fields during validation', function() {
     expect(typeof errors).to.equal('undefined');
   });
 
+  it('Select root level properties using selectFields', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        age: "666",
+        user: {
+          username: 'my_username',
+          email: 'my@email.com'
+        }
+    }, {
+      selectFields: ['age', 'user']
+    });
+    
+    expect(typeof errors).to.equal('undefined');
+  });
+
   it('Omit root level properties', function() {
     var nestedSchema = _genNested();
     
@@ -675,6 +691,22 @@ describe('Select and omit fields during validation', function() {
         }
     }, {
       omittedFields: ['title']
+    });
+    
+    expect(typeof errors).to.equal('undefined');
+  });
+
+  it('Omit root level properties using omitFields', function() {
+    var nestedSchema = _genNested();
+    
+    var errors = nestedSchema.validate({
+        age: "666",
+        user: {
+          username: 'my_username',
+          email: 'my@email.com'
+        }
+    }, {
+      omitFields: ['title']
     });
     
     expect(typeof errors).to.equal('undefined');
