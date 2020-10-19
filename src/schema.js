@@ -25,7 +25,23 @@
 */
 
 class Schema { 
-    
+    /**
+     * Create a form or object schema. You would normally use one of the predefined field types
+     * in isomorphic-schema or a subclass of these in order to support auto-generated forms.
+     * 
+     * However, this isn't required as long as you provide an object of the kind:
+     * { validator(), fromString() }
+     * 
+     * Passing schema name as first param is legacy but common. It won't be deprecated, but doesn't
+     * support 'extends'.
+     * 
+     * @param {(string|Object)} opts – configuration object
+     * @param {string} opts.schemaName – name of schema
+     * @param {Object} opts.fields – schema fields
+     * @param {Object[]} opts.extends – list of schemas to extend for composition (experimental)
+     * @param {Object=} fieldDefs – schema fields (overridden if fields are passed in first param)
+     * @returns {Object}
+     */
     constructor (opts, fieldDefs) {
         if (typeof opts === 'string') {
             // Backward compatibility
@@ -72,11 +88,39 @@ class Schema {
         }
     }
 
-    addInvariant(invariant) {
+    /**
+     * If this function returns undefined then there is no invariant error. If there is an invariant error
+     *
+     * @callback invariantCondition
+     * @param {Object} data – the complete data of the current object.
+     * @param {string[]} selectedFields – list of all fields that are active (respecting selected and omitted fields)
+     */
+
+    /**
+     * Add an invariant validation rule. You use it to make sure a max value is larger than a min value or that
+     * password equals to confirmPassword etc.
+     * @param {invariant} invariant
+     */
+    addInvariant(invariantCondition) {
         // TODO: Check that it is valid
         this._invariants.push(invariant)
     }
+
+    /**
+     * If this function returns true the field is included. Perhaps you only want to include a field
+     * if another field is of a certain value.
+     *
+     * @callback validationConstraint
+     * @param {Object} data – the complete data of the current object.
+     * @param {string} fieldKey – dot notation path to field being evaluated.
+     * @returns {boolean}
+     */
     
+    /**
+     * Add a condition under which the field should be active. Used when generating forms and during validation
+     * 
+     * @param {validationConstraint} constraint – the validation constraint
+     */
     addValidationConstraint(constraint) {
         // TODO: Check that it is valid
         this._validationConstraints.push(constraint)
@@ -133,11 +177,31 @@ class Schema {
         }
     }
     
-    // TODO: validate async
+    /**
+     * Validate data async using defined schema. Allways returns a promise
+     * @param {Object} data – the data input to be validated
+     * @param {Object} options – options object
+     * @param {(string|string[])} options.selected – only include selected fields (comma separated list, or array, of prop names)
+     * @param {(string|string[])} options.omitted – omit omitted fields (comma separated list, or array, of prop names)
+     * @param {string[]} options.objectPath – path to input object, used when transforming nested object
+     * @param {Object} context – the entire data object which can be used by a field for conditional validation against other props
+     * @returns {Promise}
+     */
     validateAsync(data, options, context) {
         return this.validate(data, options, context || data, true)
     }
     
+    /**
+     * Validate data using defined schema.
+     * @param {Object} data – the data input to be validated
+     * @param {Object} options – options object
+     * @param {(string|string[])} options.selected – only include selected fields (comma separated list, or array, of prop names)
+     * @param {(string|string[])} options.omitted – omit omitted fields (comma separated list, or array, of prop names)
+     * @param {string[]} options.objectPath – path to input object, used when transforming nested object
+     * @param {Object} context – the entire data object which can be used by a field for conditional validation against other props
+     * @param {boolean} async – (use validateAsync instead) data is validated async because schema contains async fields. This will return a promise
+     * @returns {(undefined|Object|Promise)} – returns error object if validation errors are found
+     */
     validate(data, options, context, async) {    
         let skipInvariants = false,
             selected = undefined,
@@ -280,8 +344,11 @@ class Schema {
         }
     }
 
+    /**
+     * Adds props as defined in schema to passed object in place. Uses Object.defineProperty.
+     * @param {Object} obj – the object to decorate
+     */
     addProperties(obj) {
-        // TODO: Implement this in isomorphic-schema
         var schema = this
 
         
@@ -291,15 +358,33 @@ class Schema {
             Object.defineProperty(obj, key, {
                 configurable: true, // We might want to remove properties when passing data through API
                 enumerable: true,
-                writable: !field.readOnly
+                // Changed so props are allways writable, otherwise you can have problems creating the object
+                // programmtically. Thus field.readOnly is only a form related property
+                // writable: !field.readOnly
             })
         }
     }
 
+    /**
+     * Returns fields defined for this schema
+     * @returns {Object} object containing fields
+     */
     getFields() {
         return this._fields
     }
     
+    /**
+     * Recursively transforms form data. Normally used to convert input data from a browser form. Calls
+     * .fromString on each field in schema in order to allow data to be cleaned and typed as specified
+     * for each field type.
+     * @param {Object} data – input object of any type, usually form data from browser
+     * @param {Object} options – options object
+     * @param {(string|string[])} options.selected – only include selected fields (comma separated list, or array, of prop names)
+     * @param {(string|string[])} options.omitted – omit omitted fields (comma separated list, or array, of prop names)
+     * @param {string[]} options.objectPath – path to input object, used when transforming nested object
+     * @param {boolean} options.doNotRemoveReadOnly – standard behaviour is to remove readOnly props. This overrides
+     * @returns {Object} returns the transformed object
+     */
     transform(data, options = {}) {
         const { selectedFields: selected, omittedFields: omitted, objectPath = [], doNotRemoveReadOnly  } = options
         const { selectedFields, newFieldOptions } = this._getSelectedFieldsList(selected, omitted, objectPath)
