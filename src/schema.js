@@ -99,9 +99,9 @@ class Schema {
     /**
      * Add an invariant validation rule. You use it to make sure a max value is larger than a min value or that
      * password equals to confirmPassword etc.
-     * @param {invariant} invariant
+     * @param {invariantCondition} invariant
      */
-    addInvariant(invariantCondition) {
+    addInvariant(invariant) {
         // TODO: Check that it is valid
         this._invariants.push(invariant)
     }
