@@ -361,6 +361,7 @@ class Schema {
                 // Changed so props are allways writable, otherwise you can have problems creating the object
                 // programmtically. Thus field.readOnly is only a form related property
                 // writable: !field.readOnly
+                writable: true
             })
         }
     }

@@ -789,4 +789,14 @@ describe('Select and omit fields during validation', function() {
   
     expect(typeof errors).to.equal('object');
   });
+
+  it('can add editable properties', function() {        
+    var testUserSchema = _genTestUserSchema();
+
+    var obj = new Object()
+    testUserSchema.addProperties(obj)
+    obj.email = 'testWrite@email.com'
+    
+    expect(obj.email).to.equal('testWrite@email.com');
+});
 })
