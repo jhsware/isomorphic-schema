@@ -2,14 +2,16 @@
 import expect from 'expect.js'
 
 import { createObjectPrototype } from 'component-registry'
-import { createInterface } from 'component-registry'
+import { createInterfaceClass } from 'component-registry'
 
 import TextField from '../../src/field_validators/TextField'
 import DynamicSelectAsyncBaseField from '../../src/field_validators/DynamicSelectAsyncBaseField'
 import Schema from '../../src/schema'
 
+const Interface = createInterfaceClass('test')
 
-var IMyDynamicSelectAsyncField = createInterface({
+
+var IMyDynamicSelectAsyncField = new Interface({
     name: 'IMyDynamicSelectAsyncField'
 })
 

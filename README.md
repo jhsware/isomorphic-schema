@@ -337,9 +337,10 @@ There are three use cases where you will want to create a custom field.
 Since each field is identified by it's interface, we first create one.
 
 ```JavaScript
-import { createInterface } from 'component-registry');
+import { createInterfaceClass } from 'component-registry');
+const Interface = createInterfaceClass('MyTestApp')
 
-export const IMySpecialField = createInterface({
+export const IMySpecialField = new Interface({
   name: 'IMySpecialField'
 })
 ```
@@ -365,9 +366,10 @@ This field extends TextField and thus inherits all the functionality of a TextFi
 Again you start by creating an interface. 
 
 ```JavaScript
-import { createInterface } from 'component-registry');
+import { createInterfaceClass } from 'component-registry');
+const Interface = createInterfaceClass('MyTestApp')
 
-export const IMySpecialValidationField = createInterface({
+export const IMySpecialValidationField = new Interface({
   name: 'IMySpecialValidationField'
 })
 ```
@@ -409,9 +411,10 @@ Note that createObjectPrototype mounts methods of the extended fields using the 
 Yupp, you start by creating an interface. 
 
 ```JavaScript
-import { createInterface } from 'component-registry');
+import { createInterfaceClass } from 'component-registry');
+const Interface = createInterfaceClass('MyTestApp')
 
-export const IMyComplexValidationField = createInterface({
+export const IMyComplexValidationField = new Interface({
   name: 'IMyComplexValidationField'
 })
 ```
@@ -487,9 +490,10 @@ Rendering a form from a schema is not very difficult but there are several featu
 The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget)
 
 ```JavaScript
-import { createInterface } from 'component-registry');
+import { createInterfaceClass } from 'component-registry');
+const Interface = createInterfaceClass('MyTestApp')
 
-export const IInputFieldWidget = createInterface({
+export const IInputFieldWidget = new Interface({
   name: 'IInputFieldWidget'
 })
 ```

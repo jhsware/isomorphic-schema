@@ -2,13 +2,15 @@
 import expect from 'expect.js'
 
 import { createObjectPrototype } from 'component-registry'
-import { createInterface } from 'component-registry'
+import { createInterfaceClass } from 'component-registry'
 
 import TextField from '../../src/field_validators/TextField'
 import IntegerField from '../../src/field_validators/IntegerField'
 import DynamicSelectBaseField from '../../src/field_validators/DynamicSelectBaseField'
 
-var IMyDynamicSelectField = createInterface({
+const Interface = createInterfaceClass('MyTestApp')
+
+var IMyDynamicSelectField = new Interface({
     name: 'IMyDynamicSelectField'
 })
 
