@@ -20,7 +20,7 @@ export default createObjectPrototype({
     
     validate: function (inp) {
         var error = this._ITextField.validate.call(this, inp);
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         if(inp && (inp.length != 10 || !isValid(new Date(inp)))) {
             error = {
@@ -29,9 +29,9 @@ export default createObjectPrototype({
                 message: "Det ser inte ut som datum"
             }
         
-            return error
+            return Promise.resolve(error)
         }
-    
+        return Promise.resolve()
     },
 
     toFormattedString: function (inp) {

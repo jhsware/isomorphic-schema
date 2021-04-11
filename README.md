@@ -388,7 +388,7 @@ export const MySpecialValidationField = createObjectPrototype({
   validate: function (inp, options, context) {
     // Call the TextField validate method to invoke the validation we inherited
     var error = this._ITextField.validate.call(this, inp)
-    if (error) { return error }
+    if (error) { return Promise.resolve(error) }
 
     // Implement our custom regex validation
     if (inp !== undefined && !(MyRegex.test(inp) && !inp.length === 19)) {

@@ -38,11 +38,11 @@ export default createObjectPrototype({
     validate: function (inp, options, context, async) {
         // Check that this isn't undefined if it is required
         var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
         
         // If undefined and not required just return ok
         if (typeof inp === 'undefined' || inp === null) {
-            return
+          return Promise.resolve();
         }
         
         // We need to check every item in the list to see that they are valid
@@ -50,11 +50,7 @@ export default createObjectPrototype({
             // Chack value is of valueType
             var error = this.valueType.validate(item)
             if (typeof error !== 'undefined') {
-                if (!aync) {
-                    return error
-                } else {
-                    return Promise.resolve(error)
-                }
+                return Promise.resolve(error)
             }
 
             var options = this.options
@@ -68,22 +64,19 @@ export default createObjectPrototype({
                 }
             }
             if (!matches) {
-                return {
+                return Promise.resolve({
                     type: 'constraint_error',
                     i18nLabel: i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the selected values is not allowed'),
                     message: "Ett eller flera valda värden finns inte i listan över tillåtna värden"
-                }
+                })
             }
         }.bind(this)).filter(function (item) {return typeof item !== 'undefined'})
-        if (!async || errors.length === 0) {
-            return errors[0]
-        } else {
-            return Promise.all(errors)
-                .then(function (results) {
-                    var results = results.filter(function (item) { item !== undefined })
-                    return Promise.resolve(results[0])
-                })
-        }
+
+        return Promise.all(errors)
+            .then(function (results) {
+                var results = results.filter(function (item) { item !== undefined })
+                return Promise.resolve(results[0])
+            })
     },
 
     toFormattedString: function (inp) {

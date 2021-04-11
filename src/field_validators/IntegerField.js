@@ -30,43 +30,44 @@ export default createObjectPrototype({
     
     validate: function (inp) {
         var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
 
         if (!this._isRequired && (inp === null || typeof inp === "undefined" || inp === '')) {
-            return
+            return Promise.resolve()
         }
 
         if (typeof inp !== "number" || isNaN(inp)) {
-            return {
+            return Promise.resolve({
                 type: 'type_error',
                 i18nLabel: i18n('isomorphic-schema--integer_field_not_number', 'The field doesn\'t contain numbers'),
                 message: "Värdet innehåller annat än siffror"
-            }
+            })
         }
 
         if (parseInt(inp) !== inp) {
-            return {
+            return Promise.resolve({
                 type: 'type_error',
                 i18nLabel: i18n('isomorphic-schema--integer_field_no_decimals', 'The field may not contain decimals'),
                 message: "Värdet får inte innehålla en decimaldel"
-            }
+            })
         }
 
         if (typeof this._minValue !== 'undefined' && inp < this._minValue) {
-            return {
+            return Promise.resolve({
                 type: 'constraint_error',
                 i18nLabel: i18n('isomorphic-schema--integer_field_too_small', 'The value is too small. Min ${minValue}'),
                 message: "Minimum " + this._minValue
-            }
+            })
         }
 
         if (typeof this._maxValue !== 'undefined' && inp > this._maxValue) {
-            return {
+            return Promise.resolve({
                 type: 'constraint_error',
                 i18nLabel: i18n('isomorphic-schema--integer_field_too_big', 'The value is too big. Max ${maxValue}'),
                 message: "Max " + this._maxValue
-            }
+            })
         }
+        return Promise.resolve()
     },
     
     toFormattedString: function (inp) {

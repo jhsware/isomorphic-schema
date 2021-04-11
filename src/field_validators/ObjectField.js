@@ -26,56 +26,33 @@ export default createObjectPrototype({
     
     validate: function (inp, options, context, async) {
         var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         // Validate data and return an error object
         if (inp) {
             
-            if (this._interface) {
-                if (!async) {
-                    var schema = this._interface.schema
-                } else {
-
-                }
+            if (this._interface !== undefined) {
+                var schema = this._interface.schema
             } else {
                 var schema = this._schema
             }
 
             // Allow object fields without schema (useful for modelling objects that we don't know what they look like)
             if (typeof schema === 'undefined') {
-              return (async ? Promise.resolve(undefined) : undefined)
+              return Promise.resolve(undefined)
             }
 
-            if (!async) {
-                var formErrors = schema.validate(inp, options, context, async)
-                if (formErrors) {
-                    // report error if data is passed and errors are found
-                    return {
-                        type: "object_error",
-                        i18nLabel: i18n('isomorphic-schema--object_field_value_error', 'There is an error in the content of this object'),
-                        message: "Delformuläret innehåller fältfel",
-                        fieldErrors: formErrors.fieldErrors,
-                        invariantErrors: formErrors.invariantErrors
-                    }
-                }        
+            var promise = schema.validateAsync(inp, options, context)
+
+            if (!(promise && promise.then)) {
+                return Promise.resolve(promise)
             } else {
-                var promise = schema.validateAsync(inp, options, context)
-
-                if (!(promise && promise.then)) {
-                    return Promise.resolve(promise)
-                } else {
-                    return promise.then(function (formErrors) {
-                        return Promise.resolve(formErrors)
-                    })
-                }
+                return promise.then(function (formErrors) {
+                    return Promise.resolve(formErrors)
+                })
             }
-            
         } else {
-            if (!async) {
-                return undefined
-            } else {
-                return Promise.resolve(undefined)
-            }
+            return Promise.resolve(undefined)
         }
     },
 

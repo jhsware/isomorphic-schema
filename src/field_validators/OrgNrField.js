@@ -23,7 +23,7 @@ export default createObjectPrototype({
     
     validate: function (inp) {
         var error = this._ITextField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
 
         if (inp) {
             var message
@@ -41,14 +41,15 @@ export default createObjectPrototype({
                     var i18nLabel = error.i18nLabel
                 }
                 if (message) {
-                    return {
+                    return Promise.resolve({
                         type: type,
                         i18nLabel: i18nLabel,
                         message: message
-                    };                
+                    });
                 }
             }
         }
+        return Promise.resolve();
     },
     
     toFormattedString: function (inp) {

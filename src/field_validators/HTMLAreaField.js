@@ -22,11 +22,13 @@ export default createObjectPrototype({
             tmp = striptags(inp)
         }
         var error = this._ITextAreaField.validate.call(this, tmp)
-        if (error) { return error }
+        
+        return Promise.resolve(error)
 
         // TODO: should I add HTML validation? Might need cheerio, in which case 
         // perhaps only serverside validation to keep file size small in browser?
         // Could use striptags with allowed tags but it doesn't support attribute
         // stripping
+
     }
 })

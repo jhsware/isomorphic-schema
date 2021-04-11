@@ -20,7 +20,7 @@ export default createObjectPrototype({
     
     validate: function (inp) {
         var error = this._ITextField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         if(inp !== null && typeof inp !== 'undefined' && inp.length < 8) {
             error = {
@@ -29,7 +29,7 @@ export default createObjectPrototype({
                 message: "Lösenordet måste innehålla minst 8 tecken"
             }
         
-            return error
+            return Promise.resolve(error);
         }
     
     }

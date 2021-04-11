@@ -15,13 +15,9 @@ export default createObjectPrototype({
         
     },
 
-    validateAsync: function (inp, options, context) {
-        return this.validate(inp, options, context, true)
-    },
-    
     validate: function (inp) {
         // False and undefined == false so this is always ok
-        return undefined
+        return Promise.resolve()
     },
     
     toFormattedString: function (inp) {

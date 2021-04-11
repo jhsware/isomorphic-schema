@@ -29,15 +29,15 @@ export default createObjectPrototype({
     validate: function (inp, options, context) {
         // Check that this isn't undefined if it is required
         var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         var error = inp && this.valueType.validate(inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         // Since we have passed the required test we can just check if the value is undefined
         // or null and return field errors undefined 
         if (inp === null || typeof inp === 'undefined') {
-            return
+            return Promise.resolve()
         }
         
         
@@ -58,8 +58,10 @@ export default createObjectPrototype({
                 message: "Valt värde finns inte i listan över tillåtna värden"
             }
             //console.log(error)
-            return error
+            return Promise.resolve(error)
         }
+
+        return Promise.resolve()
     },
 
     toFormattedString: function (inp) {

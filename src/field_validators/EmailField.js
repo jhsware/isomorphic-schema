@@ -20,11 +20,11 @@ export default createObjectPrototype({
     
     validate: function (inp) {
         var error = this._ITextField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         // Required has been checked so if it is empty it is ok
         if (!inp) {
-            return
+            return Promise.resolve()
         }
     
         /* 
@@ -67,9 +67,10 @@ export default createObjectPrototype({
                 message: "Det här är inte en riktig e-postadress"
             }
         
-            return error
+            return Promise.resolve(error)
         }
-    
+
+        return Promise.resolve()
     },
     
     toFormattedString: function (inp) {

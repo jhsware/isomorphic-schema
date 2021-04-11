@@ -43,12 +43,12 @@ export default createObjectPrototype({
     validate: function (inp, options, context, async) {
         if (inp && inp.length == 0) { inp = undefined }
         var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
         
         // If it is undefined or null, then we just return 
         // that this value is ok
         if (!inp) {
-            return undefined
+            return Promise.resolve()
         }
         
         // Check that this is an array
@@ -59,7 +59,7 @@ export default createObjectPrototype({
                 message: "This is not a proper list. This is a bug in the application"
             }
             //console.log(error)
-            return error;            
+            return Promise.resolve(error);
         }
         
         if (this._maxItems && inp.length > this._maxItems) {
@@ -68,6 +68,7 @@ export default createObjectPrototype({
                 i18nLabel: i18n('isomorphic-schema--list_field_value_error_too_many_items', 'Too many items in list, max ${maxItems} allowed'),
                 message: 'Too many items in list, max ${maxItems} allowed'
             }
+            return Promise.resolve(error);
         }
     
         if (this._minItems && inp.length < this._minItems) {
@@ -76,6 +77,7 @@ export default createObjectPrototype({
                 i18nLabel: i18n('isomorphic-schema--list_field_value_error_too_few_items', 'Too few items in list, min ${minItems} allowed'),
                 message: 'Too few items in list, min ${minItems} allowed'
             }
+            return Promise.resolve(error);
         }
 
         var tmpValidationErrors = []
@@ -116,47 +118,25 @@ export default createObjectPrototype({
             }
         }.bind(this))
     
-        if (!async || validationPromises.length === 0) {
-            if (tmpValidationErrors.length > 0) {
-                var tmpErrors = {}
-                tmpValidationErrors.map(function (item) {
-                    tmpErrors[item.id] = item.error
-                })
-            
-                if (error !== undefined) {
-                    error.errors = tmpErrors
+        return Promise.all(validationPromises)
+            .then(function (errors) {
+                // Filter out non-errors (undefined)
+                errors = errors.filter(function (error) { return error })
+                if (errors.length === 0) {
+                    return Promise.resolve(undefined)
                 } else {
-                    error = {
+                    var tmpErrors = {}
+                    errors.forEach(function (err) {
+                        tmpErrors[err.id] = err.error
+                    })
+                    return Promise.resolve({
                         type: 'list_error',
                         i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
                         message: "There is an error in the content of this list",
                         errors: tmpErrors
-                    }
+                    })
                 }
-            }
-            // If there weren't any errors this will return undefined
-            return error
-        } else {
-            return Promise.all(validationPromises)
-                .then(function (errors) {
-                    // Filter out non-errors (undefined)
-                    errors = errors.filter(function (error) { return error })
-                    if (errors.length === 0) {
-                        return Promise.resolve(undefined)
-                    } else {
-                        var tmpErrors = {}
-                        errors.forEach(function (err) {
-                            tmpErrors[err.id] = err.error
-                        })
-                        return Promise.resolve({
-                            type: 'list_error',
-                            i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
-                            message: "There is an error in the content of this list",
-                            errors: tmpErrors
-                        })
-                    }
-                })
-        }
+            })
         
     },
     

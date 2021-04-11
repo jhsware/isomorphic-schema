@@ -28,7 +28,7 @@ export default createObjectPrototype({
     },
 
     // DynamicSelectAsyncBaseField:
-    validateAsync: function (inp, options, context) {
+    validate: function (inp, options, context) {
         // Check that this isn't undefined if it is required
         var error = this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) };    
@@ -40,7 +40,7 @@ export default createObjectPrototype({
         }
 
         if (inp) {
-            return this.valueType.validateAsync(inp, options, context)
+            return this.valueType.validate(inp, options, context)
         } else {
             return Promise.resolve(undefined)
         }
@@ -72,10 +72,6 @@ export default createObjectPrototype({
                 throw new Error('Couldn\t perform validation: ' + err.message)
             })
         */
-    },
-
-    validate: function () {
-        throw new Error("You tried to call a field extending DynamicSelectAsyncBaseField synchronously, needs to be async. Use .validateAsync(...) instead!")
     },
 
     // This is used by formlibs

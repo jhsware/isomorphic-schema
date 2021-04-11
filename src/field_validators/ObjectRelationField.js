@@ -28,7 +28,7 @@ export default createObjectPrototype({
         var val = inp.get()
         
         var error = this._IBaseField.validate.call(this, val)
-        if (error) { return error }
+        if (error) { return Promise.resolve(error) }
     
         /*
         // TODO: Implement object type validation

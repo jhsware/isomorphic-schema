@@ -22,25 +22,17 @@ export default createObjectPrototype({
             delete options.required
         }
     },
-
-    validateAsync: function (inp, options, context) {
-        var tmp = this.validate(inp, options, context, true)
-        if (tmp && tmp.then) {
-            return tmp
-        } else {
-            return Promise.resolve(tmp)
-        }
-    },
     
     validate: function (inp, options, context, async) {
         context = context || inp
         if (this._isRequired && (typeof inp === "undefined" || inp === null || inp === '')) {
-            return {
+            return Promise.resolve({
                 type: 'required',
                 i18nLabel: i18n('isomorphic-schema--field_required', 'Required'),
                 message: "Obligatoriskt"
-            }
+            })
         }
+        return Promise.resolve()
     },
 
     toFormattedString: function (inp) {
