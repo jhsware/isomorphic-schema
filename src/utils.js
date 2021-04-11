@@ -8,50 +8,55 @@
  * 
  */
 function cloneArray (arr) {
-    var outp = arr.map(function (item) {
-        if (Array.isArray(item)) {
-            return cloneArray(item)
-        } else if (typeof item === 'object') {
-            var tmp = clone(item)
-            return tmp
-        } else {
-            return item
-        }
-    })
-    
+    var outp = []
+    for (let i = 0; i < arr.length; i++) {
+      const item = arr[i]
+      if (Array.isArray(item)) {
+        outp.push(cloneArray(item))
+      } else if (typeof item === 'object') {
+          var tmp = clone(item)
+          outp.push(tmp)
+      } else {
+          outp.push(item)
+      }
+    }    
     return outp
+}
+
+const EMPTY_FUNC = function () {}
+function _getClonedBaseFunc (obj) {
+  var fn = EMPTY_FUNC
+  fn.prototype = obj.prototype
+  return new fn()
 }
 
 // TODO: Handle Date objects?
 export function clone(obj) {
-    var fn = function () {}
-    fn.prototype = obj.prototype
-    var outp = new fn()
+    var outp = _getClonedBaseFunc(obj)
     
-    Object.keys(obj).forEach(function (key) {
-        if (!obj.hasOwnProperty(key)) return
-            
-        var tmp = obj[key]
-        if (Array.isArray(tmp)) {
-            outp[key] = cloneArray(tmp)
-        } else if (typeof tmp === 'object') {
-            outp[key] = clone(tmp)
-        } else {
-            outp[key] = tmp
-        }
-    })    
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      var tmp = obj[key]
+      if (Array.isArray(tmp)) {
+          outp[key] = cloneArray(tmp)
+      } else if (typeof tmp === 'object') {
+          outp[key] = clone(tmp)
+      } else {
+          outp[key] = tmp
+      }
+    }
     return outp
 }
 
 export function cloneShallow(obj) {
-    var fn = function () {}
-    fn.prototype = obj.prototype
-    var outp = new fn()
+  var outp = _getClonedBaseFunc(obj)
     
-    Object.keys(obj).forEach(function (key) {
-        if (!obj.hasOwnProperty(key)) return
-        outp[key] = obj[key]
-    })    
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      outp[key] = obj[key]
+    }
     return outp
 }
 
@@ -88,6 +93,7 @@ const regex = /\${([^}]+)}/g
  * 
  * Where personSchema.age is an IntegerField validator
  */
+// TODO: Optimise this
 export function renderString(str, fieldDef) {
     var m
     while ((m = regex.exec(str)) !== null) {
