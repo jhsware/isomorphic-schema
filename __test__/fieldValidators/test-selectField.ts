@@ -1,10 +1,8 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import SelectField from '../../src/field_validators/SelectField'
 import TextField from '../../src/field_validators/TextField'
 import EmailField from '../../src/field_validators/EmailField'
-import Schema from '../../src/schema'
 
 describe('Select field', function() {
     describe('Select field with options array', function() {
@@ -18,7 +16,7 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.validate("select-me");
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
         });
         
         it('allows undefined or null if not required', function() {        
@@ -31,9 +29,9 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.validate(undefined);
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
             var tmp = theField.validate(null);
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
             
         });
 
@@ -47,7 +45,7 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.validate("outside-list");
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });
         
         
@@ -62,7 +60,7 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.validate("select-me");
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });
 
         it('can convert a value to a title', function() {        
@@ -75,7 +73,7 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.getOptionTitle("select-me");
-            expect(tmp).to.equal('Select Me');
+            expect(tmp).toEqual('Select Me');
         });
 
         it('convert a value to a title handles undefined', function() {        
@@ -88,7 +86,7 @@ describe('Select field', function() {
                 ]});
         
             var tmp = theField.getOptionTitle("no exist");
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
         });
     });
 });

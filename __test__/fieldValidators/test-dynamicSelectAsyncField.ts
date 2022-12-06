@@ -1,12 +1,9 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import { createObjectPrototype } from 'component-registry'
 import { createInterfaceClass } from 'component-registry'
-
 import TextField from '../../src/field_validators/TextField'
 import DynamicSelectAsyncBaseField from '../../src/field_validators/DynamicSelectAsyncBaseField'
-import Schema from '../../src/schema'
 
 const Interface = createInterfaceClass('test')
 
@@ -95,7 +92,7 @@ describe('Dynamic select async field', function() {
     
         var tmp = theField.validateAsync("one");
         tmp.then(function (validationError) {
-            expect(validationError).to.be(undefined);
+            expect(validationError).toBe(undefined);
             done();
         })
     });
@@ -106,7 +103,7 @@ describe('Dynamic select async field', function() {
     
         var tmp = theField.validateAsync("select-me");
         tmp.then(function (validationError) {
-            expect(validationError).not.to.be(undefined);
+            expect(validationError).not.toBe(undefined);
             done();
         })
     });
@@ -118,7 +115,7 @@ describe('Dynamic select async field', function() {
     
         var tmp = theField.getOptionTitleAsync("one");
         tmp.then(function (title) {
-            expect(title).to.equal('The One');
+            expect(title).toEqual('The One');
             done();
         })
     });
@@ -130,7 +127,7 @@ describe('Dynamic select async field', function() {
     
         var tmp = theField.getOptionTitleAsync("no exist");
         tmp.then(function (title) {
-            expect(title).to.be(undefined);
+            expect(title).toBe(undefined);
             done();
         })
 

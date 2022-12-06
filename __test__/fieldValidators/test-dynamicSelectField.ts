@@ -1,9 +1,7 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import { createObjectPrototype } from 'component-registry'
 import { createInterfaceClass } from 'component-registry'
-
 import TextField from '../../src/field_validators/TextField'
 import IntegerField from '../../src/field_validators/IntegerField'
 import DynamicSelectBaseField from '../../src/field_validators/DynamicSelectBaseField'
@@ -51,7 +49,7 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.validate("one");
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
     
     it('allows undefined or null if not required', function() {        
@@ -61,9 +59,9 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.validate(undefined);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
         var tmp = theField.validate(null);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 
     it('throws an error if selected value is outside list', function() {        
@@ -73,7 +71,7 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.validate("outside-list");
-        expect(tmp).to.not.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
 
     it('throws an error if wrong type', function() {        
@@ -83,7 +81,7 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.validate("select-me");
-        expect(tmp).to.not.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
 
     it('can convert a value to a title', function() {        
@@ -93,7 +91,7 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.getOptionTitle("one");
-        expect(tmp).to.equal('The One');
+        expect(tmp).toEqual('The One');
     });
 
     it('convert a value to a title handles undefined', function() {        
@@ -103,7 +101,7 @@ describe('Dynamic select field', function() {
         });
     
         var tmp = theField.getOptionTitle("no exist");
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 
 });

@@ -1,27 +1,25 @@
-
-
-const expect = require('expect.js')
+import { describe, expect, it } from "@jest/globals";
 
 describe('CJS-build', function() {
   it('can be imported', function() {
     const theLib = require('../dist/cjs')
-    expect(theLib).not.to.be(undefined)           
+    expect(theLib).not.toBe(undefined)           
   })
 
   it('import has content', function() {
     const { Schema } = require('../dist/cjs')
-    expect(Schema).not.to.be(undefined)           
+    expect(Schema).not.toBe(undefined)           
   })
 })
 
 describe('UMD-build', function() {
   it('can be imported', function() {
     const theLib = require('../dist/umd')
-    expect(theLib).not.to.be(undefined)           
+    expect(theLib).not.toBe(undefined)           
   })
 
   it('import has content', function() {
     const { Schema } = require('../dist/umd')
-    expect(Schema).not.to.be(undefined)           
+    expect(Schema).not.toBe(undefined)           
   })
 })

@@ -1,10 +1,9 @@
 
-import expect from 'expect.js'
+import { describe, expect, it } from "@jest/globals";
 
 import AnyOf from '../../src/field_validators/AnyOf'
 import TextField from '../../src/field_validators/TextField'
 import IntegerField from '../../src/field_validators/IntegerField'
-import Schema from '../../src/schema'
 
 // TODO: Write async tests
 
@@ -17,7 +16,7 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate(undefined);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 
     it('throws error on undefined when required', function() {
@@ -29,7 +28,7 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate(undefined);
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
 
     it('throws error if no value type validates', function() {
@@ -41,7 +40,7 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate("not a number");
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
 
     it('is ok if at least one value type validates (string)', function() {
@@ -54,7 +53,7 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate("not a number");
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 
     it('is ok if at least one value type validates (integer)', function() {
@@ -66,6 +65,6 @@ describe('Any of', function() {
         });
     
         var tmp = anyOf.validate("234");
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 });

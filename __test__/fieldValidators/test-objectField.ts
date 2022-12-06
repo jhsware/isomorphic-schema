@@ -1,6 +1,5 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import ObjectField from '../../src/field_validators/ObjectField'
 import TextField from '../../src/field_validators/TextField'
 import Schema from '../../src/schema'
@@ -23,7 +22,7 @@ describe('Object field', function () {
                 username: "test_user"
             });
             
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
         });
 
         it('throws error on undefined if required', function() {        
@@ -33,7 +32,7 @@ describe('Object field', function () {
             });
             
             var tmp = objectField.validate();
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });
 
         it("throws error when object schema doesn't validate", function() {        
@@ -45,7 +44,7 @@ describe('Object field', function () {
             var tmp = objectField.validate({
                 username: undefined
             });
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });        
         
     });
@@ -68,7 +67,7 @@ describe('Object field', function () {
                 username: "test_user"
             });
             
-            expect(tmp).to.be(undefined);
+            expect(tmp).toBe(undefined);
         });
 
         it('throws error on undefined if required', function() {        
@@ -78,7 +77,7 @@ describe('Object field', function () {
             });
             
             var tmp = objectField.validate();
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });
 
         it("throws error when object schema doesn't validate", function() {        
@@ -90,7 +89,7 @@ describe('Object field', function () {
             var tmp = objectField.validate({
                 username: undefined
             });
-            expect(tmp).to.not.be(undefined);
+            expect(tmp).not.toBe(undefined);
         });        
         
     });

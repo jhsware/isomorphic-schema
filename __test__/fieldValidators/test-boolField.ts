@@ -1,40 +1,38 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import BoolField from '../../src/field_validators/BoolField'
-import Schema from '../../src/schema'
 
 describe('Bool field', function() {
     it('accepts boolean true', function() {        
         var boolField = new BoolField({required: true});
         var tmp = boolField.validate(true);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
 
     it('accepts boolean false', function() {        
         var boolField = new BoolField({required: true});
         var tmp = boolField.validate(false);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
     
     it('allows null or undefined if not required', function() {        
         var boolField = new BoolField({required: false});
         var tmp = boolField.validate(null);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
         var tmp = boolField.validate(undefined);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
     
     it('converts string represenations to proper values', function() {        
         var boolField = new BoolField();
         var tmp = boolField.fromString('false');
-        expect(tmp).to.be(false);
+        expect(tmp).toBe(false);
         var tmp = boolField.fromString('true');
-        expect(tmp).to.be(true);
+        expect(tmp).toBe(true);
         var tmp = boolField.fromString('undefined');
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
         var tmp = boolField.fromString('null');
-        expect(tmp).to.be(null);            
+        expect(tmp).toBe(null);            
     });
     
     

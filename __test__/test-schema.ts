@@ -1,5 +1,4 @@
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import Schema from '../src/schema'
 import TextField from '../src/field_validators/TextField'
 import IntegerField from '../src/field_validators/IntegerField'
@@ -115,14 +114,14 @@ var _invariantCheck = function (data, selectedFields) {
 };
 
 var _doNotValidateUsername = function (data, fieldName) {
-    return (!fieldName == 'username');
+    return fieldName !== 'username';
 }
 
 describe('Schema definition', function() {
     it('can be created', function() {        
         var testUserSchema = _genTestUserSchema();
         
-        expect(testUserSchema).to.not.be(undefined);
+        expect(testUserSchema).not.toBe(undefined);
     });
 
     it('can validate correct data', function() {
@@ -135,7 +134,7 @@ describe('Schema definition', function() {
             confirm_password: 'mypassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('can validate correct data without required fields', function() {
@@ -146,7 +145,7 @@ describe('Schema definition', function() {
             email: 'jhsware@email.com'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('returns an error with faulty data', function() {
@@ -159,8 +158,8 @@ describe('Schema definition', function() {
             confirm_password: 'mypassword'
         });
                 
-        expect(formErrors).not.to.be(undefined);
-        expect(formErrors.fieldErrors.email).to.not.be(undefined);
+        expect(formErrors).not.toBe(undefined);
+        expect(formErrors.fieldErrors.email).not.toBe(undefined);
     });
     
     it('handles successful post with invariant', function() {
@@ -174,7 +173,7 @@ describe('Schema definition', function() {
             confirm_password: 'mypassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
 
     it('returns an error with unmet invariant check', function() {        
@@ -188,9 +187,9 @@ describe('Schema definition', function() {
             confirm_password: '----'
         });
         
-        expect(formErrors).not.to.be(undefined);
-        expect(formErrors.fieldErrors).to.be(undefined);
-        expect(formErrors.invariantErrors.length).to.equal(1);
+        expect(formErrors).not.toBe(undefined);
+        expect(formErrors.fieldErrors).toBe(undefined);
+        expect(formErrors.invariantErrors.length).toEqual(1);
     });
 
     
@@ -205,9 +204,9 @@ describe('Schema definition', function() {
             confirm_password: '----'
         });
         
-        expect(formErrors).not.to.be(undefined);
-        expect(formErrors.fieldErrors.email).to.not.be(undefined);
-        expect(formErrors.invariantErrors.length).to.equal(1);
+        expect(formErrors).not.toBe(undefined);
+        expect(formErrors.fieldErrors.email).not.toBe(undefined);
+        expect(formErrors.invariantErrors.length).toEqual(1);
     });
     
     it('does not validate username according to validationConstraint', function() {        
@@ -221,7 +220,7 @@ describe('Schema definition', function() {
             confirm_password: 'mypassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('is valid with correct, required, object field', function() {
@@ -237,7 +236,7 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('throws error on invalid required object field', function() {
@@ -253,9 +252,9 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(formErrors).not.to.be(undefined);
-        expect(formErrors.fieldErrors).to.not.be(undefined);
-        expect(formErrors.invariantErrors).to.be(undefined);
+        expect(formErrors).not.toBe(undefined);
+        expect(formErrors.fieldErrors).not.toBe(undefined);
+        expect(formErrors.invariantErrors).toBe(undefined);
     });
     
     it("is valid with field error in attribute on object that shouldn't be validated according to constraint", function() {
@@ -271,7 +270,7 @@ describe('Schema definition', function() {
             role: 'ceo'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
 
 });
@@ -289,7 +288,7 @@ describe('Schema validation ASYNC', function() {
         });
         
         promise.then(function (formErrors) {
-            expect(formErrors).to.be(undefined);
+            expect(formErrors).toBe(undefined);
             done()
         })
     });
@@ -308,8 +307,8 @@ describe('Schema validation ASYNC', function() {
         });
 
         promise.then(function (formErrors) {
-            expect(formErrors.fieldErrors.customer).not.to.be(undefined);
-            expect(formErrors.fieldErrors.role).not.to.be(undefined);
+            expect(formErrors.fieldErrors.customer).not.toBe(undefined);
+            expect(formErrors.fieldErrors.role).not.toBe(undefined);
             done();
         })        
     });
@@ -331,7 +330,7 @@ describe('Schema validation ASYNC', function() {
         });
         
         promise.then(function (formErrors) {
-            expect(formErrors.invariantErrors[0]).not.to.be(undefined);
+            expect(formErrors.invariantErrors[0]).not.toBe(undefined);
             done();
         })
     });
@@ -350,7 +349,7 @@ describe('Schema validation ASYNC', function() {
         });
         
         promise.then(function (formErrors) {
-            expect(formErrors).to.be(undefined);
+            expect(formErrors).toBe(undefined);
         })
     });
     
@@ -369,7 +368,7 @@ describe('Schema validation with read only fields', function() {
             }
         })
         
-        expect(errors).to.be(undefined);
+        expect(errors).toBe(undefined);
     });
 
     it('read only values pass validation if wrong', function() {        
@@ -384,7 +383,7 @@ describe('Schema validation with read only fields', function() {
             }
         })
         
-        expect(errors).to.be(undefined);
+        expect(errors).toBe(undefined);
     });
 });
 
@@ -394,7 +393,7 @@ describe('Schema inheritance', function() {
         var userSchema = _genTestUserSchema();
         var specUserSchema = _genSpecialUserThatExtends([userSchema]);
         
-        expect(specUserSchema.getFields().username).to.not.be(undefined);
+        expect(specUserSchema.getFields().username).not.toBe(undefined);
     });
     
     it('we can inherit multiple schemas', function() {        
@@ -402,8 +401,8 @@ describe('Schema inheritance', function() {
         var custNoSchema = _genCustomerNoSchema();
         var specCustUserSchema = _genSpecialUserThatExtends([userSchema, custNoSchema]);
         
-        expect(specCustUserSchema.getFields().username).to.not.be(undefined);
-        expect(specCustUserSchema.getFields().customer).to.not.be(undefined);
+        expect(specCustUserSchema.getFields().username).not.toBe(undefined);
+        expect(specCustUserSchema.getFields().customer).not.toBe(undefined);
     });
     
     it('throws an error when inherited fields do not validate', function() {
@@ -419,8 +418,8 @@ describe('Schema inheritance', function() {
             // Missing role and customer property
         });
         
-        expect(formErrors.fieldErrors.customer).not.to.be(undefined);
-        expect(formErrors.fieldErrors.role).not.to.be(undefined);
+        expect(formErrors.fieldErrors.customer).not.toBe(undefined);
+        expect(formErrors.fieldErrors.role).not.toBe(undefined);
     });
     
     it('validates when inherited fields are ok', function() {
@@ -437,7 +436,7 @@ describe('Schema inheritance', function() {
             confirm_password: 'mypassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('throws error when inherited invariant check fails', function() {
@@ -456,7 +455,7 @@ describe('Schema inheritance', function() {
             confirm_password: 'wrongpassword'
         });
         
-        expect(formErrors.invariantErrors[0]).not.to.be(undefined);
+        expect(formErrors.invariantErrors[0]).not.toBe(undefined);
     });
     
     it('respects validation constraints for inherited schemas', function() {        
@@ -474,7 +473,7 @@ describe('Schema inheritance', function() {
             confirm_password: 'mypassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
     
     it('overrides inherited schema field validation', function() {
@@ -488,7 +487,7 @@ describe('Schema inheritance', function() {
             confirm_password: 'wrongpassword'
         });
         
-        expect(formErrors).to.be(undefined);
+        expect(formErrors).toBe(undefined);
     });
 });
 
@@ -534,7 +533,7 @@ describe('Schema data transformation', function() {
             number: "5"
         });
         
-        expect(typeof data.number).to.equal('number');
+        expect(typeof data.number).toEqual('number');
     });
 
     it('converts a simple integer field', function() {
@@ -546,8 +545,8 @@ describe('Schema data transformation', function() {
             }
         });
         
-        expect(typeof data.numberObj).to.equal('object');
-        expect(typeof data.numberObj.number).to.equal('number');
+        expect(typeof data.numberObj).toEqual('object');
+        expect(typeof data.numberObj.number).toEqual('number');
     });
 
     it('converts a list field with objects', function() {
@@ -562,10 +561,10 @@ describe('Schema data transformation', function() {
         };
         var data = listSchema.transform(formData);
         
-        expect(Array.isArray(data.users)).to.equal(true);
-        expect(data.users.length).to.equal(3);
-        expect(typeof data.users[0]).to.equal('object');
-        expect(data.users[0].email).to.equal(formData.users[0].email);
+        expect(Array.isArray(data.users)).toEqual(true);
+        expect(data.users.length).toEqual(3);
+        expect(typeof data.users[0]).toEqual('object');
+        expect(data.users[0].email).toEqual(formData.users[0].email);
     });
 
     it('converts a nested object with readOnly fields removed', function() {
@@ -584,11 +583,11 @@ describe('Schema data transformation', function() {
             }
         });
         
-        expect(data.titleRO).to.be(undefined);
-        expect(data.otherRO).to.be(undefined);
-        expect(data.other.titleRO).to.be(undefined);
-        expect(data.other.otherAge).to.equal(10);
-        expect(data.age).to.equal(5);
+        expect(data.titleRO).toBe(undefined);
+        expect(data.otherRO).toBe(undefined);
+        expect(data.other.titleRO).toBe(undefined);
+        expect(data.other.otherAge).toEqual(10);
+        expect(data.age).toEqual(5);
     });
 
     it('converts a nested object without removing readOnly fields', function() {
@@ -607,13 +606,13 @@ describe('Schema data transformation', function() {
             }
         }, { doNotRemoveReadOnly: true });
         
-        expect(data.titleRO).to.equal('readOnly');
-        expect(data.otherRO).not.to.be(undefined);
-        expect(data.otherRO.otherTitleRO).to.equal('otherReadOnly');
-        expect(data.otherRO).not.to.be(undefined);
-        expect(data.other.otherTitleRO).to.equal('readOnly');
-        expect(data.other.otherAge).to.equal(10);
-        expect(data.age).to.equal(5);
+        expect(data.titleRO).toEqual('readOnly');
+        expect(data.otherRO).not.toBe(undefined);
+        expect(data.otherRO.otherTitleRO).toEqual('otherReadOnly');
+        expect(data.otherRO).not.toBe(undefined);
+        expect(data.other.otherTitleRO).toEqual('readOnly');
+        expect(data.other.otherAge).toEqual(10);
+        expect(data.age).toEqual(5);
     });
 });
 
@@ -630,7 +629,7 @@ describe('Select and omit fields during validation', function() {
           }
       });
       
-      expect(typeof errors).to.equal('undefined');
+      expect(typeof errors).toEqual('undefined');
   });
 
   it('Missing root level properties', function() {
@@ -644,7 +643,7 @@ describe('Select and omit fields during validation', function() {
         }
     });
     
-    expect(typeof errors).to.equal('object');
+    expect(typeof errors).toEqual('object');
   });
 
 
@@ -661,7 +660,7 @@ describe('Select and omit fields during validation', function() {
       selectedFields: ['age', 'user']
     });
     
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
   it('Select root level properties using selectFields', function() {
@@ -677,7 +676,7 @@ describe('Select and omit fields during validation', function() {
       selectFields: ['age', 'user']
     });
     
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
   it('Omit root level properties', function() {
@@ -693,7 +692,7 @@ describe('Select and omit fields during validation', function() {
       omittedFields: ['title']
     });
     
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
   it('Omit root level properties using omitFields', function() {
@@ -709,7 +708,7 @@ describe('Select and omit fields during validation', function() {
       omitFields: ['title']
     });
     
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
 
@@ -724,7 +723,7 @@ describe('Select and omit fields during validation', function() {
         }
     });
     
-    expect(typeof errors).to.equal('object');
+    expect(typeof errors).toEqual('object');
   });
 
 
@@ -741,7 +740,7 @@ describe('Select and omit fields during validation', function() {
       selectedFields: ['user.email']
     });
     
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
   it('Omit nested level properties', function() {
@@ -757,7 +756,7 @@ describe('Select and omit fields during validation', function() {
       omittedFields: ['user.username']
     });
   
-    expect(typeof errors).to.equal('undefined');
+    expect(typeof errors).toEqual('undefined');
   });
 
   it('Fail root level when select nested level properties', function() {
@@ -772,7 +771,7 @@ describe('Select and omit fields during validation', function() {
       selectedFields: ['age', 'user.email']
     });
     
-    expect(typeof errors).to.equal('object');
+    expect(typeof errors).toEqual('object');
   });
 
   it('Fail root level when omit nested level properties', function() {
@@ -787,7 +786,7 @@ describe('Select and omit fields during validation', function() {
       omittedFields: ['user.username']
     });
   
-    expect(typeof errors).to.equal('object');
+    expect(typeof errors).toEqual('object');
   });
 
   it('can add editable properties', function() {        
@@ -797,6 +796,6 @@ describe('Select and omit fields during validation', function() {
     testUserSchema.addProperties(obj)
     obj.email = 'testWrite@email.com'
     
-    expect(obj.email).to.equal('testWrite@email.com');
+    expect(obj.email).toEqual('testWrite@email.com');
 });
 })

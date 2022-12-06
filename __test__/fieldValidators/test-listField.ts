@@ -1,6 +1,5 @@
 
-import expect from 'expect.js'
-
+import { describe, expect, it } from "@jest/globals";
 import ListField from '../../src/field_validators/ListField'
 import TextField from '../../src/field_validators/TextField'
 import ObjectField from '../../src/field_validators/ObjectField'
@@ -17,7 +16,7 @@ describe('List field', function() {
             valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
     it('accepts a list of objects', function() {
         var objSchema = new Schema("Obj Schema", {
@@ -28,7 +27,7 @@ describe('List field', function() {
             valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{title: "one"}, {title: "two"}]);
-        expect(tmp).to.be(undefined);
+        expect(tmp).toBe(undefined);
     });
     it('throws error if single item is invalid', function() {
         var theField = new ListField({
@@ -36,7 +35,7 @@ describe('List field', function() {
             valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", undefined, "three"]);
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
     it('throws error if sub form is invalid', function() {
         var objSchema = new Schema("Obj Schema", {
@@ -47,7 +46,7 @@ describe('List field', function() {
             valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{}, {title: "two"}]);
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
     it('throws error if too few items', function() {
         var theField = new ListField({
@@ -56,7 +55,7 @@ describe('List field', function() {
             valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
     it('throws error if too many items', function() {
         var theField = new ListField({
@@ -65,7 +64,7 @@ describe('List field', function() {
             valueType: new TextField({required: true})});
     
         var tmp = theField.validate(["one", "two", "three"]);
-        expect(tmp).not.to.be(undefined);
+        expect(tmp).not.toBe(undefined);
     });
     it('specialised field extending ListField throws error if too few items', function() {
         const ISpecialListField = new Interface({ name: 'ISpecialListField'})
@@ -80,7 +79,7 @@ describe('List field', function() {
             valueType: new TextField({required: true})});
     
         var err = theField.validate(["one", "two", "three"]);
-        expect(err).not.to.be(undefined);
+        expect(err).not.toBe(undefined);
     });
     it('throws correct error if too few items and sub form error', function() {
         var objSchema = new Schema("Obj Schema", {
@@ -92,7 +91,7 @@ describe('List field', function() {
             valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = theField.validate([{}, {title: "two"}]);
-        expect(tmp).not.to.be(undefined);
-        expect(tmp.i18nLabel).to.equal('isomorphic-schema--list_field_value_error_too_few_items')
+        expect(tmp).not.toBe(undefined);
+        expect(tmp.i18nLabel).toEqual('isomorphic-schema--list_field_value_error_too_few_items')
     });
 });

@@ -1,5 +1,6 @@
 
-import expect from 'expect.js'
+import { describe, expect, it } from "@jest/globals";
+
 
 import IntegerField from '../src/field_validators/IntegerField'
 import BaseField from '../src/field_validators/BaseField'
@@ -12,7 +13,7 @@ describe('Utils', function() {
         it('returns the first parameter', function() {        
             var result = i18n('the_key', 'The Help Text');
         
-            expect(result).to.equal('the_key');            
+            expect(result).toEqual('the_key');            
         })
     })
 
@@ -28,15 +29,15 @@ describe('Utils', function() {
             var objClone = clone(obj);
         
             // Check that we have deep cloned
-            expect(objClone).not.to.be(obj);
-            expect(objClone.obj).not.to.be(obj.obj);
-            expect(objClone.arr).not.to.be(obj.arr);
-            expect(objClone.arr[2]).not.to.be(obj.arr[2]);
+            expect(objClone).not.toBe(obj);
+            expect(objClone.obj).not.toBe(obj.obj);
+            expect(objClone.arr).not.toBe(obj.arr);
+            expect(objClone.arr[2]).not.toBe(obj.arr[2]);
             
             // Check the values are equal
-            expect(objClone.obj.str).to.equal(obj.obj.str);
-            expect(objClone.arr[2].str).to.equal(obj.arr[2].str);
-            expect(objClone.arr[0]).to.equal(obj.arr[0]);
+            expect(objClone.obj.str).toEqual(obj.obj.str);
+            expect(objClone.arr[2].str).toEqual(obj.arr[2].str);
+            expect(objClone.arr[0]).toEqual(obj.arr[0]);
         })
     })
 
@@ -44,19 +45,19 @@ describe('Utils', function() {
         it('substitute placeholders with field definition values', function() {
             var integerField = new IntegerField({required: true, min: 1});
             var result = renderString('Min ${minValue}', integerField);
-            expect(result).to.equal('Min 1');
+            expect(result).toEqual('Min 1');
         })
 
         it('is ok with not getting any placeholders', function() {
             var baseField = new BaseField({required: true});
             var result = renderString('Required', baseField);
-            expect(result).to.equal('Required');
+            expect(result).toEqual('Required');
         })
 
         it('leaves placeholders that don\'t have corresponding values', function() {
             var integerField = new IntegerField({required: true, min: 1});
             var result = renderString('Min ${notFound}', integerField);
-            expect(result).to.equal('Min ${notFound}');
+            expect(result).toEqual('Min ${notFound}');
         })
     })
 })
