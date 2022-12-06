@@ -1,4 +1,3 @@
-'use strict'
 import { createObjectPrototype } from 'component-registry'
 const isValid = require('date-fns/is_valid')
 import TextField from './TextField'

@@ -1,4 +1,3 @@
-'use strict'
 
 /**
  * 
@@ -110,4 +109,8 @@ export function renderString(str, fieldDef) {
         })
     }
     return str
+}
+
+export function isNullUndefEmpty(inp: any) {
+    return  inp === undefined || inp === null || inp === '';
 }

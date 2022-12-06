@@ -1,4 +1,3 @@
-'use strict'
 
 import { createObjectPrototype } from 'component-registry'
 import TextField from './TextField'

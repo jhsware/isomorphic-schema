@@ -1,7 +1,5 @@
 
 import { describe, expect, it } from "@jest/globals";
-
-
 import IntegerField from '../src/field_validators/IntegerField'
 import BaseField from '../src/field_validators/BaseField'
 var i18n = require('../src/utils').i18n;
@@ -35,9 +33,7 @@ describe('Utils', function() {
             expect(objClone.arr[2]).not.toBe(obj.arr[2]);
             
             // Check the values are equal
-            expect(objClone.obj.str).toEqual(obj.obj.str);
-            expect(objClone.arr[2].str).toEqual(obj.arr[2].str);
-            expect(objClone.arr[0]).toEqual(obj.arr[0]);
+            expect(objClone).toStrictEqual(obj);
         })
     })
 

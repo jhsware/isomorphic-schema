@@ -1,4 +1,3 @@
-'use strict'
 import { createObjectPrototype } from 'component-registry'
 import DynamicSelectBaseField from './DynamicSelectBaseField'
 import { i18n } from '../utils'
