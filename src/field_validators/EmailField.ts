@@ -1,5 +1,4 @@
 
-import { createObjectPrototype } from 'component-registry'
 import { TextField } from './TextField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
@@ -7,7 +6,7 @@ import { i18n, isNullUndefEmpty } from '../utils'
     Email-field
 */
 import { IEmailField, OmitInContructor } from '../interfaces'
-import { TFieldError } from '../schema';
+import { TFieldError, TFormErrors } from '../schema';
 
 type TEmailField = Omit<IEmailField, 'interfaceId' | 'providedBy'>;
 
@@ -26,7 +25,7 @@ export class EmailField extends TextField<TEmailField> implements TEmailField {
     this.trim = trim;
   }
 
-  async validate(inp, options, context): Promise<TFieldError> {
+  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
     let err = await super.validate(inp, options, context);
     if (err) return err;
 

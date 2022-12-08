@@ -1,14 +1,15 @@
-import { createIdFactory, Interface } from 'component-registry'
+import { createIdFactory, ObjectInterface } from 'component-registry'
+import Schema, { TFieldError, TFormErrors } from './schema';
 const id = createIdFactory('isomorphic-schema');
 
 export type OmitInContructor =  'validate' | 'toFormattedString' | 'fromString';
 
-export class IBaseField extends Interface {
+export class IBaseField extends ObjectInterface {
     get interfaceId() { return id('IBaseField') };
     required?: boolean;
     readOnly?: boolean;
-    validate(inp: any, options: any, context: any) {};
-    fromString(inp: string) {};
+    validate(inp: any, options: any, context: any): Promise<TFieldError | TFormErrors | undefined> { return };
+    fromString(inp: string, options: object) {};
     toFormattedString(inp: any): string { return ''};
 }
 
@@ -19,16 +20,20 @@ export class ITextField extends IBaseField {
     trim?: boolean;
 }
 
-export class ITextAreaField extends IBaseField {
+export class ITextAreaField extends ITextField {
     get interfaceId() { return id('ITextAreaField') };
 }
 
 export class IIntegerField extends IBaseField {
     get interfaceId() { return id('IIntegerField') };
+    min?: number;
+    max?: number;
 }
 
 export class IDecimalField extends IBaseField {
     get interfaceId() { return id('IDecimalField') };
+    min?: number;
+    max?: number;
 }
 
 export class IBoolField extends IBaseField {
@@ -57,10 +62,16 @@ export class ITelephoneField extends IBaseField {
 
 export class IListField extends IBaseField {
     get interfaceId() { return id('IListField') };
+    fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>; 
+    minItems?: number;
+    maxItems?: number;
+    objectFactoryName?: string;
 }
 
 export class IObjectField extends IBaseField {
     get interfaceId() { return id('IObjectField') };
+    schema: Schema<any>;
+    objectFactoryName?: string;
 }
 
 export class IObjectRelationField extends IBaseField {

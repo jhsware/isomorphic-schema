@@ -12,7 +12,5 @@ typings.json
 node_modules
 
 # We don't want to push test to npm
-test/
+__tests__/
 
-# We don't want to push .babelrc
-.babelrc

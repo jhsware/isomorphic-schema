@@ -11,7 +11,7 @@ import { createObjectPrototype } from 'component-registry'
 import { IAnyOf } from '../interfaces'
 import { i18n } from '../utils'
 
-import BaseField from './BaseField'
+import {BaseField} from './BaseField'
 
 export default createObjectPrototype({
     extends: [BaseField],

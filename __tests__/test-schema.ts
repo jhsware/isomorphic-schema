@@ -1,13 +1,14 @@
 import { describe, expect, it } from "@jest/globals";
 import Schema from '../src/schema'
 import { TextField } from '../src/field_validators/TextField'
-import IntegerField from '../src/field_validators/IntegerField'
+import { IntegerField } from '../src/field_validators/IntegerField'
 import { EmailField } from '../src/field_validators/EmailField'
-import ObjectField from '../src/field_validators/ObjectField'
-import ListField from '../src/field_validators/ListField'
+import { ObjectField } from '../src/field_validators/ObjectField'
+import { ListField } from '../src/field_validators/ListField'
 
-var _genTestUserSchema = function () {
+// TODO: can we type the output of transform some other way than passing a Generic?
 
+function _genTestUserSchema() {
   return new Schema({
     name: "User Schema",
     fields: {
@@ -19,7 +20,7 @@ var _genTestUserSchema = function () {
   });
 };
 
-var _genCustomerNoSchema = function () {
+function _genCustomerNoSchema() {
   return new Schema({
     name: "Customer Schema",
     fields: {
@@ -28,7 +29,7 @@ var _genCustomerNoSchema = function () {
   });
 };
 
-var _genSpecialUserThatExtends = function (extendWithSchemas) {
+function _genSpecialUserThatExtends(extendWithSchemas) {
   return new Schema({
     name: "Special User Schema",
     extend: extendWithSchemas,
@@ -38,7 +39,7 @@ var _genSpecialUserThatExtends = function (extendWithSchemas) {
   });
 };
 
-var _genSpecialUserThatExtendsAndOverrides = function (extendWithSchemas) {
+function _genSpecialUserThatExtendsAndOverrides(extendWithSchemas) {
   return new Schema({
     name: "Override Schema", extend: extendWithSchemas, fields: {
       email: new TextField({ required: true })
@@ -46,7 +47,7 @@ var _genSpecialUserThatExtendsAndOverrides = function (extendWithSchemas) {
   });
 };
 
-var _genTestObjectSchema = function (options) {
+function _genTestObjectSchema(options) {
   var userSchema = new Schema({
     name: "User Schema", fields: {
       username: new TextField({ required: true }),
@@ -68,7 +69,7 @@ var _genTestObjectSchema = function (options) {
   });
 };
 
-var _genTestListSchema = function () {
+function _genTestListSchema() {
   var userSchema = new Schema({
     name: "User Schema", fields: {
       username: new TextField({ required: true }),
@@ -80,13 +81,13 @@ var _genTestListSchema = function () {
   return new Schema({
     name: "Schema With List", fields: {
       users: new ListField({
-        valueType: new ObjectField({ required: true, schema: userSchema })
+        fieldType: new ObjectField({ required: true, schema: userSchema })
       })
     }
   })
 }
 
-var _genTestOtherRO = function () {
+function _genTestOtherRO() {
   return new Schema({
     name: "RO Schema", fields: {
       titleOtherRO: new TextField({ required: true, readOnly: true }),
@@ -95,7 +96,7 @@ var _genTestOtherRO = function () {
   });
 };
 
-var _genTestRO = function () {
+function _genTestRO() {
   var otherRO = _genTestOtherRO()
 
   return new Schema({
@@ -107,7 +108,7 @@ var _genTestRO = function () {
   });
 };
 
-var _genNested = function () {
+function _genNested() {
   var testUserSchema = _genTestUserSchema()
 
   return new Schema({
@@ -119,7 +120,7 @@ var _genNested = function () {
   });
 };
 
-var _invariantCheck = function (data, selectFields) {
+async function _invariantCheck(data, selectFields) {
   var tmpFields = ['password', 'confirm_password'];
 
   // Check that all the fields in this invariant are passed
@@ -139,11 +140,11 @@ var _invariantCheck = function (data, selectFields) {
   }
 };
 
-var _doNotValidateUsername = function (data, fieldName) {
+function _doNotValidateUsername(data, fieldName) {
   return fieldName !== 'username';
 }
 
-describe('Schema definition', async function () {
+describe('Schema definition', function () {
   it('can be created', async function () {
     var testUserSchema = _genTestUserSchema();
 
@@ -204,6 +205,8 @@ describe('Schema definition', async function () {
 
   it('returns an error with unmet invariant check', async function () {
     var testUserSchema = _genTestUserSchema();
+
+    // TODO: Add invariant support
     testUserSchema.addInvariant(_invariantCheck);
 
     var formErrors = await testUserSchema.validate({
@@ -301,7 +304,7 @@ describe('Schema definition', async function () {
 
 });
 
-describe('Schema validation ASYNC', async function () {
+describe('Schema validation ASYNC', function () {
   it('ASYNC handles successful post with invariant', async function () {
     var testUserSchema = _genTestUserSchema();
     testUserSchema.addInvariant(_invariantCheck);
@@ -370,7 +373,7 @@ describe('Schema validation ASYNC', async function () {
 
 })
 
-describe('Schema validation with read only fields', async function () {
+describe('Schema validation with read only fields', function () {
   it('correct content is valid', async function () {
     var roSchema = _genTestRO();
 
@@ -403,7 +406,7 @@ describe('Schema validation with read only fields', async function () {
 });
 
 
-describe('Schema inheritance', async function () {
+describe('Schema inheritance', function () {
   it('we can inherit a single schema', async function () {
     var userSchema = _genTestUserSchema();
     var specUserSchema = _genSpecialUserThatExtends([userSchema]);
@@ -506,29 +509,29 @@ describe('Schema inheritance', async function () {
   });
 });
 
-var _genSchemaWithInteger = async function () {
-  return new Schema({ name: "Integer Schema", fields: {
+function _genSchemaWithInteger() {
+  return new Schema<{number: number}>({ name: "Integer Schema", fields: {
     number: new IntegerField({ required: true }),
   }});
 };
 
-var _genSchemaWithObject = async function () {
+function _genSchemaWithObject() {
   var integerSchema = _genSchemaWithInteger();
 
-  return new Schema({ name: "Object Schema", fields: {
+  return new Schema<{ numberObj: { number: number }}>({ name: "Object Schema", fields: {
     numberObj: new ObjectField({ schema: integerSchema, required: true }),
   }});
 };
 
 
-var _genOtherSchemaWithReadOnly = async function () {
+function _genOtherSchemaWithReadOnly() {
   return new Schema({ name: "Object Schema", fields: {
     otherTitleRO: new TextField({ readOnly: true, required: true }),
     otherAge: new IntegerField({ required: true })
   }});
 };
 
-var _genSchemaWithReadOnly = async function () {
+function _genSchemaWithReadOnly() {
   var otherSchema = _genOtherSchemaWithReadOnly();
 
   return new Schema({ name: "ReadOnly Schema", fields: {
@@ -540,7 +543,7 @@ var _genSchemaWithReadOnly = async function () {
 };
 
 
-describe('Schema data transformation', async function () {
+describe('Schema data transformation', function () {
   it('converts a simple integer field', async function () {
     var integerSchema = _genSchemaWithInteger();
 
@@ -576,10 +579,7 @@ describe('Schema data transformation', async function () {
     };
     var data = listSchema.transform(formData);
 
-    expect(Array.isArray(data.users)).toEqual(true);
-    expect(data.users.length).toEqual(3);
-    expect(typeof data.users[0]).toEqual('object');
-    expect(data.users[0].email).toEqual(formData.users[0].email);
+    expect(data).toEqual(formData);
   });
 
   it('converts a nested object with readOnly fields removed', async function () {
@@ -598,11 +598,12 @@ describe('Schema data transformation', async function () {
       }
     });
 
-    expect(data.titleRO).toBe(undefined);
-    expect(data.otherRO).toBe(undefined);
-    expect(data.other.titleRO).toBe(undefined);
-    expect(data.other.otherAge).toEqual(10);
-    expect(data.age).toEqual(5);
+    expect(data).toEqual({
+      age: 5,
+      other: {
+        otherAge: 10
+      }
+    });
   });
 
   it('converts a nested object without removing readOnly fields', async function () {
@@ -621,17 +622,22 @@ describe('Schema data transformation', async function () {
       }
     }, { doNotRemoveReadOnly: true });
 
-    expect(data.titleRO).toEqual('readOnly');
-    expect(data.otherRO).not.toBe(undefined);
-    expect(data.otherRO.otherTitleRO).toEqual('otherReadOnly');
-    expect(data.otherRO).not.toBe(undefined);
-    expect(data.other.otherTitleRO).toEqual('readOnly');
-    expect(data.other.otherAge).toEqual(10);
-    expect(data.age).toEqual(5);
+    expect(data).toEqual({
+      titleRO: "readOnly",
+      age: 5,
+      other: {
+        otherTitleRO: "readOnly",
+        otherAge: 10
+      },
+      otherRO: {
+        otherTitleRO: "otherReadOnly",
+        otherAge: 20
+      }
+    });
   });
 });
 
-describe('Select and omit fields during validation', async function () {
+describe('Select and omit fields during validation', function () {
   it('Simple nested validate', async function () {
     var nestedSchema = _genNested();
 
@@ -675,7 +681,7 @@ describe('Select and omit fields during validation', async function () {
       selectFields: ['age', 'user']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
   it('Select root level properties using selectFields', async function () {
@@ -691,7 +697,7 @@ describe('Select and omit fields during validation', async function () {
       selectFields: ['age', 'user']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
   it('Omit root level properties', async function () {
@@ -707,7 +713,7 @@ describe('Select and omit fields during validation', async function () {
       omitFields: ['title']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
   it('Omit root level properties using omitFields', async function () {
@@ -723,7 +729,7 @@ describe('Select and omit fields during validation', async function () {
       omitFields: ['title']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
 
@@ -755,7 +761,7 @@ describe('Select and omit fields during validation', async function () {
       selectFields: ['user.email']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
   it('Omit nested level properties', async function () {
@@ -771,7 +777,7 @@ describe('Select and omit fields during validation', async function () {
       omitFields: ['user.username']
     });
 
-    expect(typeof errors).toEqual('undefined');
+    expect(errors).toEqual(undefined);
   });
 
   it('Fail root level when select nested level properties', async function () {

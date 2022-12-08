@@ -6,14 +6,13 @@ import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
 import { ITextField, OmitInContructor } from '../interfaces'
-import { TFieldError } from '../schema';
+import { TFieldError, TFormErrors } from '../schema';
 
 type TTextField = Omit<ITextField, 'interfaceId' | 'providedBy'>;
 
 export class TextField<T = TTextField> extends BaseField<T> implements TTextField {
   readonly __implements__ = [ITextField];
-  // required: boolean;
-  // readOnly: boolean;
+  
   minLength: number;
   maxLength: number;
   trim: boolean;
@@ -26,7 +25,7 @@ export class TextField<T = TTextField> extends BaseField<T> implements TTextFiel
     this.trim = trim;
   }
 
-  async validate(inp, options, context): Promise<TFieldError> {
+  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
     const err = await super.validate(inp, options, context);
     if (err) return err;
 

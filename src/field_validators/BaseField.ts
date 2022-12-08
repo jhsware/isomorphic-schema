@@ -9,7 +9,7 @@
 import { ObjectPrototype } from 'component-registry'
 
 import { IBaseField, OmitInContructor } from '../interfaces'
-import { TFieldError } from '../schema';
+import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
 import { i18n, isNullUndefEmpty } from '../utils'
 
 type TBaseField = Omit<IBaseField, 'interfaceId' | 'providedBy'>;
@@ -23,7 +23,12 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
     this.readOnly = readOnly;
   }
 
-  async validate(inp, options, context): Promise<TFieldError> {
+  async validate(
+    inp: any,
+    options: TValidationOptions = {
+      skipInvariants: false, selectFields: [], omitFields: [], objectPath: []
+    },
+    context: any = undefined): Promise<TFieldError | TFormErrors | undefined> {
     context = context || inp;
     if (this.required && isNullUndefEmpty(inp)) {
       return {
@@ -38,7 +43,7 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
     return inp.toString();
   }
 
-  fromString(inp) {
+  fromString(inp, options) {
     return inp;
   }
 }

@@ -3,86 +3,81 @@
     Ineteger-field
 */
 
-import { createObjectPrototype } from 'component-registry'
+import { ObjectPrototype } from 'component-registry'
 
-import BaseField from './BaseField'
-import { i18n } from '../utils'
+import { BaseField } from './BaseField'
+import { i18n, isNullUndefEmpty } from '../utils'
 
-import { IIntegerField } from '../interfaces'
+import { IIntegerField, OmitInContructor } from '../interfaces'
+import { TFieldError, TFormErrors } from '../schema'
 
 var reInteger = /[^0-9\.]/g
 
-export default createObjectPrototype({
-    implements: [IIntegerField],
+type TIntegerField = Omit<IIntegerField, 'interfaceId' | 'providedBy'>;
 
-    extends: [BaseField],
-    
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-        if (options) {
-            this._minValue = options.min
-            delete options.min
-            this._maxValue = options.max
-            delete options.max;            
-        }
-    },
-    
-    validate: function (inp) {
-        var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return Promise.resolve(error) }
+export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIntegerField {
+  readonly __implements__ = [IIntegerField];
+  min?: number;
+  max?: number;
 
-        if (!this._isRequired && (inp === null || typeof inp === "undefined" || inp === '')) {
-            return Promise.resolve()
-        }
+  constructor({ required = false, readOnly = false, min = undefined, max = undefined }: Omit<TIntegerField, OmitInContructor> = {}) {
+    super({ required, readOnly });
+    this.min = min;
+    this.max = max;
+  }
 
-        if (typeof inp !== "number" || isNaN(inp)) {
-            return Promise.resolve({
-                type: 'type_error',
-                i18nLabel: i18n('isomorphic-schema--integer_field_not_number', 'The field doesn\'t contain numbers'),
-                message: "Värdet innehåller annat än siffror"
-            })
-        }
+  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
+    const err = await super.validate(inp, options, context);
+    if (err) return err;
 
-        if (parseInt(inp) !== inp) {
-            return Promise.resolve({
-                type: 'type_error',
-                i18nLabel: i18n('isomorphic-schema--integer_field_no_decimals', 'The field may not contain decimals'),
-                message: "Värdet får inte innehålla en decimaldel"
-            })
-        }
-
-        if (typeof this._minValue !== 'undefined' && inp < this._minValue) {
-            return Promise.resolve({
-                type: 'constraint_error',
-                i18nLabel: i18n('isomorphic-schema--integer_field_too_small', 'The value is too small. Min ${minValue}'),
-                message: "Minimum " + this._minValue
-            })
-        }
-
-        if (typeof this._maxValue !== 'undefined' && inp > this._maxValue) {
-            return Promise.resolve({
-                type: 'constraint_error',
-                i18nLabel: i18n('isomorphic-schema--integer_field_too_big', 'The value is too big. Max ${maxValue}'),
-                message: "Max " + this._maxValue
-            })
-        }
-        return Promise.resolve()
-    },
-    
-    toFormattedString: function (inp) {
-        return (typeof inp === 'undefined' || inp === null ? '' : inp + '')
-    },
-    
-    fromString: function (inp) {
-        if (typeof inp === "string") {
-            var tmp = parseInt(inp.replace(reInteger, ""))
-        } else {
-            var tmp = parseInt(inp)
-        }
-        if (isNaN(tmp)) {
-            return undefined
-        } else {
-            return tmp
-        }
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-})
+
+    if (typeof inp !== "number" || isNaN(inp)) {
+      return {
+        type: 'type_error',
+        i18nLabel: i18n('isomorphic-schema--integer_field_not_number', 'The field doesn\'t contain numbers'),
+        message: "Värdet innehåller annat än siffror"
+      }
+    }
+
+    if (parseInt(inp.toString()) !== inp) {
+      return {
+        type: 'type_error',
+        i18nLabel: i18n('isomorphic-schema--integer_field_no_decimals', 'The field may not contain decimals'),
+        message: "Värdet får inte innehålla en decimaldel"
+      }
+    }
+
+    if (this.min !== undefined && inp < this.min) {
+      return {
+        type: 'constraint_error',
+        i18nLabel: i18n('isomorphic-schema--integer_field_too_small', 'The value is too small. Min ${minValue}'),
+        message: "Minimum " + this.min
+      }
+    }
+
+    if (this.max !== undefined && inp > this.max) {
+      return {
+        type: 'constraint_error',
+        i18nLabel: i18n('isomorphic-schema--integer_field_too_big', 'The value is too big. Max ${maxValue}'),
+        message: "Max " + this.max
+      }
+    }
+
+  }
+
+  toFormattedString(inp) {
+    return isNullUndefEmpty(inp) ? '' : inp.toString();
+  }
+
+  fromString(inp) {
+    const tmp = typeof inp === "string"
+      ? parseInt(inp.replace(reInteger, ""))
+      : parseInt(inp);
+
+    return isNaN(tmp) ? undefined : tmp;
+  }
+}
