@@ -2,7 +2,6 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 import { IBaseField, IListField, OmitInContructor } from '../interfaces'
-import { cloneShallow } from '../utils'
 import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
 
 
@@ -40,7 +39,7 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
         options: TValidationOptions = {
             skipInvariants: false, selectFields: [], omitFields: [], objectPath: []
         },
-        context: any): Promise<TFieldError | TFormErrors | undefined> {
+        context: any): Promise<TFieldError | undefined> {
         const err = await super.validate(inp, options, context);
         if (err) return err;
 
@@ -86,19 +85,22 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
 
         const tmpErrors = await Promise.all(validationPromises);
 
-        const errors = Object.fromEntries(tmpErrors
+        const tmpEntries = tmpErrors
             // Create entries
             .map((err, i) => [i, err])
             // Remove validations that passed
             .filter(([i, err]) => err)
-        );
-
-        return {
-            type: 'list_error',
-            i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
-            message: "There is an error in the content of this list",
-            errors
+        
+        if (tmpEntries.length > 0) {
+            return {
+                type: 'list_error',
+                i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in the content of this list'),
+                message: "There is an error in the content of this list",
+                errors: Object.fromEntries(tmpEntries),
+            }
         }
+        
+        return;
     }
 
     toFormattedString(inp) {

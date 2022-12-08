@@ -1,110 +1,100 @@
-
-import { createObjectPrototype } from 'component-registry'
-import TextField from './TextField'
+import { TextField } from './TextField'
+import { IOrgNrField } from '../interfaces'
+import { TFieldError } from '../schema'
 import { i18n } from '../utils'
 
 /*
-    Credit card field validator
-
-    Port of:
-    http://jquerycreditcardvalidator.com/
+    Swedish Org-nr validator
 */
-import { IOrgNrField } from '../interfaces'
+type TOrgNrField = Omit<IOrgNrField, 'interfaceId' | 'providedBy'>;
 
-export default createObjectPrototype({
-    implements: [IOrgNrField],
+export class OrgNrField extends TextField<TOrgNrField> implements TOrgNrField {
+  readonly __implements__ = [IOrgNrField];
 
-    extends: [TextField],
-    
-    constructor: function (options) {
-        this._ITextField.constructor.call(this, options)
-    },
-    
-    validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp)
-        if (error) { return Promise.resolve(error) }
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    const err = await super.validate(inp, options, context);
+    if (err) return err;
 
-        if (inp) {
-            var message
-            try {
-                var error = _validateOrgNr(inp)
-        
-            } catch (e) {
-                var type = 'value_error'
-                const i18nLabel = i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted'),
-                message = "Inmatat organisations-/personnummer har något seriöst fel"
-            } finally {
-                if (!message && error) {
-                    var type = 'type_error'
-                    message = error.message
-                    var i18nLabel = error.i18nLabel
-                }
-                if (message) {
-                    return Promise.resolve({
-                        type: type,
-                        i18nLabel: i18nLabel,
-                        message: message
-                    });
-                }
-            }
-        }
-        return Promise.resolve();
-    },
-    
-    toFormattedString: function (inp) {
-        if (inp) {
-            var tmp = inp.match(/.{1,8}/g)
-            var outp = tmp.join('-');
-            return (outp.length === 8 ? outp + '-' : outp)
-        } else {
-            return ""
-        }
-    },
-
-    fromString: function (inp) {
-        var tmp = inp.replace(/([^0-9]*)/g, '')
-        if (tmp.length > 12) {
-            tmp = tmp.split("")
-            tmp = tmp.splice(0,12)
-            tmp = tmp.join("")
-        }
-        return tmp
+    // Required has been checked so if it is empty it is ok
+    if (!inp) {
+      return;
     }
-})
 
-var _validateOrgNr = function(inp, options) {
-    /*
-           8  1 1 2 1 8  9 8  7 6
-        *  2  1 2 1 2 1  2 1  2 1
-        -------------------------
-           ^  ^ ^ ^ ^ ^  ^ ^  ^ 
-          16  1 2 2 2 8 18 8 14 6
-    
-        1+6+1+2+2+2+8+1+8+8+1+4+6 = 50
-    */
-    
-    var inpLst = inp.split("")
-    if (inpLst.length < 12) {
+    try {
+      var error = _validateOrgNr(inp);
+    } catch (e) {
+      return {
+        type: 'value_error',
+        i18nLabel: i18n('isomorphic-schema--org_nr_field_incorrect_formatting', 'Malformatted'),
+        message: "Inmatat organisations-/personnummer har något seriöst fel"
+      };
+    } finally {
+      if (error?.message) {
         return {
-            i18nLabel: i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short'),
-            message: "Inmatat nummer är för kort"
-        }
+          type: 'value_error',
+          i18nLabel: error.i18nLabel,
+          message: error.message
+        };
+      }
     }
-    
-    var luhLst = [0,0,2,1,2,1,2,1,2,1,2,1]
-    var calcLst = luhLst.map(function (val, i) {
-        return  luhLst[i] * parseInt(inpLst[i])
-    })
-    var tmp = 0
-    calcLst.map(function (val) {
-        tmp += (val % 10) + Math.floor(val/10)
-    })
-    if (tmp % 10 == 0) {
-        return undefined
+
+    return;
+  }
+
+  toFormattedString(inp) {
+    if (inp) {
+      var tmp = inp.match(/.{1,8}/g)
+      var outp = tmp.join('-');
+      return (outp.length === 8 ? outp + '-' : outp)
     } else {
-        return {
-            i18nLabel: i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)'),
-            message: "Kontrollsiffran stämmer inte"
-        }
+      return
     }
+  }
+
+  fromString(inp) {
+    var tmp = inp.replace(/([^0-9]*)/g, '')
+    if (tmp.length > 12) {
+      tmp = tmp.split("")
+      tmp = tmp.splice(0, 12)
+      tmp = tmp.join("")
+    }
+    return tmp
+  }
+}
+
+function _validateOrgNr(inp) {
+  /*
+         8  1 1 2 1 8  9 8  7 6
+      *  2  1 2 1 2 1  2 1  2 1
+      -------------------------
+         ^  ^ ^ ^ ^ ^  ^ ^  ^ 
+        16  1 2 2 2 8 18 8 14 6
+  
+      1+6+1+2+2+2+8+1+8+8+1+4+6 = 50
+  */
+
+  var inpLst = inp.split("")
+  if (inpLst.length < 12) {
+    return {
+      i18nLabel: i18n('isomorphic-schema--org_nr_field_too_short', 'Entered number is too short'),
+      message: "Inmatat nummer är för kort"
+    }
+  }
+
+  var luhLst = [0, 0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1]
+  var calcLst = luhLst.map(function (val, i) {
+    return luhLst[i] * parseInt(inpLst[i])
+  })
+  var tmp = 0
+  calcLst.map(function (val) {
+    tmp += (val % 10) + Math.floor(val / 10)
+  })
+  if (tmp % 10 == 0) {
+    return undefined
+  } else {
+    return {
+      i18nLabel: i18n('isomorphic-schema--org_nr_field_wrong_checksum', 'The entered number is incorrect (checksum error)'),
+      message: "Kontrollsiffran stämmer inte"
+    }
+  }
 }

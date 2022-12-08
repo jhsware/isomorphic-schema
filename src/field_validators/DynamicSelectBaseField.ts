@@ -27,10 +27,10 @@ export default createObjectPrototype({
 
     validate: function (inp, options, context) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp)
+        var error = await this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) }
     
-        var error = inp && this.valueType.validate(inp)
+        var error = await inp && this.valueType.validate(inp)
         if (error) { return Promise.resolve(error) }
     
         // Since we have passed the required test we can just check if the value is undefined
@@ -63,11 +63,11 @@ export default createObjectPrototype({
         return Promise.resolve()
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return this.valueType.fromString(inp)
     },
 
-    fromString: function (inp) {
+    fromString(inp) {
         return this.valueType.fromString(inp)
     },
 

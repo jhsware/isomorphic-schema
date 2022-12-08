@@ -29,7 +29,7 @@ export default createObjectPrototype({
     // DynamicSelectAsyncBaseField:
     validate: function (inp, options, context) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp)
+        var error = await this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) };    
     
         // Since we have passed the required test we can just check if the value is undefined
@@ -48,7 +48,7 @@ export default createObjectPrototype({
 
         Example implementation:
 
-        var result = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp)
+        var result = await this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp)
 
         // Check if we failed validation in DynamicSelectAsyncBaseField
         if (result) {
@@ -118,11 +118,11 @@ export default createObjectPrototype({
         throw new Error("You tried to call a field extending DynamicSelectAsyncBaseField synchronously, needs to be async. Use .getOptionTitleAsync(...) instead!")
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return this.valueType.fromString(inp)
     },
 
-    fromString: function (inp) {
+    fromString(inp) {
         return this.valueType.fromString(inp)
     }
 })

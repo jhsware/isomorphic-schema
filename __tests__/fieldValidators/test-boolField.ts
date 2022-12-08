@@ -1,29 +1,29 @@
 
 import { describe, expect, it } from "@jest/globals";
-import BoolField from '../../src/field_validators/BoolField'
+import {BoolField} from '../../src/field_validators/BoolField'
 
 describe('Bool field', function() {
-    it('accepts boolean true', function() {        
+    it('accepts boolean true', async function() {        
         var boolField = new BoolField({required: true});
-        var tmp = boolField.validate(true);
+        var tmp = await boolField.validate(true);
         expect(tmp).toBe(undefined);
     });
 
-    it('accepts boolean false', function() {        
+    it('accepts boolean false', async function() {        
         var boolField = new BoolField({required: true});
-        var tmp = boolField.validate(false);
+        var tmp = await boolField.validate(false);
         expect(tmp).toBe(undefined);
     });
     
-    it('allows null or undefined if not required', function() {        
+    it('allows null or undefined if not required', async function() {        
         var boolField = new BoolField({required: false});
-        var tmp = boolField.validate(null);
+        var tmp = await boolField.validate(null);
         expect(tmp).toBe(undefined);
-        var tmp = boolField.validate(undefined);
+        var tmp = await boolField.validate(undefined);
         expect(tmp).toBe(undefined);
     });
     
-    it('converts string represenations to proper values', function() {        
+    it('converts string represenations to proper values', async function() {        
         var boolField = new BoolField();
         var tmp = boolField.fromString('false');
         expect(tmp).toBe(false);

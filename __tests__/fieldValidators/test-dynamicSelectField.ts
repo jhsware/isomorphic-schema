@@ -29,11 +29,11 @@ var MyDynamicSelectField = createObjectPrototype({
         return dummyOptions
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return this.valueType.fromString(inp);
     },
 
-    fromString: function (inp) {
+    fromString(inp) {
         return this.valueType.fromString(inp);
     }
 });
@@ -42,49 +42,49 @@ var myDynamicSelectField = function (options) { return new MyDynamicSelectField(
 
 describe('Dynamic select field', function() {
 
-    it('allows you to select a value from the list', function() {        
+    it('allows you to select a value from the list', async function() {        
         var theField = myDynamicSelectField({
             required: true,
             valueType: new TextField({required: true})
         });
     
-        var tmp = theField.validate("one");
+        var tmp = await theField.validate("one");
         expect(tmp).toBe(undefined);
     });
     
-    it('allows undefined or null if not required', function() {        
+    it('allows undefined or null if not required', async function() {        
         var theField = myDynamicSelectField({
             required: false,
             valueType: new TextField({required: true})
         });
     
-        var tmp = theField.validate(undefined);
+        var tmp = await theField.validate(undefined);
         expect(tmp).toBe(undefined);
-        var tmp = theField.validate(null);
+        var tmp = await theField.validate(null);
         expect(tmp).toBe(undefined);
     });
 
-    it('throws an error if selected value is outside list', function() {        
+    it('throws an error if selected value is outside list', async function() {        
         var theField = myDynamicSelectField({
             required: true,
             valueType: new TextField({required: true})
         });
     
-        var tmp = theField.validate("outside-list");
+        var tmp = await theField.validate("outside-list");
         expect(tmp).not.toBe(undefined);
     });
 
-    it('throws an error if wrong type', function() {        
+    it('throws an error if wrong type', async function() {        
         var theField = myDynamicSelectField({
             required: true,
             valueType: new IntegerField({required: true})
         });
     
-        var tmp = theField.validate("select-me");
+        var tmp = await theField.validate("select-me");
         expect(tmp).not.toBe(undefined);
     });
 
-    it('can convert a value to a title', function() {        
+    it('can convert a value to a title', async function() {        
         var theField = myDynamicSelectField({
             required: true,
             valueType: new TextField({required: true})
@@ -94,7 +94,7 @@ describe('Dynamic select field', function() {
         expect(tmp).toEqual('The One');
     });
 
-    it('convert a value to a title handles undefined', function() {        
+    it('convert a value to a title handles undefined', async function() {        
         var theField = myDynamicSelectField({
             required: true,
             valueType: new TextField({required: true})

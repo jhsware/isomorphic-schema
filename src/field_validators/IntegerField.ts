@@ -3,13 +3,11 @@
     Ineteger-field
 */
 
-import { ObjectPrototype } from 'component-registry'
-
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
 import { IIntegerField, OmitInContructor } from '../interfaces'
-import { TFieldError, TFormErrors } from '../schema'
+import { TFieldError } from '../schema'
 
 var reInteger = /[^0-9\.]/g
 
@@ -26,7 +24,7 @@ export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIn
     this.max = max;
   }
 
-  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
     const err = await super.validate(inp, options, context);
     if (err) return err;
 

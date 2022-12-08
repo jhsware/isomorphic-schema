@@ -1,45 +1,50 @@
-
-import { createObjectPrototype } from 'component-registry'
-import BaseField from './BaseField'
-import { i18n } from '../utils'
-const parse = require('date-fns/parse')
-const format = require('date-fns/format')
+import { i18n, isNullUndefEmpty } from '../utils'
+import { BaseField } from './BaseField'
+import { IDateTimeField, OmitInContructor } from '../interfaces'
+import { TFieldError } from '../schema';
+import { parse, format } from 'date-fns'
 
 /*
-    Date-field
+    DateTime-field
 */
-import { IDateTimeField } from '../interfaces'
+type TDateTimeField = Omit<IDateTimeField, 'interfaceId' | 'providedBy'>;
 
-export default createObjectPrototype({
-    implements: [IDateTimeField],
+export class DateTimeField extends BaseField<TDateTimeField> implements TDateTimeField {
+  readonly __implements__ = [IDateTimeField];
+  timezoneAware?: boolean;
+  
+  constructor({ required = false, readOnly = false, timezoneAware = false }: Omit<TDateTimeField, OmitInContructor>
+    = { required: false, readOnly: false, timezoneAware: false }) {
+    super({ required, readOnly });
+    this.timezoneAware = timezoneAware;
+  }
 
-    extends: [BaseField],
-    
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-    },
-    
-    validate: function (inp) {
-        var error = this._IBaseField.validate.call(this, inp);
-        if (error) { return Promise.resolve(error) }
-        
-        if(inp && !(inp instanceof Date)) {
-            error = {
-                type: 'type_error',
-                i18nLabel: i18n('isomorphic-schema--date_time_field_incorrect_formatting', 'This doesn\'t look like a date with time'),
-                message: "Det ser inte ut som ett riktigt datumobjekt med tid"
-            }
-    
-            return Promise.resolve(error)
-        }
-        return Promise.resolve()
-    },
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    let err = await super.validate(inp, options, context);
+    if (err) return err;
 
-    toFormattedString: function (inp) {
-        return format(inp, 'YYYY-MM-DDTHH:mm:ssZ')
-    },
-
-    fromString: function (inp) {
-        return parse(inp)
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-})
+
+    if (inp && !(inp instanceof Date)) {
+      return {
+        type: 'type_error',
+        i18nLabel: i18n('isomorphic-schema--date_time_field_incorrect_formatting', 'This doesn\'t look like a date with time'),
+        message: "Det ser inte ut som ett riktigt datumobjekt med tid"
+      }
+    }
+
+    return;
+  }
+
+  toFormattedString(inp) {
+    return format(inp, 'YYYY-MM-DDTHH:mm:ssZ')
+  }
+
+  fromString(inp) {
+    return parse(inp)
+  }
+
+}

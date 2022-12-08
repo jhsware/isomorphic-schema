@@ -27,7 +27,7 @@ export default createObjectPrototype({
     
     // TODO: Validate against one of several
     validate: function (inp, options, context) {
-        var error = this._IBaseField.validate.call(this, inp)
+        var error = await this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) }
 
         if (inp) {
@@ -57,11 +57,11 @@ export default createObjectPrototype({
         return Promise.resolve(undefined)
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return inp
     },
     
-    fromString: function (inp) {
+    fromString(inp) {
         return inp
     }
     

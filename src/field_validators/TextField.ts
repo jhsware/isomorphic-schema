@@ -6,7 +6,7 @@ import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
 import { ITextField, OmitInContructor } from '../interfaces'
-import { TFieldError, TFormErrors } from '../schema';
+import { TFieldError } from '../schema';
 
 type TTextField = Omit<ITextField, 'interfaceId' | 'providedBy'>;
 
@@ -25,17 +25,18 @@ export class TextField<T = TTextField> extends BaseField<T> implements TTextFiel
     this.trim = trim;
   }
 
-  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    // First trim so we can se if it is empty
+    if (this.trim) {
+      inp = inp?.trim?.()
+    }
+
     const err = await super.validate(inp, options, context);
     if (err) return err;
 
     // Required has been checked so if it is empty it is ok
     if (isNullUndefEmpty(inp)) {
       return;
-    }
-
-    if (this.trim) {
-      inp = inp.trim?.()
     }
 
     // TODO: Check for line breaks

@@ -1,6 +1,6 @@
 
 import { createObjectPrototype } from 'component-registry'
-import BaseField from './BaseField'
+import {BaseField} from './BaseField'
 import { IObjectRelationField } from '../interfaces'
 import { i18n } from '../utils'
 
@@ -22,11 +22,11 @@ export default createObjectPrototype({
         }
     },
     
-    validate: function (inp, options) {
+    async validate(inp, options) {
         // We need to resolve the relation to validate it
         var val = inp.get()
         
-        var error = this._IBaseField.validate.call(this, val)
+        var error = await this._IBaseField.validate.call(this, val)
         if (error) { return Promise.resolve(error) }
     
         /*

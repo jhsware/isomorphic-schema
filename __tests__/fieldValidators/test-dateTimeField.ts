@@ -1,38 +1,38 @@
 
 import { describe, expect, it } from "@jest/globals";
-import DateTimeField from '../../src/field_validators/DateTimeField'
+import {DateTimeField} from '../../src/field_validators/DateTimeField'
 
 describe('DateTime field', function() {
-    it('accepts valid date object without timezone', function() {        
+    it('accepts valid date object without timezone', async function() {        
         var dateTimeField = new DateTimeField({required: true});
 
         var tmpDt = new Date("2015-01-01T10:18");
-        var tmp = dateTimeField.validate(tmpDt);
+        var tmp = await dateTimeField.validate(tmpDt);
         expect(tmp).toBe(undefined);
     });
         
-    it('throws error on undefined if required', function() {        
+    it('throws error on undefined if required', async function() {        
         var dateTimeField = new DateTimeField({required: true});
-        var tmp = dateTimeField.validate();
+        var tmp = await dateTimeField.validate(undefined);
         expect(tmp).not.toBe(undefined);
     });
             
-    it('accepts datetime with UTC timezone', function() {        
+    it('accepts datetime with UTC timezone', async function() {        
         var dateTimeField = new DateTimeField({required: true, timezoneAware: true});
         
         var tmpDt = new Date("2015-01-01T10:18+0000");
-        var tmp = dateTimeField.validate(tmpDt);
+        var tmp = await dateTimeField.validate(tmpDt);
         
         expect(tmp).toBe(undefined);
     });
 
-    it('throws error on invalid date object', function() {        
+    it('throws error on invalid date object', async function() {        
         var dateTimeField = new DateTimeField({required: false});
-        var tmp = dateTimeField.validate({});
+        var tmp = await dateTimeField.validate({});
         expect(tmp).not.toBe(undefined);
     });
     
-    it('moment in time doesn\'t change when converting to string', function() {
+    it('moment in time doesn\'t change when converting to string', async function() {
         var dateTimeField = new DateTimeField({required: true, timezoneAware: true});
         
         var inpStr = "2015-01-01T10:18+0000";
@@ -47,7 +47,7 @@ describe('DateTime field', function() {
         expect(tmpDt.toISOString()).toBe(tmpDtConverted.toISOString());
     });
     
-    it('moment in time doesn\'t change when parsed from string', function() {        
+    it('moment in time doesn\'t change when parsed from string', async function() {        
         var dateTimeField = new DateTimeField({required: true, timezoneAware: true});
         
         var inpStr = "2015-01-02T10:18:00.000Z";
@@ -58,7 +58,7 @@ describe('DateTime field', function() {
         
     });
     
-    it('creates a proper Date object from string', function() {        
+    it('creates a proper Date object from string', async function() {        
         var dateTimeField = new DateTimeField({required: true, timezoneAware: true});
         
         var inpStr = "2015-01-02T10:18:00.000Z";

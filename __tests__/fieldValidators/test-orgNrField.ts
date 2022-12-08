@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from "@jest/globals";
-import OrgNrField from '../../src/field_validators/OrgNrField'
+import {OrgNrField} from '../../src/field_validators/OrgNrField'
 
 /*
        9 5 0 1 0 1  0 0  1 2
@@ -11,39 +11,39 @@ import OrgNrField from '../../src/field_validators/OrgNrField'
 */
 
 describe('OrgNrField field', function() {
-    it('accepts well formatted org nr', function() {
+    it('accepts well formatted org nr', async function() {
       var orgNrField = new OrgNrField({required: true});
-      var tmp = orgNrField.validate('199501010012');
+      var tmp = await orgNrField.validate('199501010012');
       expect(tmp).toBe(undefined);
     });
 
-    it('throws error if wrong', function() {        
+    it('throws error if wrong', async function() {        
       var orgNrField = new OrgNrField({required: true});
-      var tmp = orgNrField.validate('199501010019');
+      var tmp = await orgNrField.validate('199501010019');
       expect(tmp).not.toBe(undefined);
     });
     
-    it('converts string input properly', function() {        
+    it('converts string input properly', async function() {        
       var orgNrField = new OrgNrField({required: true});
       var tmp = orgNrField.fromString("19950101-0012");
       expect(tmp).toBe('199501010012');
     });
 
-    it('format full value properly', function() {        
+    it('format full value properly', async function() {        
       var orgNrField = new OrgNrField({required: true});
       var tmp = orgNrField.toFormattedString("199501010012");
       expect(tmp).toBe("19950101-0012");
     });
 
-    it('format partial value properly', function() {        
+    it('format partial value properly', async function() {        
       var orgNrField = new OrgNrField({required: true});
       var tmp = orgNrField.toFormattedString("19950101");
       expect(tmp).toBe("19950101-");
     });
     
-    it('throws error on null if required', function() {        
+    it('throws error on null if required', async function() {        
       var orgNrField = new OrgNrField({required: true});
-      var tmp = orgNrField.validate(null);
+      var tmp = await orgNrField.validate(null);
       expect(tmp).not.toBe(undefined);
     });
 

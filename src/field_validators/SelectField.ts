@@ -1,6 +1,8 @@
-import { createObjectPrototype } from 'component-registry'
-import BaseField from './BaseField'
-import { i18n } from '../utils'
+import { isValid } from 'date-fns';
+import { i18n, isNullUndefEmpty } from '../utils'
+import { BaseField } from './BaseField'
+import { IBaseField, ISelectField, OmitInContructor, TSelectFieldOption } from '../interfaces'
+import { TFieldError } from '../schema';
 
 /*
 
@@ -11,79 +13,63 @@ import { i18n } from '../utils'
 
 */
 
-// TODO: Write tests
+type TSelectField = Omit<ISelectField, 'interfaceId' | 'providedBy'>;
 
-import { ISelectField } from '../interfaces'
+export class SelectField extends BaseField<TSelectField> implements TSelectField {
+  readonly __implements__ = [ISelectField];
+  fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+  options: TSelectFieldOption[]
 
-export default createObjectPrototype({
-    implements: [ISelectField],
+  constructor({ required, readOnly, options, fieldType }: Omit<TSelectField, OmitInContructor | 'getOptionTitle'>) {
+    super({ required, readOnly });
+    this.options = options,
+      this.fieldType = fieldType;
+  }
 
-    extends: [BaseField],
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    let err = await super.validate(inp, options, context);
+    if (err) return err;
+
     
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-        
-        if (options) {
-            // Always set valueType to required to get validation per item
-            // Should be an instance of a field.
-            this.valueType = options.valueType; 
-            this.options = options.options;            
-        }
-        
-    },
-    
-    validate: function (inp, options, context, async) {
-        var error = this._IBaseField.validate.call(this, inp)
-        if (error) { return Promise.resolve(error) }
-    
-        var error = inp && this.valueType.validate(inp)
-        if (error) { return Promise.resolve(error) }
-    
-        //console.log("[Select] options:")
-        //console.log(this.options)
-    
-        //console.log("[Select] current:")
-        //console.log(inp)
-        
-        // Since we have passed the required test we can just check if the value is undefined
-        // or null and return field errors undefined 
-        if (inp === null || typeof inp === 'undefined') {
-            return Promise.resolve();
-        }
-        
-        var options = this.options
-
-        var matches = false
-        for (var i = 0; i < options.length; i++) {
-            if (options[i].name === inp) {
-                matches = true
-                break
-            }
-        }
-    
-        if (!matches) {
-            error = {
-                type: 'constraint_error',
-                i18nLabel: i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed'),
-                message: "Valt värde finns inte i listan över tillåtna värden"
-            }
-            //console.log(error)
-            return Promise.resolve(error);
-        }
-        return Promise.resolve();
-    },
-
-    toFormattedString: function (inp) {
-        return this.valueType.fromString(inp)
-    },
-
-    fromString: function (inp) {
-        return this.valueType.fromString(inp)
-    },
-
-    getOptionTitle: function (inp) {
-        for (var i=0; i < this.options.length; i++) {
-            if (this.options[i].name === inp) return this.options[i].title 
-        }
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-})
+
+    err = await this.fieldType.validate(inp)
+    if (err) return err;
+
+    var matches = false
+    for (var i = 0; i < this.options.length; i++) {
+      if (this.options[i].name === inp) {
+        matches = true
+        break
+      }
+    }
+
+    if (!matches) {
+      return {
+        type: 'constraint_error',
+        i18nLabel: i18n('isomorphic-schema--select_field_value_error', 'The selected value is not allowed'),
+        message: "Valt värde finns inte i listan över tillåtna värden"
+      }
+    }
+
+    return;
+  }
+
+  toFormattedString(inp: string) {
+    return this.fieldType.fromString(inp)
+  }
+
+  fromString(inp) {
+    return this.fieldType.fromString(inp)
+  }
+
+  getOptionTitle(inp) {
+    for (var i = 0; i < this.options.length; i++) {
+      if (this.options[i].name === inp) return this.options[i].label;
+    }
+  }
+
+}

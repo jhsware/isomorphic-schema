@@ -3,27 +3,30 @@
     Bool field
 */
 
-import { createObjectPrototype } from 'component-registry'
+import { BaseField } from './BaseField'
+import { IBoolField, OmitInContructor } from '../interfaces'
+import { TFieldError } from '../schema';
 
-import { IBoolField } from '../interfaces'
-
-export default createObjectPrototype({
-    implements: [IBoolField],
+type TBoolField = Omit<IBoolField, 'interfaceId' | 'providedBy'>;
+export class BoolField<T = TBoolField> extends BaseField<T> implements TBoolField {
+    readonly __implements__ = [IBoolField];
     
-    constructor: function (options) {
-        
-    },
+    constructor({
+      required = false, readOnly = false }:
+      Omit<TBoolField, OmitInContructor> = {}) {
+      super({ required, readOnly });
+    }
 
-    validate: function (inp) {
+    async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
         // False and undefined == false so this is always ok
-        return Promise.resolve()
-    },
-    
-    toFormattedString: function (inp) {
+        return;
+    }
+
+    toFormattedString(inp) {
         return inp
-    },
+    }
     
-    fromString: function (inp) {
+    fromString(inp) {
         if (inp == "true" || inp === true) {
             return true
         } else if (inp == "false" || inp === false) {
@@ -32,8 +35,8 @@ export default createObjectPrototype({
             return undefined
         } else if (inp === 'null' || inp === null) {
             return null
-        } else {
-            return inp
         }
+        
+        return inp;
     }
-})
+}

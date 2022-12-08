@@ -123,7 +123,7 @@ Validation constraints are very nice in browser rendered forms because they allo
 Once you have created an instance of a schema such as `simpleSchema` above you can use it to validate and transform data that you have received from the browser. The validation part checks that the provided input is valid, otherwise returning field level errors that are inteded to be displayed to the user. The transform part makes sure that data is converted to correct data types since the HTML-input fields normally return simple strings.
 
 ```JavaScript
-var errors = simpleSchema.validate(inputData)
+var errors = await simpleSchema.validate(inputData)
 
 // or if you have async fields such as something based on DynamicSelectAsyncBaseField:
 simpleSchema.validateAsync(inputData, options, context).then((errors) => {
@@ -387,7 +387,7 @@ export const MySpecialValidationField = createObjectPrototype({
   
   validate: function (inp, options, context) {
     // Call the TextField validate method to invoke the validation we inherited
-    var error = this._ITextField.validate.call(this, inp)
+    var error = await this._ITextField.validate.call(this, inp)
     if (error) { return Promise.resolve(error) }
 
     // Implement our custom regex validation
@@ -445,7 +445,7 @@ export const MyComplexValidationField = createObjectPrototype({
     this._ISelectField.constructor.call(this, options)
   },
 
-  toFormattedString: function (inp) {
+  toFormattedString(inp) {
     if (inp.happy && inp.strong) {
         return 'happy_strong';
     } else if (inp.happy) {
@@ -457,7 +457,7 @@ export const MyComplexValidationField = createObjectPrototype({
     }
   },
 
-  fromString: function (inp) {
+  fromString(inp) {
     var outp = {
         happy: false,
         strong: false
@@ -637,12 +637,7 @@ You will want to translate these strings in your project to internationalise you
 **Note:** These examples don't use i18n enabled strings for readability. Substitute the strings with i18n(...) as shown above to support translations.
 
 ```JavaScript
-import Schema from 'isomorphic-schema/lib/schema';
-import TextAreaField from 'isomorphic-schema/lib/field_validators/TextAreaField';
-import TextField from 'isomorphic-schema/lib/field_validators/TextField';
-import SelectField from 'isomorphic-schema/lib/field_validators/SelectField';
-import ListField from 'isomorphic-schema/lib/field_validators/ListField';
-import ObjectField from 'isomorphic-schema/lib/field_validators/ObjectField';
+import {Schema, TextAreaField, TextField, SelectField, ListField, ObjectField} from 'isomorphic-schema';
 
 const mediaSchema = new Schema("Media Schema", {
     image_url: new TextField({
@@ -686,7 +681,7 @@ const myThing = new Schema("MyThing Schema", {
     })
 });
 
-const errors = mySchema.validate({
+const errors = await mySchema.validate({
     difficulty: 0,
     description: "This is my thing"
 });

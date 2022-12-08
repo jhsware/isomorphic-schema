@@ -49,7 +49,7 @@ type TSchemaOpts<T> = {
   extend?: Schema<any>[]
 }
 
-type TFieldErrorType = 'required' | 'value_error' | 'type_error' | 'constraint_error' | 'list_error';
+type TFieldErrorType = 'required' | 'value_error' | 'type_error' | 'constraint_error' | 'object_error' | 'list_error';
 export type TFieldError = {
   type: TFieldErrorType,
   i18nLabel: string,
@@ -63,11 +63,11 @@ export type TInvariantErrorType = {
 }
 
 export type TFormErrors = {
-  fieldErrors: Record<string, TFieldError | TFormErrors>,
+  fieldErrors: Record<string, TFieldError>,
   invariantErrors: TInvariantErrorType[]
 }
 
-export default class Schema<T extends object = object> {
+export class Schema<T extends object = object> {
   _fields: Record<string, BaseField>;
   _name: string;
   _invariants: TInvariantValidator<T>[];

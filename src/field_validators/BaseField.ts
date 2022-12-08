@@ -28,7 +28,7 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
     options: TValidationOptions = {
       skipInvariants: false, selectFields: [], omitFields: [], objectPath: []
     },
-    context: any = undefined): Promise<TFieldError | TFormErrors | undefined> {
+    context: any = undefined): Promise<TFieldError | undefined> {
     context = context || inp;
     if (this.required && isNullUndefEmpty(inp)) {
       return {

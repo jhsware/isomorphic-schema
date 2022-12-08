@@ -36,7 +36,7 @@ export default createObjectPrototype({
     
     validate: function (inp, options, context, async) {
         // Check that this isn't undefined if it is required
-        var error = this._IBaseField.validate.call(this, inp)
+        var error = await this._IBaseField.validate.call(this, inp)
         if (error) { return Promise.resolve(error) }
         
         // If undefined and not required just return ok
@@ -47,7 +47,7 @@ export default createObjectPrototype({
         // We need to check every item in the list to see that they are valid
         var errors = inp.map(function (item) {
             // Chack value is of valueType
-            var error = this.valueType.validate(item)
+            var error = await this.valueType.validate(item)
             if (typeof error !== 'undefined') {
                 return Promise.resolve(error)
             }
@@ -78,11 +78,11 @@ export default createObjectPrototype({
             })
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return inp
     },
 
-    fromString: function (inp) {
+    fromString(inp) {
         return inp
     },
 

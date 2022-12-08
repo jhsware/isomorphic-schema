@@ -1,5 +1,5 @@
 import { createIdFactory, ObjectInterface } from 'component-registry'
-import Schema, { TFieldError, TFormErrors } from './schema';
+import { Schema, TFieldError, TFormErrors } from './schema';
 const id = createIdFactory('isomorphic-schema');
 
 export type OmitInContructor =  'validate' | 'toFormattedString' | 'fromString';
@@ -8,8 +8,8 @@ export class IBaseField extends ObjectInterface {
     get interfaceId() { return id('IBaseField') };
     required?: boolean;
     readOnly?: boolean;
-    validate(inp: any, options: any, context: any): Promise<TFieldError | TFormErrors | undefined> { return };
-    fromString(inp: string, options: object) {};
+    validate(inp: any, options?: any, context?: any): Promise<TFieldError | undefined> { return };
+    fromString(inp: string, options?: object): any {};
     toFormattedString(inp: any): string { return ''};
 }
 
@@ -22,6 +22,9 @@ export class ITextField extends IBaseField {
 
 export class ITextAreaField extends ITextField {
     get interfaceId() { return id('ITextAreaField') };
+    minLength?: number;
+    maxLength?: number;
+    trim?: boolean;
 }
 
 export class IIntegerField extends IBaseField {
@@ -34,6 +37,7 @@ export class IDecimalField extends IBaseField {
     get interfaceId() { return id('IDecimalField') };
     min?: number;
     max?: number;
+    precision?: number;
 }
 
 export class IBoolField extends IBaseField {
@@ -42,6 +46,7 @@ export class IBoolField extends IBaseField {
 
 export class ICreditCardField extends IBaseField {
     get interfaceId() { return id('ICreditCardField') };
+    cardValidationOptions?: object;
 }
 
 export class IDateField extends IBaseField {
@@ -50,10 +55,14 @@ export class IDateField extends IBaseField {
 
 export class IDateTimeField extends IBaseField {
     get interfaceId() { return id('IDateTimeField') };
+    timezoneAware?: boolean;
 }
 
 export class IEmailField extends ITextField {
     get interfaceId() { return id('IEmailField') };
+    minLength?: number;
+    maxLength?: number;
+    trim?: boolean;
 }
 
 export class ITelephoneField extends IBaseField {
@@ -84,10 +93,17 @@ export class IOrgNrField extends IBaseField {
 
 export class IPasswordField extends IBaseField {
     get interfaceId() { return id('IPasswordField') };
+    minLength?: number;
+    maxLength?: number;
+    trim?: boolean;
 }
 
+export type TSelectFieldOption = { name: string, label: string };
 export class ISelectField extends IBaseField {
     get interfaceId() { return id('ISelectField') };
+    fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>; 
+    options: TSelectFieldOption[];
+    getOptionTitle(inp: string): string { return ''};
 }
 
 export class IDynamicSelectBaseField extends IBaseField {
@@ -109,6 +125,9 @@ export class IDynamicMultiSelectField extends IBaseField {
 /* Richtext HTML field */
 export class IHTMLAreaField extends IBaseField {
     get interfaceId() { return id('IHTMLAreaField') };
+    minLength?: number;
+    maxLength?: number;
+    trim?: boolean;
 }
 
 export class IAnyOf extends IBaseField {

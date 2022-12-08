@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
-import Schema from '../src/schema'
+import {Schema} from '../src/schema'
 import { TextField } from '../src/field_validators/TextField'
 import { IntegerField } from '../src/field_validators/IntegerField'
 import { EmailField } from '../src/field_validators/EmailField'

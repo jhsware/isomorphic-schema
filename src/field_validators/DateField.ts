@@ -1,43 +1,39 @@
-import { createObjectPrototype } from 'component-registry'
-const isValid = require('date-fns/is_valid')
-import TextField from './TextField'
-import { i18n } from '../utils'
+import { isValid } from 'date-fns';
+import { i18n, isNullUndefEmpty } from '../utils'
+import { BaseField } from './BaseField'
+import { IDateField, OmitInContructor } from '../interfaces'
+import { TFieldError } from '../schema';
 
 /*
     Date-field
 */
-import { IDateField } from '../interfaces'
+type TDateField = Omit<IDateField, 'interfaceId' | 'providedBy'>;
 
-export default createObjectPrototype({
-    implements: [IDateField],
+export class DateField extends BaseField<TDateField> implements TDateField {
+  readonly __implements__ = [IDateField];
+  constructor({ required, readOnly }: Omit<TDateField, OmitInContructor>
+    = { required: false, readOnly: false }) {
+    super({ required, readOnly });
+  }
 
-    extends: [TextField],
-    
-    constructor: function (options) {
-        this._ITextField.constructor.call(this, options)
-    },
-    
-    validate: function (inp) {
-        var error = this._ITextField.validate.call(this, inp);
-        if (error) { return Promise.resolve(error) }
-    
-        if(inp && (inp.length != 10 || !isValid(new Date(inp)))) {
-            error = {
-                type: 'type_error',
-                i18nLabel: i18n('isomorphic-schema--date_field_incorrect_formatting', 'This doesn\'t look like a date'),
-                message: "Det ser inte ut som datum"
-            }
-        
-            return Promise.resolve(error)
-        }
-        return Promise.resolve()
-    },
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    let err = await super.validate(inp, options, context);
+    if (err) return err;
 
-    toFormattedString: function (inp) {
-        return inp
-    },
-
-    fromString: function (inp) {
-        return inp
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-})
+
+    if (inp && (inp.length != 10 || !isValid(new Date(inp)))) {
+      return {
+        type: 'type_error',
+        i18nLabel: i18n('isomorphic-schema--date_field_incorrect_formatting', "This doesn't look like a date"),
+        message: "This doesn't look like a date"
+      }
+    }
+
+    return;
+  }
+
+}

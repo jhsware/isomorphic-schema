@@ -1,8 +1,7 @@
-
 import { BaseField } from '../field_validators'
 import { i18n, isNullUndefEmpty } from '../utils'
 import { IObjectField, OmitInContructor } from '../interfaces'
-import Schema, { TFieldError, TFormErrors } from '../schema';
+import { Schema, TFieldError, TFormErrors } from '../schema';
 
 /*
     Object field
@@ -21,7 +20,7 @@ export class ObjectField<T = TObjectField> extends BaseField<T> implements TObje
     this.objectFactoryName = objectFactoryName
   }
 
-  async validate(inp, options, context): Promise<TFieldError | TFormErrors | undefined> {
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
     const err = await super.validate(inp, options, context);
     if (err) return err;
 
@@ -38,7 +37,17 @@ export class ObjectField<T = TObjectField> extends BaseField<T> implements TObje
     }
 
     const formErrors = await schema.validate(inp, options, context);
-    return formErrors; // TODO: Fix this hack
+    
+    if (formErrors?.fieldErrors || formErrors?.invariantErrors ) {
+      return {
+        type: 'object_error',
+        i18nLabel: i18n('isomorphic-schema--list_field_value_error', 'There is an error in object'),
+        message: 'There is an error in object',
+        errors: formErrors.fieldErrors
+      }; // TODO: Fix this hack
+    }
+
+    return;
   }
 
   toFormattedString(inp) {

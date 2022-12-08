@@ -25,7 +25,7 @@ var MyDynamicSelectAsyncField = createObjectPrototype({
     },
 
     validateAsync: function (inp, options, context) {
-        var promise = this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp);
+        var promise = await this._IDynamicSelectAsyncBaseField.validateAsync.call(this, inp);
 
         // Check if we failed validation in DynamicSelectAsyncBaseField
         var _this = this
@@ -72,11 +72,11 @@ var MyDynamicSelectAsyncField = createObjectPrototype({
         return Promise.resolve(undefined)
     },
 
-    toFormattedString: function (inp) {
+    toFormattedString(inp) {
         return this.valueType.fromString(inp);
     },
 
-    fromString: function (inp) {
+    fromString(inp) {
         return this.valueType.fromString(inp);
     }
 });
@@ -90,7 +90,7 @@ describe('Dynamic select async field', function() {
             required: true
         });
     
-        var tmp = theField.validateAsync("one");
+        var tmp = await theField.validateAsync("one");
         tmp.then(function (validationError) {
             expect(validationError).toBe(undefined);
             done();
@@ -101,7 +101,7 @@ describe('Dynamic select async field', function() {
             required: true
         });
     
-        var tmp = theField.validateAsync("select-me");
+        var tmp = await theField.validateAsync("select-me");
         tmp.then(function (validationError) {
             expect(validationError).not.toBe(undefined);
             done();
