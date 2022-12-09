@@ -81,7 +81,7 @@ function _genTestListSchema() {
   return new Schema({
     name: "Schema With List", fields: {
       users: new ListField({
-        fieldType: new ObjectField({ required: true, schema: userSchema })
+        valueType: new ObjectField({ required: true, schema: userSchema })
       })
     }
   })

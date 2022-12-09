@@ -2,15 +2,15 @@ import { createIdFactory, ObjectInterface } from 'component-registry'
 import { Schema, TFieldError, TFormErrors } from './schema';
 const id = createIdFactory('isomorphic-schema');
 
-export type OmitInContructor =  'validate' | 'toFormattedString' | 'fromString';
+export type OmitInContructor = 'validate' | 'toFormattedString' | 'fromString';
 
 export class IBaseField extends ObjectInterface {
     get interfaceId() { return id('IBaseField') };
     required?: boolean;
     readOnly?: boolean;
     validate(inp: any, options?: any, context?: any): Promise<TFieldError | undefined> { return };
-    fromString(inp: string, options?: object): any {};
-    toFormattedString(inp: any): string { return ''};
+    fromString(inp: string, options?: object): any { };
+    toFormattedString(inp: any): string { return '' };
 }
 
 export class ITextField extends IBaseField {
@@ -71,7 +71,7 @@ export class ITelephoneField extends IBaseField {
 
 export class IListField extends IBaseField {
     get interfaceId() { return id('IListField') };
-    fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>; 
+    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
     minItems?: number;
     maxItems?: number;
     objectFactoryName?: string;
@@ -83,8 +83,12 @@ export class IObjectField extends IBaseField {
     objectFactoryName?: string;
 }
 
-export class IObjectRelationField extends IBaseField {
+export class IObjectRelationField<T = any> extends IBaseField {
     get interfaceId() { return id('IObjectRelationField') };
+    // resolverName: string;
+    // interface: ObjectInterface;
+    // TODO: Create object relation type
+    async validate(inp: T, options = undefined, context = undefined): Promise<TFieldError | undefined> { return };
 }
 
 export class IOrgNrField extends IBaseField {
@@ -101,25 +105,23 @@ export class IPasswordField extends IBaseField {
 export type TSelectFieldOption = { name: string, label: string };
 export class ISelectField extends IBaseField {
     get interfaceId() { return id('ISelectField') };
-    fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>; 
+    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
     options: TSelectFieldOption[];
-    getOptionTitle(inp: string): string { return ''};
+    getOptionLabel(inp: string): string { return '' };
 }
-
-export class IDynamicSelectBaseField extends IBaseField {
-    get interfaceId() { return id('IDynamicSelectBaseField') };
-}
-
-export class IDynamicSelectAsyncBaseField extends IBaseField {
-    get interfaceId() { return id('IDynamicSelectAsyncBaseField') };
+export class ISelectFieldAsync extends IBaseField {
+    get interfaceId() { return id('ISelectField') };
+    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    async getOptions(): Promise<TSelectFieldOption[]> { return [] };
+    async getOptionLabel(inp: string): Promise<string> { return '' };
 }
 
 export class IMultiSelectField extends IBaseField {
     get interfaceId() { return id('IMultiSelectField') };
-}
-
-export class IDynamicMultiSelectField extends IBaseField {
-    get interfaceId() { return id('IDynamicMultiSelectField') };
+    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    options: TSelectFieldOption[];
+    validate(inp: string[], options?: any, context?: any): Promise<TFieldError | undefined> { return };
+    getOptionLabel(inp: string): string { return '' };
 }
 
 /* Richtext HTML field */
@@ -132,4 +134,5 @@ export class IHTMLAreaField extends IBaseField {
 
 export class IAnyOf extends IBaseField {
     get interfaceId() { return id('IAnyOf') };
+    valueTypes: Omit<IBaseField, 'interfaceId' | 'providedBy'>[];
 }

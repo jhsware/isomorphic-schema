@@ -1,34 +1,34 @@
+import { BaseField } from './BaseField'
+import { i18n, isNullUndefEmpty } from '../utils'
 
-import { createObjectPrototype } from 'component-registry'
-import {BaseField} from './BaseField'
-import { IObjectRelationField } from '../interfaces'
-import { i18n } from '../utils'
+import { IObjectRelationField, OmitInContructor } from '../interfaces'
+import { TFieldError } from '../schema';
+import { resolve } from 'path';
 
 /*
     Object field
 */
 
+type TObjectRelationField = Omit<IObjectRelationField, 'interfaceId' | 'providedBy'>;
 
+export class ObjectRelationField<T = TObjectRelationField> extends BaseField<T> implements TObjectRelationField {
+  readonly __implements__ = [IObjectRelationField];
 
-export default createObjectPrototype({
-    implements: [IObjectRelationField],
-    extends: [BaseField],
-    
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-        if (options) {
-            this._resolverName = options.resolverName
-            this._interface = options.interface
-        }
-    },
-    
-    async validate(inp, options) {
+  constructor({ required = false, readOnly = false }:
+    Omit<TObjectRelationField, OmitInContructor>) {
+    super({ required, readOnly });
+  }
+
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    const err = await super.validate(inp, options, context);
+    if (err) return err;
+
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
+    }
         // We need to resolve the relation to validate it
-        var val = inp.get()
-        
-        var error = await this._IBaseField.validate.call(this, val)
-        if (error) { return Promise.resolve(error) }
-    
+        const val = inp.get?.()
         /*
         // TODO: Implement object type validation
         // TODO: Consider implementing test on server for existence of related object
@@ -47,6 +47,13 @@ export default createObjectPrototype({
         }
         */
         return undefined
-    }
-    
-})
+  }
+
+  toFormattedString(inp) {
+    return inp;
+  }
+
+  fromString(inp) {
+    return inp;
+  }
+}

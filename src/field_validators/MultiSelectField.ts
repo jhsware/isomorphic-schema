@@ -1,8 +1,8 @@
 
-import { createObjectPrototype } from 'component-registry'
-import BaseField from './BaseField'
-import { i18n } from '../utils'
-
+import { i18n, isNullUndefEmpty } from '../utils'
+import { BaseField } from './BaseField'
+import { IBaseField, IMultiSelectField, OmitInContructor, TSelectFieldOption } from '../interfaces'
+import { TFieldError } from '../schema';
 
 /*
 
@@ -13,82 +13,72 @@ import { i18n } from '../utils'
 
 */
 
-// TODO: Write tests
 
-import { IMultiSelectField } from '../interfaces'
+type TMultiSelectField = Omit<IMultiSelectField, 'interfaceId' | 'providedBy'>;
 
-export default createObjectPrototype({
-    implements: [IMultiSelectField],
+export class MultiSelectField extends BaseField<TMultiSelectField> implements TMultiSelectField {
+  readonly __implements__ = [IMultiSelectField];
+  options: TSelectFieldOption[]
+  valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
 
-    extends: [BaseField],
-    
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-        
-        if (options) {
-            // Always set valueType to required to get validation per item
-            // Should be an instance of a field.
-            this.valueType = options.valueType; 
-            this.options = options.options;            
-        }
-        
-    },
-    
-    validate: function (inp, options, context, async) {
-        // Check that this isn't undefined if it is required
-        var error = await this._IBaseField.validate.call(this, inp)
-        if (error) { return Promise.resolve(error) }
-        
-        // If undefined and not required just return ok
-        if (typeof inp === 'undefined' || inp === null) {
-          return Promise.resolve();
-        }
-        
-        // We need to check every item in the list to see that they are valid
-        var errors = inp.map(function (item) {
-            // Chack value is of valueType
-            var error = await this.valueType.validate(item)
-            if (typeof error !== 'undefined') {
-                return Promise.resolve(error)
-            }
+  constructor({ required, readOnly, options, valueType }: Omit<TMultiSelectField, OmitInContructor | 'getOptionLabel'>) {
+    super({ required, readOnly });
+    this.options = options,
+      this.valueType = valueType;
+  }
 
-            var options = this.options
+  async validate(inp: string[], options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    let err = await super.validate(inp, options, context);
+    if (err) return err;
 
-            // Check that selected value is in options list
-            var matches = false
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].name === item) {
-                    matches = true
-                    break
-                }
-            }
-            if (!matches) {
-                return Promise.resolve({
-                    type: 'constraint_error',
-                    i18nLabel: i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the selected values is not allowed'),
-                    message: "Ett eller flera valda värden finns inte i listan över tillåtna värden"
-                })
-            }
-        }.bind(this)).filter(function (item) {return typeof item !== 'undefined'})
-
-        return Promise.all(errors)
-            .then(function (results) {
-                var results = results.filter(function (item) { item !== undefined })
-                return Promise.resolve(results[0])
-            })
-    },
-
-    toFormattedString(inp) {
-        return inp
-    },
-
-    fromString(inp) {
-        return inp
-    },
-
-    getOptionTitle: function (name) {
-        for (var i=0; i < this.options.length; i++) {
-            if (this.options[i].name === name) return this.options[i].title 
-        }
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-})
+
+    // Check every value in list
+    var matches = true;
+    for (const val of inp) {
+      // Only check until anything is wrong
+      if (!matches) break;
+
+      // Check value type
+      err = await this.valueType.validate(val)
+      if (err) return err;
+
+      for (const option of this.options) {
+        if (option.name === val) {
+          break
+        }
+        // Nothing matched so this
+        matches = false;
+      }
+
+    }
+
+    if (!matches) {
+      return {
+        type: 'constraint_error',
+        i18nLabel: i18n('isomorphic-schema--multi_select_field_value_error', 'One or more of the selected values is not allowed'),
+        message: "Ett eller flera valda värden finns inte i listan över tillåtna värden"
+      }
+    }
+
+    return;
+  }
+
+  toFormattedString(inp) {
+    return this.valueType.fromString(inp)
+  }
+
+  fromString(inp) {
+    return this.valueType.fromString(inp)
+  }
+
+  getOptionLabel(inp) {
+    for (const option of this.options) {
+      if (option.name === inp) return option.label
+    }
+  }
+
+}

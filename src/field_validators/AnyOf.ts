@@ -1,3 +1,8 @@
+import { BaseField } from './BaseField'
+import { i18n, isNullUndefEmpty } from '../utils'
+
+import { IAnyOf, OmitInContructor } from '../interfaces'
+import { TFieldError } from '../schema';
 
 /*
     Standard options:
@@ -6,63 +11,57 @@
 
 */
 
-import { createObjectPrototype } from 'component-registry'
+type TAnyOf = Omit<IAnyOf, 'interfaceId' | 'providedBy'>;
 
-import { IAnyOf } from '../interfaces'
-import { i18n } from '../utils'
+export class AnyOf<T = TAnyOf> extends BaseField<T> implements TAnyOf {
+  readonly __implements__ = [IAnyOf];
+  valueTypes;
 
-import {BaseField} from './BaseField'
+  constructor({ required = false, readOnly = false, valueTypes }:
+    Omit<TAnyOf, OmitInContructor>) {
+    super({ required, readOnly });
+    this.valueTypes = valueTypes;
+  }
 
-export default createObjectPrototype({
-    extends: [BaseField],
-    implements: [IAnyOf],
+  async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
+    const err = await super.validate(inp, options, context);
+    if (err) return err;
 
-    constructor: function (options) {
-        this._IBaseField.constructor.call(this, options)
-        if (options) {
-            this._valueTypes = options.valueTypes
-            delete options.valueTypes
-        }
-    },
-    
-    // TODO: Validate against one of several
-    validate: function (inp, options, context) {
-        var error = await this._IBaseField.validate.call(this, inp)
-        if (error) { return Promise.resolve(error) }
-
-        if (inp) {
-                var errorPromises = this._valueTypes.map(function (field) {
-                    // Convert value so it can be checked properly, but if it converts to empty or undefined use original value
-                    var tmp = field.fromString(inp)
-                    return field.validateAsync(tmp || inp, options, context)
-                })
-
-                return Promise.all(errorPromises).then(function (fieldErrors) {
-                    var error = fieldErrors.reduce(function (curr, next) {
-                        // If one of the validators pass we are ok
-                        if (next === undefined) {
-                            return undefined
-                        } else {
-                            return curr
-                        }
-                    }, {
-                        type: 'constraint_error',
-                        i18nLabel: i18n('isomorphic-schema--any_of_error', 'The entered value doesn\'t match any of the allowed value types'),
-                        message: 'Inmatat värde matchar inte de tillåtna alternativen'
-                    })
-                    return Promise.resolve(error)
-                })
-        }
-      
-        return Promise.resolve(undefined)
-    },
-
-    toFormattedString(inp) {
-        return inp
-    },
-    
-    fromString(inp) {
-        return inp
+    // Required has been checked so if it is empty it is ok
+    if (isNullUndefEmpty(inp)) {
+      return;
     }
-    
-})
+
+    const errorPromises = this.valueTypes.map(function (field) {
+      // Convert value so it can be checked properly, but if it converts to empty or undefined use original value
+      var tmp = field.fromString(inp)
+      return field.validate(tmp || inp, options, context)
+    })
+
+    const fieldErrors = await Promise.all(errorPromises)
+    const error = fieldErrors.reduce((prev, curr) => {
+      // If one of the validators pass we are ok
+      if (curr === undefined) {
+        return false
+      } else {
+        return prev
+      }
+    }, true)
+
+    if (error) {
+      return {
+        type: 'constraint_error',
+        i18nLabel: i18n('isomorphic-schema--any_of_error', 'The entered value doesn\'t match any of the allowed value types'),
+        message: 'Inmatat värde matchar inte de tillåtna alternativen'
+      }
+    }
+  }
+
+  toFormattedString(inp) {
+    return inp;
+  }
+
+  fromString(inp) {
+    return inp;
+  }
+}

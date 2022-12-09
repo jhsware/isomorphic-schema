@@ -20,15 +20,15 @@ type TListField = Omit<IListField, 'interfaceId' | 'providedBy'>;
 
 export class ListField<T = TListField> extends BaseField<T> implements TListField {
     readonly __implements__ = [IListField];
-    fieldType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
     minItems?: number;
     maxItems?: number;
     objectFactoryName: string;
 
-    constructor({ required = false, readOnly = false, fieldType, minItems = undefined, maxItems = undefined, objectFactoryName = undefined }:
+    constructor({ required = false, readOnly = false, valueType, minItems = undefined, maxItems = undefined, objectFactoryName = undefined }:
         Omit<TListField, OmitInContructor>) {
         super({ required, readOnly });
-        this.fieldType = fieldType;
+        this.valueType = valueType;
         this.minItems = minItems;
         this.maxItems = maxItems;
         this.objectFactoryName = objectFactoryName
@@ -79,7 +79,7 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
                 ...options,
                 objectPath: [...options.objectPath, i]
             };
-            return this.fieldType
+            return this.valueType
                 .validate(item, newOptions, context)
         });
 
@@ -108,6 +108,6 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
     }
 
     fromString(inp, options) {
-        return inp?.map?.((item) => this.fieldType.fromString(item, options));
+        return inp?.map?.((item) => this.valueType.fromString(item, options));
     }
 }

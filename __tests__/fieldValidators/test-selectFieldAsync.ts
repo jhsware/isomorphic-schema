@@ -1,19 +1,21 @@
 
 import { describe, expect, it } from "@jest/globals";
-import { SelectField } from '../../src/field_validators/SelectField'
-import { TextField } from '../../src/field_validators/TextField'
-import { EmailField } from '../../src/field_validators/EmailField'
+import { SelectFieldAsync } from '../../src'
+import { TextField } from '../../src'
+import { EmailField } from '../../src'
 
 describe('Select field', function () {
   describe('Select field with options array', function () {
     it('allows you to select a value from the list', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: true,
         valueType: new TextField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ]
+        }
       });
 
       var tmp = await theField.validate("select-me");
@@ -21,13 +23,15 @@ describe('Select field', function () {
     });
 
     it('allows undefined or null if not required', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: false,
         valueType: new TextField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ]
+        }
       });
 
       var tmp = await theField.validate(undefined);
@@ -38,13 +42,15 @@ describe('Select field', function () {
     });
 
     it('throws an error if selected value is outside list', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: true,
         valueType: new TextField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ];
+        }
       });
 
       var tmp = await theField.validate("outside-list");
@@ -54,13 +60,15 @@ describe('Select field', function () {
 
 
     it('throws an error if wrong type', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: true,
         valueType: new EmailField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ]
+        }
       });
 
       var tmp = await theField.validate("select-me");
@@ -68,30 +76,34 @@ describe('Select field', function () {
     });
 
     it('can convert a value to a title', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: true,
         valueType: new TextField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ]
+        }
       });
 
-      var tmp = theField.getOptionLabel("select-me");
+      var tmp = await theField.getOptionLabel("select-me");
       expect(tmp).toEqual('Select Me');
     });
 
     it('convert a value to a title handles undefined', async function () {
-      var theField = new SelectField({
+      var theField = new SelectFieldAsync({
         required: true,
         valueType: new TextField({ required: true }),
-        options: [
-          { name: "select-me", label: "Select Me" },
-          { name: "do-not-select", label: "Don't Select Me" }
-        ]
+        async getOptions() {
+          return [
+            { name: "select-me", label: "Select Me" },
+            { name: "do-not-select", label: "Don't Select Me" }
+          ]
+        }
       });
 
-      var tmp = theField.getOptionLabel("no exist");
+      var tmp = await theField.getOptionLabel("no exist");
       expect(tmp).toBe(undefined);
     });
   });

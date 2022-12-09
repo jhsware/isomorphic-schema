@@ -14,7 +14,7 @@ describe('List field', function() {
     it('accepts a list of fields', async function() {
         var theField = new ListField({
             required: true,
-            fieldType: new TextField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = await await theField.validate(["one", "two", "three"], undefined, undefined);
         expect(tmp).toBe(undefined);
@@ -25,7 +25,7 @@ describe('List field', function() {
         }})
         var theField = new ListField({
             required: true,
-            fieldType: new ObjectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = await await theField.validate([{title: "one"}, {title: "two"}], undefined, undefined);
         expect(tmp).toBe(undefined);
@@ -33,7 +33,7 @@ describe('List field', function() {
     it('throws error if single item is invalid', async function() {
         var theField = new ListField({
             required: true,
-            fieldType: new TextField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = await theField.validate(["one", undefined, "three"], undefined, undefined);
         expect(tmp).not.toBe(undefined);
@@ -44,7 +44,7 @@ describe('List field', function() {
         }})
         var theField = new ListField({
             required: true,
-            fieldType: new ObjectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = await theField.validate([{}, {title: "two"}], undefined, undefined);
         expect(tmp).not.toBe(undefined);
@@ -53,7 +53,7 @@ describe('List field', function() {
         var theField = new ListField({
             required: true,
             minItems: 4,
-            fieldType: new TextField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = await theField.validate(["one", "two", "three"], undefined, undefined);
         expect(tmp).not.toBe(undefined);
@@ -62,7 +62,7 @@ describe('List field', function() {
         var theField = new ListField({
             required: true,
             maxItems: 2,
-            fieldType: new TextField({required: true})});
+            valueType: new TextField({required: true})});
     
         var tmp = await theField.validate(["one", "two", "three"], undefined, undefined);
         expect(tmp).not.toBe(undefined);
@@ -78,7 +78,7 @@ describe('List field', function() {
         var theField = new SpecialListField({
             required: true,
             minItems: 4,
-            fieldType: new TextField({required: true})});
+            valueType: new TextField({required: true})});
     
         var err = await theField.validate(["one", "two", "three"], undefined, undefined);
         expect(err).not.toBe(undefined);
@@ -90,7 +90,7 @@ describe('List field', function() {
         var theField = new ListField({
             required: true,
             minItems: 5,
-            fieldType: new ObjectField({required: true, schema: objSchema})});
+            valueType: new ObjectField({required: true, schema: objSchema})});
     
         var tmp = await await theField.validate([{}, {title: "two"}], undefined, undefined);
         expect(tmp).not.toBe(undefined);

@@ -1,27 +1,29 @@
 import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
-import { IBaseField, ISelectField, OmitInContructor, TSelectFieldOption } from '../interfaces'
+import { IBaseField, ISelectFieldAsync, OmitInContructor, TSelectFieldOption } from '../interfaces'
 import { TFieldError } from '../schema';
 
 /*
 
-    A Select Field allows you to choose a single value from a selection
+    A Select Field Async allows you to choose a single value from a selection where
+    options are dynamically fetched
 
     valueType: TextField,
     options: [{name: "1", title: "First"}]
 
 */
 
-type TSelectField = Omit<ISelectField, 'interfaceId' | 'providedBy'>;
+type TSelectFieldAsync = Omit<ISelectFieldAsync, 'interfaceId' | 'providedBy'>;
 
-export class SelectField extends BaseField<TSelectField> implements TSelectField {
-  readonly __implements__ = [ISelectField];
-  options: TSelectFieldOption[]
+export class SelectFieldAsync extends BaseField<TSelectFieldAsync> implements TSelectFieldAsync {
+  readonly __implements__ = [ISelectFieldAsync];
   valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+  _getOptions;
 
-  constructor({ required, readOnly, options, valueType }: Omit<TSelectField, OmitInContructor | 'getOptionLabel'>) {
+
+  constructor({ required, readOnly, getOptions, valueType }: Omit<TSelectFieldAsync, OmitInContructor | 'getOptionLabel'>) {
     super({ required, readOnly });
-    this.options = options,
+    this._getOptions = getOptions;
     this.valueType = valueType;
   }
 
@@ -29,6 +31,7 @@ export class SelectField extends BaseField<TSelectField> implements TSelectField
     let err = await super.validate(inp, options, context);
     if (err) return err;
 
+    
     // Required has been checked so if it is empty it is ok
     if (isNullUndefEmpty(inp)) {
       return;
@@ -37,9 +40,11 @@ export class SelectField extends BaseField<TSelectField> implements TSelectField
     err = await this.valueType.validate(inp)
     if (err) return err;
 
+    const _options = await this._getOptions();
+
     var matches = false
-    for (var i = 0; i < this.options.length; i++) {
-      if (this.options[i].name === inp) {
+    for (var i = 0; i < _options.length; i++) {
+      if (_options[i].name === inp) {
         matches = true
         break
       }
@@ -56,7 +61,7 @@ export class SelectField extends BaseField<TSelectField> implements TSelectField
     return;
   }
 
-  toFormattedString(inp) {
+  toFormattedString(inp: string) {
     return this.valueType.fromString(inp)
   }
 
@@ -64,9 +69,14 @@ export class SelectField extends BaseField<TSelectField> implements TSelectField
     return this.valueType.fromString(inp)
   }
 
-  getOptionLabel(inp) {
-    for (var i = 0; i < this.options.length; i++) {
-      if (this.options[i].name === inp) return this.options[i].label
+  async getOptions(): Promise<TSelectFieldOption[]> {
+    return this._getOptions();
+  }
+
+  async getOptionLabel(name: string): Promise<string> {
+    const options = await this._getOptions();
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].name === name) return options[i].label;
     }
   }
 

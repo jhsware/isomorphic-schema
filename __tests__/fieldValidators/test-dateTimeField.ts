@@ -1,6 +1,6 @@
 
 import { describe, expect, it } from "@jest/globals";
-import {DateTimeField} from '../../src/field_validators/DateTimeField'
+import {DateTimeField} from '../../src'
 
 describe('DateTime field', function() {
     it('accepts valid date object without timezone', async function() {        
