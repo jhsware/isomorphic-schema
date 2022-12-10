@@ -18,8 +18,8 @@ export class CreditCardField<T = TCreditCardField> extends BaseField<T> implemen
   readonly __implements__ = [ICreditCardField];
   cardValidationOptions?: object;
 
-  constructor({ required = false, readOnly = false, cardValidationOptions = undefined }: Omit<TCreditCardField, OmitInContructor> = {}) {
-    super({ required, readOnly });
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, cardValidationOptions = undefined }: Omit<TCreditCardField, OmitInContructor> = {}) {
+    super({ required, readOnly, label, placeholder, help });
     this.cardValidationOptions = cardValidationOptions;
   }
 

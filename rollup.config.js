@@ -36,7 +36,7 @@ const baseConfig = (outputFormat) => {
       'date-fns'
     ],
     output: {
-      name: 'IsomorphicSchema',
+      get interfaceId() { return id('IsomorphicSchema') };
       file: file,
       format: outputFormat,
       sourcemap: true,

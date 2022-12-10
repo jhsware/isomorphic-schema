@@ -21,8 +21,9 @@ export class MultiSelectField extends BaseField<TMultiSelectField> implements TM
   options: TSelectFieldOption[]
   valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
 
-  constructor({ required, readOnly, options, valueType }: Omit<TMultiSelectField, OmitInContructor | 'getOptionLabel'>) {
-    super({ required, readOnly });
+  constructor(
+    { required = false, readOnly = false, options = undefined, valueType, label = undefined, placeholder = undefined, help = undefined }: Omit<TMultiSelectField, OmitInContructor | 'getOptionLabel'>) {
+    super({ required, readOnly, label, placeholder, help });
     this.options = options,
       this.valueType = valueType;
   }

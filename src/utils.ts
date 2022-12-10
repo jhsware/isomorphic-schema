@@ -73,7 +73,7 @@ export function cloneShallow(obj) {
  * @example
  * i18n('form_label_title', 'The Title')
  */
-export function i18n(i18nKey, helpText) {
+export function i18n(i18nKey: string, helpText: string): string {
     return i18nKey
 }
 
@@ -93,7 +93,7 @@ const regex = /\${([^}]+)}/g
  * Where personSchema.age is an IntegerField validator
  */
 // TODO: Optimise this
-export function renderString(str, fieldDef) {
+export function renderString(str: string, fieldDef: Record<string, string>): string {
     var m
     while ((m = regex.exec(str)) !== null) {
         // This is necessary to avoid infinite loops with zero-width matches

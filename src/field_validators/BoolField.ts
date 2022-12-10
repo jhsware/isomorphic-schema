@@ -12,9 +12,9 @@ export class BoolField<T = TBoolField> extends BaseField<T> implements TBoolFiel
     readonly __implements__ = [IBoolField];
     
     constructor({
-      required = false, readOnly = false }:
+      required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }:
       Omit<TBoolField, OmitInContructor> = {}) {
-      super({ required, readOnly });
+      super({ required, readOnly, label, placeholder, help });
     }
 
     async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {

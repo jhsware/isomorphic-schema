@@ -18,8 +18,8 @@ export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIn
   min?: number;
   max?: number;
 
-  constructor({ required = false, readOnly = false, min = undefined, max = undefined }: Omit<TIntegerField, OmitInContructor> = {}) {
-    super({ required, readOnly });
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, min = undefined, max = undefined }: Omit<TIntegerField, OmitInContructor> = {}) {
+    super({ required, readOnly, label, placeholder, help });
     this.min = min;
     this.max = max;
   }

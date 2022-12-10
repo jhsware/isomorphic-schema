@@ -11,9 +11,9 @@ type TDateField = Omit<IDateField, 'interfaceId' | 'providedBy'>;
 
 export class DateField extends BaseField<TDateField> implements TDateField {
   readonly __implements__ = [IDateField];
-  constructor({ required, readOnly }: Omit<TDateField, OmitInContructor>
-    = { required: false, readOnly: false }) {
-    super({ required, readOnly });
+  constructor({
+    required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }: Omit<TDateField, OmitInContructor>) {
+    super({ required, readOnly, label, placeholder, help });
   }
 
   async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {

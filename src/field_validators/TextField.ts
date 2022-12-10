@@ -17,9 +17,9 @@ export class TextField<T = TTextField> extends BaseField<T> implements TTextFiel
   maxLength: number;
   trim: boolean;
   constructor({
-    required = false, readOnly = false, minLength = undefined, maxLength = undefined, trim = false }:
+    required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, minLength = undefined, maxLength = undefined, trim = false }:
     Omit<TTextField, OmitInContructor> = {}) {
-    super({ required, readOnly });
+    super({ required, readOnly, label, placeholder, help });
     this.minLength = minLength;
     this.maxLength = maxLength;
     this.trim = trim;

@@ -21,8 +21,9 @@ export class SelectFieldAsync extends BaseField<TSelectFieldAsync> implements TS
   _getOptions;
 
 
-  constructor({ required, readOnly, getOptions, valueType }: Omit<TSelectFieldAsync, OmitInContructor | 'getOptionLabel'>) {
-    super({ required, readOnly });
+  constructor(
+    { required = false, readOnly = false, getOptions, valueType, label = undefined, placeholder = undefined, help = undefined }: Omit<TSelectFieldAsync, OmitInContructor | 'getOptionLabel'>) {
+    super({ required, readOnly, label, placeholder, help });
     this._getOptions = getOptions;
     this.valueType = valueType;
   }

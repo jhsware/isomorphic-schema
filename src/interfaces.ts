@@ -8,6 +8,9 @@ export class IBaseField extends ObjectInterface {
     get interfaceId() { return id('IBaseField') };
     required?: boolean;
     readOnly?: boolean;
+    label?: string;
+    placeholder?: string;
+    help?: string;
     validate(inp: any, options?: any, context?: any): Promise<TFieldError | undefined> { return };
     fromString(inp: string, options?: object): any { };
     toFormattedString(inp: any): string { return '' };

@@ -19,8 +19,9 @@ export class SelectField extends BaseField<TSelectField> implements TSelectField
   options: TSelectFieldOption[]
   valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
 
-  constructor({ required, readOnly, options, valueType }: Omit<TSelectField, OmitInContructor | 'getOptionLabel'>) {
-    super({ required, readOnly });
+  constructor(
+    { required = false, readOnly = false, options = undefined, valueType, label = undefined, placeholder = undefined, help = undefined }: Omit<TSelectField, OmitInContructor | 'getOptionLabel'>) {
+    super({ required, readOnly, label, placeholder, help });
     this.options = options,
     this.valueType = valueType;
   }

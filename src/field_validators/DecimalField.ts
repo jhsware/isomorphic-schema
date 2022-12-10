@@ -18,8 +18,8 @@ export class DecimalField<T = TDecimalField> extends BaseField<T> implements TDe
   max?: number;
   precision?: number;
 
-  constructor({ required = false, readOnly = false, min = undefined, max = undefined, precision = undefined }: Omit<TDecimalField, OmitInContructor> = {}) {
-    super({ required, readOnly });
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, min = undefined, max = undefined, precision = undefined }: Omit<TDecimalField, OmitInContructor> = {}) {
+    super({ required, readOnly, label, placeholder, help });
     this.min = min;
     this.max = max;
     this.precision = precision;

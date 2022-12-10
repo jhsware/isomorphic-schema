@@ -13,9 +13,9 @@ export class ObjectField<T = TObjectField> extends BaseField<T> implements TObje
   schema: Schema; // TODO: Should we allow passing ObjectInterface? needs schema
   objectFactoryName: string;
   
-  constructor({ required = false, readOnly = false, schema, objectFactoryName = undefined }:
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, schema, objectFactoryName = undefined }:
     Omit<TObjectField, OmitInContructor>) {
-    super({ required, readOnly });
+    super({ required, readOnly, label, placeholder, help });
     this.schema = schema;
     this.objectFactoryName = objectFactoryName
   }

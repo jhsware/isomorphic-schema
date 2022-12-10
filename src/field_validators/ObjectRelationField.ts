@@ -14,9 +14,9 @@ type TObjectRelationField = Omit<IObjectRelationField, 'interfaceId' | 'provided
 export class ObjectRelationField<T = TObjectRelationField> extends BaseField<T> implements TObjectRelationField {
   readonly __implements__ = [IObjectRelationField];
 
-  constructor({ required = false, readOnly = false }:
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }:
     Omit<TObjectRelationField, OmitInContructor>) {
-    super({ required, readOnly });
+    super({ required, readOnly, label, placeholder, help });
   }
 
   async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {

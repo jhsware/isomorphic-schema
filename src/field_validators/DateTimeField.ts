@@ -13,9 +13,9 @@ export class DateTimeField extends BaseField<TDateTimeField> implements TDateTim
   readonly __implements__ = [IDateTimeField];
   timezoneAware?: boolean;
   
-  constructor({ required = false, readOnly = false, timezoneAware = false }: Omit<TDateTimeField, OmitInContructor>
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, timezoneAware = false }: Omit<TDateTimeField, OmitInContructor>
     = { required: false, readOnly: false, timezoneAware: false }) {
-    super({ required, readOnly });
+    super({ required, readOnly, label, placeholder, help });
     this.timezoneAware = timezoneAware;
   }
 

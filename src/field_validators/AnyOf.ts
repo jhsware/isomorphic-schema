@@ -17,9 +17,9 @@ export class AnyOf<T = TAnyOf> extends BaseField<T> implements TAnyOf {
   readonly __implements__ = [IAnyOf];
   valueTypes;
 
-  constructor({ required = false, readOnly = false, valueTypes }:
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, valueTypes }:
     Omit<TAnyOf, OmitInContructor>) {
-    super({ required, readOnly });
+    super({ required, readOnly, label, placeholder, help });
     this.valueTypes = valueTypes;
   }
 

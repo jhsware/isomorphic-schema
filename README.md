@@ -337,11 +337,11 @@ There are three use cases where you will want to create a custom field.
 Since each field is identified by it's interface, we first create one.
 
 ```JavaScript
-import { createInterfaceClass } from 'component-registry');
-const Interface = createInterfaceClass('MyTestApp')
+import { createIdFactory } from 'component-registry');
+const id = createIdFactory('MyTestApp')
 
-export const IMySpecialField = new Interface({
-  name: 'IMySpecialField'
+class IMySpecialField extends ObjectInterface {
+  get interfaceId() { return id('MySpecialField') };
 })
 ```
 
@@ -352,7 +352,7 @@ import { createObjectPrototype } from 'component-registry');
 import TextField from 'isomorphic-schema/lib/field_validators/TextField');
 
 export const MySpecialField = createObjectPrototype({
-  implements: [IMySpecialField],
+  __implements__ [IMySpecialField],
   extends: [TextField]
   // We don't change any functionality so we don't need to implement any methods
   // to override the inherited TextField behaviour
@@ -366,11 +366,11 @@ This field extends TextField and thus inherits all the functionality of a TextFi
 Again you start by creating an interface. 
 
 ```JavaScript
-import { createInterfaceClass } from 'component-registry');
-const Interface = createInterfaceClass('MyTestApp')
+import { createIdFactory } from 'component-registry');
+const id = createIdFactory('MyTestApp')
 
-export const IMySpecialValidationField = new Interface({
-  name: 'IMySpecialValidationField'
+class IMySpecialValidationField extends ObjectInterface {
+  get interfaceId() { return id('MySpecialValidationField') };
 })
 ```
 
@@ -382,7 +382,7 @@ import { i18n } from 'isomorphic-schema/lib/utils')
 const MyRegex = /(\d{4}-){3}\d{4}/
 
 export const MySpecialValidationField = createObjectPrototype({
-  implements: [IMySpecialValidationField],
+  __implements__ [IMySpecialValidationField],
   extends: [TextField],
   
   validate: function (inp, options, context) {
@@ -411,11 +411,11 @@ Note that createObjectPrototype mounts methods of the extended fields using the 
 Yupp, you start by creating an interface. 
 
 ```JavaScript
-import { createInterfaceClass } from 'component-registry');
-const Interface = createInterfaceClass('MyTestApp')
+import { createIdFactory } from 'component-registry');
+const id = createIdFactory('MyTestApp')
 
-export const IMyComplexValidationField = new Interface({
-  name: 'IMyComplexValidationField'
+class IMyComplexValidationField extends ObjectInterface {
+  get interfaceId() { return id('MyComplexValidationField') };
 })
 ```
 
@@ -426,7 +426,7 @@ import TextField from 'isomorphic-schema/lib/field_validators/TextField';
 import SelectField from 'isomorphic-schema/lib/field_validators/SelectField';
 
 export const MyComplexValidationField = createObjectPrototype({
-  implements: [IMyComplexValidationField],
+  __implements__ [IMyComplexValidationField],
   extends: [SelectField],
   
   constructor: function (options) {
@@ -490,11 +490,11 @@ Rendering a form from a schema is not very difficult but there are several featu
 The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget)
 
 ```JavaScript
-import { createInterfaceClass } from 'component-registry');
-const Interface = createInterfaceClass('MyTestApp')
+import { createIdFactory } from 'component-registry');
+const id = createIdFactory('MyTestApp')
 
-export const IInputFieldWidget = new Interface({
-  name: 'IInputFieldWidget'
+class IInputFieldWidget extends ObjectInterface {
+  get interfaceId() { return id('InputFieldWidget') };
 })
 ```
 
@@ -516,7 +516,7 @@ import { globalRegistry } from 'component-registry'
 import { createAdapter } from 'component-registry');
 
 const MySpecialInputAdapter = createAdapter({
-  implements: IInputFieldWidget, // Which we just created
+  __implements__ IInputFieldWidget, // Which we just created
   adapts: IMySpecialField, // Which was created a bit further up
 
   render: function (key, data, fieldError, lang, objectNamespace) {

@@ -25,9 +25,9 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
     maxItems?: number;
     objectFactoryName: string;
 
-    constructor({ required = false, readOnly = false, valueType, minItems = undefined, maxItems = undefined, objectFactoryName = undefined }:
+    constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, valueType, minItems = undefined, maxItems = undefined, objectFactoryName = undefined }:
         Omit<TListField, OmitInContructor>) {
-        super({ required, readOnly });
+        super({ required, readOnly, label, placeholder, help });
         this.valueType = valueType;
         this.minItems = minItems;
         this.maxItems = maxItems;

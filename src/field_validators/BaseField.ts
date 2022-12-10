@@ -9,7 +9,7 @@
 import { ObjectPrototype } from 'component-registry'
 
 import { IBaseField, OmitInContructor } from '../interfaces'
-import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
+import { TFieldError, TValidationOptions } from '../schema';
 import { i18n, isNullUndefEmpty } from '../utils'
 
 type TBaseField = Omit<IBaseField, 'interfaceId' | 'providedBy'>;
@@ -17,10 +17,18 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
   readonly __implements__ = [IBaseField];
   required: boolean;
   readOnly: boolean;
-  constructor({ required = false, readOnly = false }: Omit<TBaseField, OmitInContructor> = {}) {
+  label?: string;
+  placeholder?: string;
+  help?: string;
+
+
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }: Omit<TBaseField, OmitInContructor>) {
     super();
     this.required = required;
     this.readOnly = readOnly;
+    this.label = label;
+    this.placeholder = placeholder;
+    this.help = help;
   }
 
   async validate(
