@@ -19,7 +19,7 @@ import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
 type TListField = Omit<IListField, 'interfaceId' | 'providedBy'>;
 
 export class ListField<T = TListField> extends BaseField<T> implements TListField {
-    readonly __implements__ = [IListField];
+    readonly __implements__ = [IListField, IBaseField];
     valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
     minItems?: number;
     maxItems?: number;
@@ -104,7 +104,7 @@ export class ListField<T = TListField> extends BaseField<T> implements TListFiel
     }
 
     toFormattedString(inp) {
-        return inp.toString();
+        return inp?.toString?.();
     }
 
     fromString(inp, options) {

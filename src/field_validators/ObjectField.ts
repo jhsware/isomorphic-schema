@@ -1,6 +1,6 @@
 import { BaseField } from '../field_validators'
 import { i18n, isNullUndefEmpty } from '../utils'
-import { IObjectField, OmitInContructor } from '../interfaces'
+import { IBaseField, IObjectField, OmitInContructor } from '../interfaces'
 import { Schema, TFieldError, TFormErrors } from '../schema';
 
 /*
@@ -9,7 +9,7 @@ import { Schema, TFieldError, TFormErrors } from '../schema';
 type TObjectField = Omit<IObjectField, 'interfaceId' | 'providedBy'>;
 
 export class ObjectField<T = TObjectField> extends BaseField<T> implements TObjectField {
-  readonly __implements__ = [IObjectField];
+  readonly __implements__ = [IObjectField, IBaseField];
   schema: Schema; // TODO: Should we allow passing ObjectInterface? needs schema
   objectFactoryName: string;
   
@@ -51,7 +51,7 @@ export class ObjectField<T = TObjectField> extends BaseField<T> implements TObje
   }
 
   toFormattedString(inp) {
-    return inp.toString();
+    return inp?.toString?.();
   }
 
   fromString(inp, options) {

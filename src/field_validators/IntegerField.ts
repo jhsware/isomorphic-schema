@@ -6,7 +6,7 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
-import { IIntegerField, OmitInContructor } from '../interfaces'
+import { IBaseField, IIntegerField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema'
 
 var reInteger = /[^0-9\.]/g
@@ -14,7 +14,7 @@ var reInteger = /[^0-9\.]/g
 type TIntegerField = Omit<IIntegerField, 'interfaceId' | 'providedBy'>;
 
 export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIntegerField {
-  readonly __implements__ = [IIntegerField];
+  readonly __implements__ = [IIntegerField, IBaseField];
   min?: number;
   max?: number;
 
@@ -68,7 +68,7 @@ export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIn
   }
 
   toFormattedString(inp) {
-    return isNullUndefEmpty(inp) ? '' : inp.toString();
+    return isNullUndefEmpty(inp) ? '' : inp?.toString?.();
   }
 
   fromString(inp) {

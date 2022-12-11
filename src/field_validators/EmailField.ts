@@ -5,13 +5,13 @@ import { i18n, isNullUndefEmpty } from '../utils'
 /*
     Email-field
 */
-import { IEmailField, OmitInContructor } from '../interfaces'
+import { IBaseField, IEmailField, ITextField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 type TEmailField = Omit<IEmailField, 'interfaceId' | 'providedBy'>;
 
 export class EmailField extends TextField<TEmailField> implements TEmailField {
-  readonly __implements__ = [IEmailField];
+  readonly __implements__ = [IEmailField, ITextField, IBaseField];
   minLength: number;
   maxLength: number;
   trim: boolean;

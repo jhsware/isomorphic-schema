@@ -1,5 +1,5 @@
 import { TextField } from './TextField'
-import { ITextAreaField } from '../interfaces'
+import { IBaseField, ITextAreaField, ITextField } from '../interfaces'
 
 /*
     Text area field
@@ -7,5 +7,5 @@ import { ITextAreaField } from '../interfaces'
 type TTextAreaField = Omit<ITextAreaField, 'interfaceId' | 'providedBy'>;
 
 export class TextAreaField<T = TTextAreaField> extends TextField<T> implements TTextAreaField {
-  readonly __implements__ = [ITextAreaField];
+  readonly __implements__ = [ITextAreaField, ITextField, IBaseField];
 }

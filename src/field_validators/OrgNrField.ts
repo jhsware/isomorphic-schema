@@ -1,5 +1,5 @@
 import { TextField } from './TextField'
-import { IOrgNrField } from '../interfaces'
+import { IBaseField, IOrgNrField, ITextField } from '../interfaces'
 import { TFieldError } from '../schema'
 import { i18n } from '../utils'
 
@@ -9,7 +9,7 @@ import { i18n } from '../utils'
 type TOrgNrField = Omit<IOrgNrField, 'interfaceId' | 'providedBy'>;
 
 export class OrgNrField extends TextField<TOrgNrField> implements TOrgNrField {
-  readonly __implements__ = [IOrgNrField];
+  readonly __implements__ = [IOrgNrField, ITextField, IBaseField];
 
   async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
     const err = await super.validate(inp, options, context);

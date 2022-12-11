@@ -48,7 +48,7 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
   }
 
   toFormattedString(inp) {
-    return inp.toString();
+    return inp?.toString?.();
   }
 
   fromString(inp, options) {

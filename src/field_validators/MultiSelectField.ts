@@ -17,7 +17,7 @@ import { TFieldError } from '../schema';
 type TMultiSelectField = Omit<IMultiSelectField, 'interfaceId' | 'providedBy'>;
 
 export class MultiSelectField extends BaseField<TMultiSelectField> implements TMultiSelectField {
-  readonly __implements__ = [IMultiSelectField];
+  readonly __implements__ = [IMultiSelectField, IBaseField];
   options: TSelectFieldOption[]
   valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
 

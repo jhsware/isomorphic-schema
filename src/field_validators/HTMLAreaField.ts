@@ -1,6 +1,7 @@
 import {TextAreaField} from './TextAreaField';
 import striptags from 'striptags';
-import { IHTMLAreaField } from '../interfaces'
+import { IBaseField, IHTMLAreaField, ITextField } from '../interfaces'
+import { TFieldError } from '../schema';
 
 /*
     HTML field
@@ -8,9 +9,9 @@ import { IHTMLAreaField } from '../interfaces'
 type THTMLAreaField = Omit<IHTMLAreaField, 'interfaceId' | 'providedBy'>;
 
 export class HTMLAreaField extends TextAreaField<THTMLAreaField> implements THTMLAreaField {
-  readonly __implements__ = [IHTMLAreaField];
+  readonly __implements__ = [IHTMLAreaField, ITextField, IBaseField];
 
-  async validate(inp) {
+  async validate(inp): Promise<TFieldError> {
     if (typeof inp === 'string') {
         inp = striptags(inp)
     }

@@ -1,5 +1,5 @@
 import { TextField } from './TextField'
-import { ITelephoneField } from '../interfaces'
+import { IBaseField, ITelephoneField, ITextField } from '../interfaces'
 import { TFieldError } from '../schema'
 import { i18n } from '../utils'
 
@@ -11,7 +11,7 @@ var allowedCharsRegex = /[^\d().\/+ -]+/
 type TTelephoneField = Omit<ITelephoneField, 'interfaceId' | 'providedBy'>;
 
 export class TelephoneField extends TextField<TTelephoneField> implements TTelephoneField {
-  readonly __implements__ = [ITelephoneField];
+  readonly __implements__ = [ITelephoneField, ITextField, IBaseField];
 
   async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
     const err = await super.validate(inp, options, context);

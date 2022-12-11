@@ -8,14 +8,14 @@ import { i18n, isNullUndefEmpty } from '../utils'
     Port of:
     http://jquerycreditcardvalidator.com/
 */
-import { ICreditCardField, OmitInContructor } from '../interfaces'
+import { IBaseField, ICreditCardField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 
 type TCreditCardField = Omit<ICreditCardField, 'interfaceId' | 'providedBy'>;
 
 export class CreditCardField<T = TCreditCardField> extends BaseField<T> implements TCreditCardField {
-  readonly __implements__ = [ICreditCardField];
+  readonly __implements__ = [ICreditCardField, IBaseField];
   cardValidationOptions?: object;
 
   constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, cardValidationOptions = undefined }: Omit<TCreditCardField, OmitInContructor> = {}) {

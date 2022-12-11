@@ -5,13 +5,13 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
-import { ITextField, OmitInContructor } from '../interfaces'
+import { IBaseField, ITextField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 type TTextField = Omit<ITextField, 'interfaceId' | 'providedBy'>;
 
 export class TextField<T = TTextField> extends BaseField<T> implements TTextField {
-  readonly __implements__ = [ITextField];
+  readonly __implements__ = [ITextField, IBaseField];
   
   minLength: number;
   maxLength: number;
@@ -62,7 +62,7 @@ export class TextField<T = TTextField> extends BaseField<T> implements TTextFiel
   }
 
   toFormattedString(inp) {
-    return inp.toString();
+    return inp?.toString?.();
   }
 
   fromString(inp) {

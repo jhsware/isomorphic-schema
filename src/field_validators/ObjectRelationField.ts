@@ -1,7 +1,7 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
-import { IObjectRelationField, OmitInContructor } from '../interfaces'
+import { IBaseField, IObjectRelationField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 import { resolve } from 'path';
 
@@ -12,7 +12,7 @@ import { resolve } from 'path';
 type TObjectRelationField = Omit<IObjectRelationField, 'interfaceId' | 'providedBy'>;
 
 export class ObjectRelationField<T = TObjectRelationField> extends BaseField<T> implements TObjectRelationField {
-  readonly __implements__ = [IObjectRelationField];
+  readonly __implements__ = [IObjectRelationField, IBaseField];
 
   constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }:
     Omit<TObjectRelationField, OmitInContructor>) {

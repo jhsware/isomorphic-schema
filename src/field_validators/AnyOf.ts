@@ -1,7 +1,7 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
-import { IAnyOf, OmitInContructor } from '../interfaces'
+import { IAnyOf, IBaseField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 /*
@@ -14,7 +14,7 @@ import { TFieldError } from '../schema';
 type TAnyOf = Omit<IAnyOf, 'interfaceId' | 'providedBy'>;
 
 export class AnyOf<T = TAnyOf> extends BaseField<T> implements TAnyOf {
-  readonly __implements__ = [IAnyOf];
+  readonly __implements__ = [IAnyOf, IBaseField];
   valueTypes;
 
   constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, valueTypes }:

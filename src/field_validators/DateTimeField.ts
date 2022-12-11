@@ -1,6 +1,6 @@
 import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
-import { IDateTimeField, OmitInContructor } from '../interfaces'
+import { IBaseField, IDateTimeField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 import { parse, format } from 'date-fns'
 
@@ -10,7 +10,7 @@ import { parse, format } from 'date-fns'
 type TDateTimeField = Omit<IDateTimeField, 'interfaceId' | 'providedBy'>;
 
 export class DateTimeField extends BaseField<TDateTimeField> implements TDateTimeField {
-  readonly __implements__ = [IDateTimeField];
+  readonly __implements__ = [IDateTimeField, IBaseField];
   timezoneAware?: boolean;
   
   constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined, timezoneAware = false }: Omit<TDateTimeField, OmitInContructor>

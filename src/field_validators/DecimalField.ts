@@ -2,7 +2,7 @@
 import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 
-import { IDecimalField, OmitInContructor } from '../interfaces'
+import { IBaseField, IDecimalField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema'
 /*
     Decimal-field
@@ -13,7 +13,7 @@ const reDecimal = /[^0-9\.]/g
 
 type TDecimalField = Omit<IDecimalField, 'interfaceId' | 'providedBy'>;
 export class DecimalField<T = TDecimalField> extends BaseField<T> implements TDecimalField {
-  readonly __implements__ = [IDecimalField];
+  readonly __implements__ = [IDecimalField, IBaseField];
   min?: number;
   max?: number;
   precision?: number;
@@ -62,7 +62,7 @@ export class DecimalField<T = TDecimalField> extends BaseField<T> implements TDe
   toFormattedString(inp) {
     if (isNullUndefEmpty(inp)) return inp;
 
-    let outp = inp.toString?.() ?? inp
+    let outp = inp?.toString?.() ?? inp
 
     // Print only nrof decimals shown in precision if set
     if (this.precision !== undefined) {

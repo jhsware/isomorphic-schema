@@ -15,7 +15,7 @@ import { TFieldError } from '../schema';
 type TSelectField = Omit<ISelectField, 'interfaceId' | 'providedBy'>;
 
 export class SelectField extends BaseField<TSelectField> implements TSelectField {
-  readonly __implements__ = [ISelectField];
+  readonly __implements__ = [ISelectField, IBaseField];
   options: TSelectFieldOption[]
   valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
 

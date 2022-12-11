@@ -4,12 +4,12 @@
 */
 
 import { BaseField } from './BaseField'
-import { IBoolField, OmitInContructor } from '../interfaces'
+import { IBaseField, IBoolField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 type TBoolField = Omit<IBoolField, 'interfaceId' | 'providedBy'>;
 export class BoolField<T = TBoolField> extends BaseField<T> implements TBoolField {
-    readonly __implements__ = [IBoolField];
+    readonly __implements__ = [IBoolField, IBaseField];
     
     constructor({
       required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }:

@@ -1,7 +1,7 @@
 import { isValid } from 'date-fns';
 import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
-import { IDateField, OmitInContructor } from '../interfaces'
+import { IBaseField, IDateField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 
 /*
@@ -10,7 +10,7 @@ import { TFieldError } from '../schema';
 type TDateField = Omit<IDateField, 'interfaceId' | 'providedBy'>;
 
 export class DateField extends BaseField<TDateField> implements TDateField {
-  readonly __implements__ = [IDateField];
+  readonly __implements__ = [IDateField, IBaseField];
   constructor({
     required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }: Omit<TDateField, OmitInContructor>) {
     super({ required, readOnly, label, placeholder, help });
