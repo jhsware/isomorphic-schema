@@ -12,16 +12,6 @@ type TEmailField = Omit<IEmailField, 'interfaceId' | 'providedBy'>;
 
 export class EmailField extends TextField<TEmailField> implements TEmailField {
   readonly __implements__ = [IEmailField, ITextField, IBaseField];
-  minLength: number;
-  maxLength: number;
-  trim: boolean;
-  constructor({ required, readOnly, minLength, maxLength, trim }: Omit<TEmailField, OmitInContructor>
-    = { required: false, readOnly: false, minLength: undefined, maxLength: undefined, trim: false }) {
-    super({required, readOnly });
-    this.minLength = minLength;
-    this.maxLength = maxLength;
-    this.trim = trim;
-  }
 
   async validate(inp, options = undefined, context = undefined): Promise<TFieldError | undefined> {
     let err = await super.validate(inp, options, context);
