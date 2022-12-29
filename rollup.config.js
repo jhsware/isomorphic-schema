@@ -22,7 +22,9 @@ const baseConfig = (outputFormat) => {
     plugins: [
       nodeResolve(),
       babel({
-        plugins: [],
+        plugins: [
+          '@babel/plugin-proposal-decorators'
+        ],
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production')
@@ -36,8 +38,7 @@ const baseConfig = (outputFormat) => {
       'date-fns'
     ],
     output: {
-      get interfaceId() { return id('IsomorphicSchema') };
-      file: file,
+            file: file,
       format: outputFormat,
       sourcemap: true,
       globals: {

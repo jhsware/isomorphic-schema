@@ -337,12 +337,12 @@ There are three use cases where you will want to create a custom field.
 Since each field is identified by it's interface, we first create one.
 
 ```JavaScript
-import { createIdFactory } from 'component-registry');
-const id = createIdFactory('MyTestApp')
+import { createInterfaceDecorator } from 'component-registry');
+const Interface = createInterfaceDecorator('MyTestApp')
 
-class IMySpecialField extends ObjectInterface {
-  get interfaceId() { return id('MySpecialField') };
-})
+@Interface
+        class  IMySpecialField extends ObjectInterface {
+  })
 ```
 
 **Note:** we need to export the created interface to allow our custom widget to register itself as renderer for this field. 
@@ -351,7 +351,7 @@ class IMySpecialField extends ObjectInterface {
 import { createObjectPrototype } from 'component-registry');
 import TextField from 'isomorphic-schema/lib/field_validators/TextField');
 
-export const MySpecialField = createObjectPrototype({
+export class  MySpecialField extends ObjectPrototype<> implements T {
   __implements__ [IMySpecialField],
   extends: [TextField]
   // We don't change any functionality so we don't need to implement any methods
@@ -366,12 +366,12 @@ This field extends TextField and thus inherits all the functionality of a TextFi
 Again you start by creating an interface. 
 
 ```JavaScript
-import { createIdFactory } from 'component-registry');
-const id = createIdFactory('MyTestApp')
+import { createInterfaceDecorator } from 'component-registry');
+const Interface = createInterfaceDecorator('MyTestApp')
 
-class IMySpecialValidationField extends ObjectInterface {
-  get interfaceId() { return id('MySpecialValidationField') };
-})
+@Interface
+        class  IMySpecialValidationField extends ObjectInterface {
+  })
 ```
 
 Now we extend a field that has the basic behaviour we need and then add our custom validation.
@@ -381,7 +381,7 @@ import { createObjectPrototype } from 'component-registry');
 import { i18n } from 'isomorphic-schema/lib/utils')
 const MyRegex = /(\d{4}-){3}\d{4}/
 
-export const MySpecialValidationField = createObjectPrototype({
+export class  MySpecialValidationField extends ObjectPrototype<> implements T {
   __implements__ [IMySpecialValidationField],
   extends: [TextField],
   
@@ -411,12 +411,12 @@ Note that createObjectPrototype mounts methods of the extended fields using the 
 Yupp, you start by creating an interface. 
 
 ```JavaScript
-import { createIdFactory } from 'component-registry');
-const id = createIdFactory('MyTestApp')
+import { createInterfaceDecorator } from 'component-registry');
+const Interface = createInterfaceDecorator('MyTestApp')
 
-class IMyComplexValidationField extends ObjectInterface {
-  get interfaceId() { return id('MyComplexValidationField') };
-})
+@Interface
+        class  IMyComplexValidationField extends ObjectInterface {
+  })
 ```
 
 In this example we will extend a SelectField in order to update data in an object. We will also force the available select options in the constructor to avoid having to enter that data in the schema. Since we are using the standard SelectField validation we don't need to add a validation method.
@@ -425,7 +425,7 @@ In this example we will extend a SelectField in order to update data in an objec
 import TextField from 'isomorphic-schema/lib/field_validators/TextField';
 import SelectField from 'isomorphic-schema/lib/field_validators/SelectField';
 
-export const MyComplexValidationField = createObjectPrototype({
+export class  MyComplexValidationField extends ObjectPrototype<> implements T {
   __implements__ [IMyComplexValidationField],
   extends: [SelectField],
   
@@ -490,12 +490,12 @@ Rendering a form from a schema is not very difficult but there are several featu
 The form generator will do a lookup to find the widget it should render for a given field. This lookup asks for an adapter that implements an interface (in this case IInputFieldWidget)
 
 ```JavaScript
-import { createIdFactory } from 'component-registry');
-const id = createIdFactory('MyTestApp')
+import { createInterfaceDecorator } from 'component-registry');
+const Interface = createInterfaceDecorator('MyTestApp')
 
-class IInputFieldWidget extends ObjectInterface {
-  get interfaceId() { return id('InputFieldWidget') };
-})
+@Interface
+        class  IInputFieldWidget extends ObjectInterface {
+  })
 ```
 
 and adapts the given field (in the example bellow IMySpecialField).

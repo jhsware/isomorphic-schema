@@ -4,9 +4,9 @@ import {ListField} from '../../src'
 import {TextField} from '../../src'
 import {ObjectField} from '../../src'
 import {Schema } from '../../src/schema'
-import { createIdFactory } from 'component-registry'
+import { createInterfaceDecorator } from 'component-registry'
 import {  IListField } from "../../src/interfaces";
-const id = createIdFactory('test');
+const Interface = createInterfaceDecorator('test');
 
 // TODO: Test list field ASYNC validation
 

@@ -30,6 +30,7 @@
     "striptags": "^3.1.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.20.7",
     "@parcel/packager-ts": "^2.8.1",
     "@parcel/transformer-typescript-types": "^2.8.1",
     "@types/node": "^18.11.9",

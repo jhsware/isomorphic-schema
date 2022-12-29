@@ -22,7 +22,7 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
   help?: string;
 
 
-  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }: Omit<TBaseField, OmitInContructor>) {
+  constructor({ required = false, readOnly = false, label = undefined, placeholder = undefined, help = undefined }: Omit<TBaseField, OmitInContructor> = {}) {
     super();
     this.required = required;
     this.readOnly = readOnly;
