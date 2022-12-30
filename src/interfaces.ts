@@ -44,8 +44,7 @@ export class IDecimalField extends IBaseField {
 }
 
 @Interface
-export class IBoolField extends IBaseField {
-}
+export class IBoolField extends IBaseField { }
 
 @Interface
 export class ICreditCardField extends IBaseField {
@@ -53,8 +52,7 @@ export class ICreditCardField extends IBaseField {
 }
 
 @Interface
-export class IDateField extends IBaseField {
-}
+export class IDateField extends IBaseField { }
 
 @Interface
 export class IDateTimeField extends IBaseField {

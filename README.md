@@ -348,7 +348,7 @@ const Interface = createInterfaceDecorator('MyTestApp')
 **Note:** we need to export the created interface to allow our custom widget to register itself as renderer for this field. 
 
 ```JavaScript
-import { createObjectPrototype } from 'component-registry');
+import { ObjectPrototype } from 'component-registry');
 import TextField from 'isomorphic-schema/lib/field_validators/TextField');
 
 export class  MySpecialField extends ObjectPrototype<> implements T {
@@ -377,7 +377,7 @@ const Interface = createInterfaceDecorator('MyTestApp')
 Now we extend a field that has the basic behaviour we need and then add our custom validation.
 
 ```JavaScript
-import { createObjectPrototype } from 'component-registry');
+import { ObjectPrototype } from 'component-registry');
 import { i18n } from 'isomorphic-schema/lib/utils')
 const MyRegex = /(\d{4}-){3}\d{4}/
 
@@ -404,7 +404,7 @@ export class  MySpecialValidationField extends ObjectPrototype<> implements T {
 })
 ```
 
-Note that createObjectPrototype mounts methods of the extended fields using the interface name of that object prototype. That is why we type `this._ITextField` to access the validate method of the TextField. If we extend from our new MySpecialValidationField we would access it's validate method at `this._IMySpecialValidationField` which is also the name we set on the interface IMySpecialValidationField.
+Note that ObjectPrototype mounts methods of the extended fields using the interface name of that object prototype. That is why we type `this._ITextField` to access the validate method of the TextField. If we extend from our new MySpecialValidationField we would access it's validate method at `this._IMySpecialValidationField` which is also the name we set on the interface IMySpecialValidationField.
 
 ### Creating a Field to Handle Complex Properties ####
 
