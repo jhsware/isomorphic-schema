@@ -517,7 +517,7 @@ import { createAdapter } from 'component-registry');
 
 const MySpecialInputAdapter = createAdapter({
   __implements__ IInputFieldWidget, // Which we just created
-  adapts: IMySpecialField, // Which was created a bit further up
+  static __adapts__ = IMySpecialField; // Which was created a bit further up
 
   render: function (key, data, fieldError, lang, objectNamespace) {
     // this.context is the field validator object
