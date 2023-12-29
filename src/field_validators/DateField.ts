@@ -3,11 +3,12 @@ import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
 import { IBaseField, IDateField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
     Date-field
 */
-type TDateField = Omit<IDateField, 'interfaceId' | 'providedBy'>;
+type TDateField = TypeFromInterface<IDateField>;
 
 export class DateField extends BaseField<TDateField> implements TDateField {
   readonly __implements__ = [IDateField, IBaseField];

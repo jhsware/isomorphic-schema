@@ -8,10 +8,11 @@ import { i18n, isNullUndefEmpty } from '../utils'
 
 import { IBaseField, IIntegerField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema'
+import { TypeFromInterface } from 'component-registry'
 
 var reInteger = /[^0-9\.]/g
 
-type TIntegerField = Omit<IIntegerField, 'interfaceId' | 'providedBy'>;
+type TIntegerField = TypeFromInterface<IIntegerField>;
 
 export class IntegerField<T = TIntegerField> extends BaseField<T> implements TIntegerField {
   readonly __implements__ = [IIntegerField, IBaseField];

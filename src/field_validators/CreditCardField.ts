@@ -10,9 +10,10 @@ import { i18n, isNullUndefEmpty } from '../utils'
 */
 import { IBaseField, ICreditCardField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 
-type TCreditCardField = Omit<ICreditCardField, 'interfaceId' | 'providedBy'>;
+type TCreditCardField = TypeFromInterface<ICreditCardField>;
 
 export class CreditCardField<T = TCreditCardField> extends BaseField<T> implements TCreditCardField {
   readonly __implements__ = [ICreditCardField, IBaseField];

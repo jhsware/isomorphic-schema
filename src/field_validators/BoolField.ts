@@ -6,8 +6,9 @@
 import { BaseField } from './BaseField'
 import { IBaseField, IBoolField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
-type TBoolField = Omit<IBoolField, 'interfaceId' | 'providedBy'>;
+type TBoolField = TypeFromInterface<IBoolField>;
 export class BoolField<T = TBoolField> extends BaseField<T> implements TBoolField {
     readonly __implements__ = [IBoolField, IBaseField];
     

@@ -2,11 +2,12 @@ import { BaseField } from '../field_validators'
 import { i18n, isNullUndefEmpty } from '../utils'
 import { IBaseField, IObjectField, OmitInContructor } from '../interfaces'
 import { Schema, TFieldError, TFormErrors } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
     Object field
 */
-type TObjectField = Omit<IObjectField, 'interfaceId' | 'providedBy'>;
+type TObjectField = TypeFromInterface<IObjectField>;
 
 export class ObjectField<T = TObjectField> extends BaseField<T> implements TObjectField {
   readonly __implements__ = [IObjectField, IBaseField];

@@ -3,6 +3,7 @@ import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
 import { IBaseField, IMultiSelectField, OmitInContructor, TSelectFieldOption } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
 
@@ -14,12 +15,12 @@ import { TFieldError } from '../schema';
 */
 
 
-type TMultiSelectField = Omit<IMultiSelectField, 'interfaceId' | 'providedBy'>;
+type TMultiSelectField = TypeFromInterface<IMultiSelectField>;
 
 export class MultiSelectField extends BaseField<TMultiSelectField> implements TMultiSelectField {
   readonly __implements__ = [IMultiSelectField, IBaseField];
   options: TSelectFieldOption[]
-  valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+  valueType: TypeFromInterface<IBaseField>;
 
   constructor(
     { required = false, readOnly = false, options = undefined, valueType, label = undefined, placeholder = undefined, help = undefined }: Omit<TMultiSelectField, OmitInContructor | 'getOptionLabel'>) {

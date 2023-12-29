@@ -7,8 +7,9 @@ import { i18n, isNullUndefEmpty } from '../utils'
 */
 import { IBaseField, IEmailField, ITextField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
-type TEmailField = Omit<IEmailField, 'interfaceId' | 'providedBy'>;
+type TEmailField = TypeFromInterface<IEmailField>;
 
 export class EmailField extends TextField<TEmailField> implements TEmailField {
   readonly __implements__ = [IEmailField, ITextField, IBaseField];

@@ -3,6 +3,7 @@ import { i18n, isNullUndefEmpty } from '../utils'
 
 import { IAnyOf, IBaseField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
     Standard options:
@@ -11,7 +12,7 @@ import { TFieldError } from '../schema';
 
 */
 
-type TAnyOf = Omit<IAnyOf, 'interfaceId' | 'providedBy'>;
+type TAnyOf = TypeFromInterface<IAnyOf>;
 
 export class AnyOf<T = TAnyOf> extends BaseField<T> implements TAnyOf {
   readonly __implements__ = [IAnyOf, IBaseField];

@@ -2,11 +2,12 @@ import {TextAreaField} from './TextAreaField';
 import striptags from 'striptags';
 import { IBaseField, IHTMLAreaField, ITextField } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
     HTML field
 */
-type THTMLAreaField = Omit<IHTMLAreaField, 'interfaceId' | 'providedBy'>;
+type THTMLAreaField = TypeFromInterface<IHTMLAreaField>;
 
 export class HTMLAreaField extends TextAreaField<THTMLAreaField> implements THTMLAreaField {
   readonly __implements__ = [IHTMLAreaField, ITextField, IBaseField];

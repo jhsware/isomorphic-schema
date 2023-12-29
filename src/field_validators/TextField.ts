@@ -7,8 +7,9 @@ import { i18n, isNullUndefEmpty } from '../utils'
 
 import { IBaseField, ITextField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
-type TTextField = Omit<ITextField, 'interfaceId' | 'providedBy'>;
+type TTextField = TypeFromInterface<ITextField>;
 
 export class TextField<T = TTextField> extends BaseField<T> implements TTextField {
   readonly __implements__ = [ITextField, IBaseField];

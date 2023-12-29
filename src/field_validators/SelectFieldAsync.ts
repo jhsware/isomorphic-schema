@@ -2,6 +2,7 @@ import { i18n, isNullUndefEmpty } from '../utils'
 import { BaseField } from './BaseField'
 import { IBaseField, ISelectField, ISelectFieldAsync, OmitInContructor, TSelectFieldOption } from '../interfaces'
 import { TFieldError } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 /*
 
@@ -13,11 +14,11 @@ import { TFieldError } from '../schema';
 
 */
 
-type TSelectFieldAsync = Omit<ISelectFieldAsync, 'interfaceId' | 'providedBy'>;
+type TSelectFieldAsync = TypeFromInterface<ISelectFieldAsync>;
 
 export class SelectFieldAsync extends BaseField<TSelectFieldAsync> implements TSelectFieldAsync {
   readonly __implements__ = [ISelectFieldAsync, ISelectField, IBaseField];
-  valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+  valueType: TypeFromInterface<IBaseField>;
   _getOptions;
 
 

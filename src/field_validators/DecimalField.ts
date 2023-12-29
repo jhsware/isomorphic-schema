@@ -4,6 +4,7 @@ import { i18n, isNullUndefEmpty } from '../utils'
 
 import { IBaseField, IDecimalField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema'
+import { TypeFromInterface } from 'component-registry'
 /*
     Decimal-field
 */
@@ -11,7 +12,7 @@ import { TFieldError } from '../schema'
 const reDecimal = /[^0-9\.]/g
 
 
-type TDecimalField = Omit<IDecimalField, 'interfaceId' | 'providedBy'>;
+type TDecimalField = TypeFromInterface<IDecimalField>;
 export class DecimalField<T = TDecimalField> extends BaseField<T> implements TDecimalField {
   readonly __implements__ = [IDecimalField, IBaseField];
   min?: number;

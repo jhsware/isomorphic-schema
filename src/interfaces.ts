@@ -1,4 +1,4 @@
-import { createInterfaceDecorator, ObjectInterface } from 'component-registry'
+import { createInterfaceDecorator, ObjectInterface, TypeFromInterface } from 'component-registry'
 import { Schema, TFieldError, TFormErrors } from './schema';
 const Interface = createInterfaceDecorator('isomorphic-schema');
 
@@ -71,7 +71,7 @@ export class ITelephoneField extends IBaseField { }
 
 @Interface
 export class IListField extends IBaseField {
-    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: TypeFromInterface<IBaseField>;
     minItems?: number;
     maxItems?: number;
     objectFactoryName?: string;
@@ -104,20 +104,20 @@ export class IPasswordField extends IBaseField {
 export type TSelectFieldOption = { name: string, label: string };
 @Interface
 export class ISelectField extends IBaseField {
-    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: TypeFromInterface<IBaseField>;
     options: TSelectFieldOption[];
     getOptionLabel(inp: string): string { return '' };
 }
 @Interface
 export class ISelectFieldAsync extends IBaseField {
-    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: TypeFromInterface<IBaseField>;
     async getOptions(): Promise<TSelectFieldOption[]> { return [] };
     async getOptionLabel(inp: string): Promise<string> { return '' };
 }
 
 @Interface
 export class IMultiSelectField extends IBaseField {
-    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: TypeFromInterface<IBaseField>;
     options: TSelectFieldOption[];
     validate(inp: string[], options?: any, context?: any): Promise<TFieldError | undefined> { return };
     getOptionLabel(inp: string): string { return '' };
@@ -133,5 +133,5 @@ export class IHTMLAreaField extends IBaseField {
 
 @Interface
 export class IAnyOf extends IBaseField {
-    valueTypes: Omit<IBaseField, 'interfaceId' | 'providedBy'>[];
+    valueTypes: TypeFromInterface<IBaseField>[];
 }

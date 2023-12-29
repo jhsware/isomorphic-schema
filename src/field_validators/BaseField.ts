@@ -6,13 +6,13 @@
 
 */
 
-import { ObjectPrototype } from 'component-registry'
+import { ObjectPrototype, TypeFromInterface } from 'component-registry'
 
 import { IBaseField, OmitInContructor } from '../interfaces'
 import { TFieldError, TValidationOptions } from '../schema';
 import { i18n, isNullUndefEmpty } from '../utils'
 
-type TBaseField = Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+type TBaseField = TypeFromInterface<IBaseField>;
 export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInContructor>> implements TBaseField {
   readonly __implements__ = [IBaseField];
   required: boolean;

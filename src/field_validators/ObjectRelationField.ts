@@ -4,12 +4,13 @@ import { i18n, isNullUndefEmpty } from '../utils'
 import { IBaseField, IObjectRelationField, OmitInContructor } from '../interfaces'
 import { TFieldError } from '../schema';
 import { resolve } from 'path';
+import { TypeFromInterface } from 'component-registry';
 
 /*
     Object field
 */
 
-type TObjectRelationField = Omit<IObjectRelationField, 'interfaceId' | 'providedBy'>;
+type TObjectRelationField = TypeFromInterface<IObjectRelationField>;
 
 export class ObjectRelationField<T = TObjectRelationField> extends BaseField<T> implements TObjectRelationField {
   readonly __implements__ = [IObjectRelationField, IBaseField];

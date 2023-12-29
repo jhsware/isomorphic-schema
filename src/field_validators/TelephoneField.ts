@@ -2,13 +2,14 @@ import { TextField } from './TextField'
 import { IBaseField, ITelephoneField, ITextField } from '../interfaces'
 import { TFieldError } from '../schema'
 import { i18n } from '../utils'
+import { TypeFromInterface } from 'component-registry'
 
 /*
     Telephone-field
 */
 
 var allowedCharsRegex = /[^\d().\/+ -]+/
-type TTelephoneField = Omit<ITelephoneField, 'interfaceId' | 'providedBy'>;
+type TTelephoneField = TypeFromInterface<ITelephoneField>;
 
 export class TelephoneField extends TextField<TTelephoneField> implements TTelephoneField {
   readonly __implements__ = [ITelephoneField, ITextField, IBaseField];

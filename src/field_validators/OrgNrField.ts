@@ -2,11 +2,12 @@ import { TextField } from './TextField'
 import { IBaseField, IOrgNrField, ITextField } from '../interfaces'
 import { TFieldError } from '../schema'
 import { i18n } from '../utils'
+import { TypeFromInterface } from 'component-registry';
 
 /*
     Swedish Org-nr validator
 */
-type TOrgNrField = Omit<IOrgNrField, 'interfaceId' | 'providedBy'>;
+type TOrgNrField = TypeFromInterface<IOrgNrField>;
 
 export class OrgNrField extends TextField<TOrgNrField> implements TOrgNrField {
   readonly __implements__ = [IOrgNrField, ITextField, IBaseField];

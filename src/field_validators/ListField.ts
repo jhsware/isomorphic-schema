@@ -3,6 +3,7 @@ import { BaseField } from './BaseField'
 import { i18n, isNullUndefEmpty } from '../utils'
 import { IBaseField, IListField, OmitInContructor } from '../interfaces'
 import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
+import { TypeFromInterface } from 'component-registry';
 
 
 /*
@@ -16,11 +17,11 @@ import { TFieldError, TFormErrors, TValidationOptions } from '../schema';
 
 // TODO: Write tests
 
-type TListField = Omit<IListField, 'interfaceId' | 'providedBy'>;
+type TListField = TypeFromInterface<IListField>;
 
 export class ListField<T = TListField> extends BaseField<T> implements TListField {
     readonly __implements__ = [IListField, IBaseField];
-    valueType: Omit<IBaseField, 'interfaceId' | 'providedBy'>;
+    valueType: TypeFromInterface<IBaseField>;
     minItems?: number;
     maxItems?: number;
     objectFactoryName: string;
