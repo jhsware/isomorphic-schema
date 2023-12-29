@@ -86,7 +86,7 @@ export class Schema<T extends object = object> {
    * 
    * @param opts.schemaName – name of schema
    * @param opts.fields – schema fields
-   * @param opts.extends – list of schemas to extend for composition (experimental)
+   * @param opts.extend – list of schemas to extend for composition (experimental)
    */
   constructor({ name, fields, invariants = undefined, validationConstraints = undefined, extend = undefined }: TSchemaOpts<T>) {
 
@@ -101,10 +101,18 @@ export class Schema<T extends object = object> {
       for (const schema of extend.reverse()) {
         const { _fields, _invariants, _validationConstraints } = schema;
         this._fields = { ..._fields, ...this._fields };
-        this._invariants = [ ..._invariants, ...this._invariants ];
-        this._validationConstraints = [ ..._validationConstraints, ...this._validationConstraints ];
+        this._invariants = [..._invariants, ...this._invariants];
+        this._validationConstraints = [..._validationConstraints, ...this._validationConstraints];
       }
     }
+  }
+
+  /**
+   * Returns fields defined for this schema
+   * @returns {Object} object containing fields
+   */
+  get fields() {
+    return this._fields
   }
 
   /**
@@ -224,7 +232,7 @@ export class Schema<T extends object = object> {
           if (!this._fields[key].readOnly) {
 
             var tmpPromise = this._fields[key].validate(data[key], newOptions, context || data);
-            
+
             const _this = this;
             ((formErrors, key) => {
               validationPromises.push(tmpPromise.then(function (tmpError) {
@@ -269,38 +277,8 @@ export class Schema<T extends object = object> {
     if (formErrors?.fieldErrors !== undefined || formErrors?.invariantErrors !== undefined) {
       return formErrors;
     }
-    
+
     return undefined;
-  }
-
-  /**
-   * Adds props as defined in schema to passed object in place. Uses Object.defineProperty.
-   * @param {Object} obj – the object to decorate
-   */
-  addProperties(obj) {
-    var schema = this
-
-
-    var fields = (schema && schema._fields) || []
-    for (var key in fields) {
-      var field = fields[key]
-      Object.defineProperty(obj, key, {
-        configurable: true, // We might want to remove properties when passing data through API
-        enumerable: true,
-        // Changed so props are allways writable, otherwise you can have problems creating the object
-        // programmtically. Thus field.readOnly is only a form related property
-        // writable: !field.readOnly
-        writable: true
-      })
-    }
-  }
-
-  /**
-   * Returns fields defined for this schema
-   * @returns {Object} object containing fields
-   */
-  getFields() {
-    return this._fields
   }
 
   /**
