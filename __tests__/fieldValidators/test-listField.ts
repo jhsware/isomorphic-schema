@@ -4,7 +4,7 @@ import {ListField} from '../../src'
 import {TextField} from '../../src'
 import {ObjectField} from '../../src'
 import {Schema } from '../../src/schema'
-import { createInterfaceDecorator } from 'component-registry'
+import { TypeFromInterface, createInterfaceDecorator } from 'component-registry'
 import {  IListField } from "../../src/interfaces";
 const Interface = createInterfaceDecorator('test');
 
@@ -69,7 +69,7 @@ describe('List field', function() {
     });
     it('specialised field extending ListField throws error if too few items', async function() {
         class ISpecialListField extends IListField {};
-        type TSpecialListField = Omit<ISpecialListField, 'interfaceId' | 'providedBy'>;
+        type TSpecialListField = TypeFromInterface<ISpecialListField>;
 
         class SpecialListField<T = TSpecialListField> extends ListField<T> implements TSpecialListField {
             readonly __implements__ = [ISpecialListField];
