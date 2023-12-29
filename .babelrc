@@ -1,5 +1,6 @@
 {
   "plugins": [
+    // Strange that we need this, component-registry compiles fine without it
     ["@babel/plugin-proposal-decorators", { "legacy": true }]
   ]
 }
