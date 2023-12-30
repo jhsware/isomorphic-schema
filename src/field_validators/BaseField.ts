@@ -13,7 +13,7 @@ import { TFieldError, TValidationOptions } from '../schema';
 import { i18n, isNullUndefEmpty } from '../utils'
 
 type TBaseField = TypeFromInterface<IBaseField>;
-export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInContructor>> implements TBaseField {
+export class BaseField<T = TBaseField> extends ObjectPrototype<TBaseField> implements TBaseField {
   readonly __implements__ = [IBaseField];
   required: boolean;
   readOnly: boolean;
@@ -53,5 +53,9 @@ export class BaseField<T = TBaseField> extends ObjectPrototype<Omit<T, OmitInCon
 
   fromString(inp, options) {
     return inp;
+  }
+
+  toJSON() {
+    return { ...this };
   }
 }
