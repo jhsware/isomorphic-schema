@@ -2,7 +2,7 @@ import { createInterfaceDecorator, ObjectInterface, TypeFromInterface } from 'co
 import { Schema, TFieldError, TFormErrors } from './schema';
 const Interface = createInterfaceDecorator('isomorphic-schema');
 
-export type OmitInContructor = 'validate' | 'toFormattedString' | 'fromString' | 'toJSON';
+export type OmitInContructor = 'validate' | 'toFormattedString' | 'fromString' | 'toJSON' | '__implements__';
 
 @Interface
 export class IBaseField extends ObjectInterface {

@@ -13,7 +13,7 @@ import { TFieldError, TValidationOptions } from '../schema';
 import { i18n, isNullUndefEmpty } from '../utils'
 
 type TBaseField = TypeFromInterface<IBaseField>;
-export class BaseField<T = TBaseField> extends ObjectPrototype<TBaseField> implements TBaseField {
+export class BaseField<T = TBaseField> extends ObjectPrototype<IBaseField> implements TBaseField {
   readonly __implements__ = [IBaseField];
   required: boolean;
   readOnly: boolean;
